@@ -1,6 +1,7 @@
 import _ from "incognito";
 import Ph from "placeholder-js";
 import flowsync from "flowsync";
+import Promise from "./promise.js";
 import File from "./file.js";
 
 export default class Bag {
@@ -17,6 +18,72 @@ export default class Bag {
 
 	delete(filePath) {
 		_(this).files.delete(filePath);
+	}
+
+	quickGenerate(root, target, options) {
+		if(!options) {
+			options = {};
+		}
+
+		return new Promise((resolve, reject) => {
+			if(!options.replacements) {
+				options.replacements = {};
+			}
+
+			if(!options.ignoringStamps) {
+				options.ignoringStamps = [];
+			}
+
+			let ph = Ph.refresh(target);
+
+			if(options.delimiters) {
+				ph.withThisDelimiters(options.delimiters.start, options.delimiters.end);
+			}
+
+			ph.replacing(options.replacements)
+				.ignoringStamps(options.ignoringStamps)
+				.with(root,
+					(errors) => {
+						if(errors) {
+							reject(errors);
+						} else {
+							resolve();
+						}
+					}
+				);
+		});
+	}
+
+	quickClean(root, target, options) {
+		if(!options) {
+			options = {};
+		}
+
+		return new Promise((resolve, reject) => {
+			if(!options.replacements) {
+				options.replacements = {};
+			}
+
+			if(!options.ignoringStamps) {
+				options.ignoringStamps = [];
+			}
+
+			let ph = Ph.using(root);
+
+			if(options.delimiters) {
+				ph.withThisDelimiters(options.delimiters.start, options.delimiters.end);
+			}
+
+			ph.cleanTo(target,
+				(errors) => {
+					if(errors) {
+						reject(errors);
+					} else {
+						resolve();
+					}
+				}
+			);
+		});
 	}
 
 	generate(callback) {

@@ -23,6 +23,8 @@ function godify(name) {
 			bag = new _bag2.default(name);
 			bags.set(name, bag);
 		}
+	} else {
+		bag = new _bag2.default();
 	}
 
 	return bag;

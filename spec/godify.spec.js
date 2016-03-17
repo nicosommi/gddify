@@ -13,5 +13,9 @@ describe("Godify", () => {
 			const newBag = godify("newBag");
 			godify("newBag").should.equal(newBag);
 		});
+
+		it("should allow to pick a new bag with no name for quick ops", () => {
+			godify().should.be.instanceOf(Bag);
+		});
 	});
 });

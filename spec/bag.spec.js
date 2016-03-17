@@ -49,26 +49,79 @@ describe("Bag", () => {
 
 		describe("(when new files/content)", () => {
 			let filledFileContents,
-				emptyFileNewContents,
-				emptyFileOriginalContents;
+				emptyFileNewContents;
 
-			beforeEach(done => {
-				bag.root = `${__dirname}/../fixtures/filledFile.js`;
-				bag.add(`${__dirname}/../fixtures/emptyFile.js`);
-				emptyFileOriginalContents = fs.readFileSync(`${__dirname}/../fixtures/emptyFile.js`, {encoding: "utf8"});
-				bag.generate(() => {
-					filledFileContents = fs.readFileSync(`${__dirname}/../fixtures/filledFile.js`, {encoding: "utf8"});
-					emptyFileNewContents = fs.readFileSync(`${__dirname}/../fixtures/emptyFile.js`, {encoding: "utf8"});
-					done();
+			describe("(verbose)", () => {
+				beforeEach(done => {
+					bag.root = `${__dirname}/../fixtures/filledFile.js`;
+					bag.add(`${__dirname}/../fixtures/emptyFile.js`);
+					bag.generate(() => {
+						filledFileContents = fs.readFileSync(`${__dirname}/../fixtures/filledFile.js`, {encoding: "utf8"});
+						emptyFileNewContents = fs.readFileSync(`${__dirname}/../fixtures/emptyFile.js`, {encoding: "utf8"});
+						done();
+					});
+				});
+
+				afterEach(() => {
+					fs.writeFileSync(`${__dirname}/../fixtures/emptyFile.js`, "", {encoding: "utf8"});
+				});
+
+				it("should allow to generate targets from a file source as the template", () => {
+					emptyFileNewContents.should.equal(filledFileContents);
 				});
 			});
 
-			afterEach(() => {
-				fs.writeFileSync(`${__dirname}/../fixtures/emptyFile.js`, emptyFileOriginalContents, {encoding: "utf8"});
-			});
+			describe("(quick)", () => {
+				it("should provide a quick way of doing this with options", done => {
+					bag.quickGenerate(`${__dirname}/../fixtures/filledFile.js`,
+						`${__dirname}/../fixtures/emptyFile.js`,
+						{
+							delimiters: {
+								start: "/*",
+								end: "*/"
+							},
+							replacements: {},
+							ignoringStamps: []
+						})
+						.then(() => {
+							fs.readFile(`${__dirname}/../fixtures/filledFile.js`, {encoding: "utf8"},
+								(errorFilledRead, filledContents) => {
+									fs.readFile(`${__dirname}/../fixtures/emptyFile.js`, {encoding: "utf8"},
+										(errorEmptyRead, emptyNewContents) => {
+											emptyNewContents.should.equal(filledContents);
+											fs.writeFileSync(`${__dirname}/../fixtures/emptyFile.js`, "", {encoding: "utf8"});
+											done();
+										}
+									);
+								}
+							);
+						});
+				});
 
-			it("should allow to generate targets from a file source as the template", () => {
-				emptyFileNewContents.should.equal(filledFileContents);
+				it("should provide a quick way of doing this with no options", done => {
+					bag.quickGenerate(`${__dirname}/../fixtures/filledFile.js`, `${__dirname}/../fixtures/emptyFile.js`)
+						.then(() => {
+							fs.readFile(`${__dirname}/../fixtures/filledFile.js`, {encoding: "utf8"},
+								(errorFilledRead, filledContents) => {
+									fs.readFile(`${__dirname}/../fixtures/emptyFile.js`, {encoding: "utf8"},
+										(errorEmptyRead, emptyNewContents) => {
+											emptyNewContents.should.equal(filledContents);
+											fs.writeFileSync(`${__dirname}/../fixtures/emptyFile.js`, "", {encoding: "utf8"});
+											done();
+										}
+									);
+								}
+							);
+						});
+				});
+
+				it("should throw when template do not exists", done => {
+					bag.quickGenerate(`${__dirname}/../fixtures/filledFileUnexisting.js`, `${__dirname}/../fixtures/emptyFile.js`)
+						.catch((error) => {
+							error.message.should.contain("ENOENT");
+							done();
+						});
+				});
 			});
 		});
 
@@ -157,28 +210,83 @@ describe("Bag", () => {
 			cleanFileContents,
 			emptyFileOriginalContents;
 
-		beforeEach(done => {
-			bag.root = `${__dirname}/../fixtures/filledFile.js`;
-			bag.add(`${__dirname}/../fixtures/emptyFile.js`, `${__dirname}/../fixtures/cleanFileGenerated.js`)
-				.replacing({
-					"Example": "Orange"
+		describe("(verbose)", () => {
+			beforeEach(done => {
+				bag.root = `${__dirname}/../fixtures/filledFile.js`;
+				bag.add(`${__dirname}/../fixtures/emptyFile.js`, `${__dirname}/../fixtures/cleanFileGenerated.js`)
+					.replacing({
+						"Example": "Orange"
+					});
+				emptyFileOriginalContents = fs.readFileSync(`${__dirname}/../fixtures/emptyFile.js`, {encoding: "utf8"});
+				bag.generate(() => {
+					bag.clean(() => {
+						filledFileContents = fs.readFileSync(`${__dirname}/../fixtures/cleanFileGenerated.js`, {encoding: "utf8"});
+						cleanFileContents = fs.readFileSync(`${__dirname}/../fixtures/cleanFile.js`, {encoding: "utf8"});
+						done();
+					});
 				});
-			emptyFileOriginalContents = fs.readFileSync(`${__dirname}/../fixtures/emptyFile.js`, {encoding: "utf8"});
-			bag.generate(() => {
-				bag.clean(() => {
-					filledFileContents = fs.readFileSync(`${__dirname}/../fixtures/cleanFileGenerated.js`, {encoding: "utf8"});
-					cleanFileContents = fs.readFileSync(`${__dirname}/../fixtures/cleanFile.js`, {encoding: "utf8"});
-					done();
-				});
+			});
+
+			afterEach(() => {
+				fs.writeFileSync(`${__dirname}/../fixtures/emptyFile.js`, emptyFileOriginalContents, {encoding: "utf8"});
+			});
+
+			it("should generate files with no special blocks on them", () => {
+				filledFileContents.should.equal(cleanFileContents);
 			});
 		});
 
-		afterEach(() => {
-			fs.writeFileSync(`${__dirname}/../fixtures/emptyFile.js`, emptyFileOriginalContents, {encoding: "utf8"});
-		});
+		describe("(quick)", () => {
+			it("should provide a quick way for cleaning up files", done => {
+				bag.quickClean(`${__dirname}/../fixtures/replacedFile.js`,
+					`${__dirname}/../fixtures/cleanFileGenerated.js`,
+					{
+						delimiters: {
+							start: "/*",
+							end: "*/"
+						},
+						replacements: {},
+						ignoringStamps: []
+					})
+					.then(() => {
+						fs.readFile(`${__dirname}/../fixtures/cleanFile.js`, {encoding: "utf8"},
+							(errorFilledRead, cleanExpectedContents) => {
+								fs.readFile(`${__dirname}/../fixtures/cleanFileGenerated.js`, {encoding: "utf8"},
+									(errorEmptyRead, emptyNewContents) => {
+										emptyNewContents.should.equal(cleanExpectedContents);
+										done();
+									}
+								);
+							}
+						);
+					});
+			});
 
-		it("should generate files with no special blocks on them", () => {
-			filledFileContents.should.equal(cleanFileContents);
+			it("should provide a quick way for cleaning up files with no options", done => {
+				bag.quickClean(`${__dirname}/../fixtures/replacedFile.js`,
+					`${__dirname}/../fixtures/cleanFileGenerated.js`)
+					.then(() => {
+						fs.readFile(`${__dirname}/../fixtures/cleanFile.js`, {encoding: "utf8"},
+							(errorFilledRead, cleanExpectedContents) => {
+								fs.readFile(`${__dirname}/../fixtures/cleanFileGenerated.js`, {encoding: "utf8"},
+									(errorEmptyRead, emptyNewContents) => {
+										emptyNewContents.should.equal(cleanExpectedContents);
+										done();
+									}
+								);
+							}
+						);
+					});
+			});
+
+			it("should throw if the source do not exists", done => {
+				bag.quickClean(`${__dirname}/../fixtures/replacedFileButUnexisting.js`,
+					`${__dirname}/../fixtures/cleanFileGenerated.js`)
+					.catch(error => {
+						error.message.should.contain("ENOENT");
+						done();
+					});
+			});
 		});
 	});
 });

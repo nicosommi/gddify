@@ -12,6 +12,8 @@ export default function godify (name) {
 			bag = new Bag(name);
 			bags.set(name, bag);
 		}
+	} else {
+		bag = new Bag();
 	}
 
 	return bag;

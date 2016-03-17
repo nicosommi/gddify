@@ -18,6 +18,10 @@ var _flowsync = require("flowsync");
 
 var _flowsync2 = _interopRequireDefault(_flowsync);
 
+var _promise = require("./promise.js");
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _file = require("./file.js");
 
 var _file2 = _interopRequireDefault(_file);
@@ -45,6 +49,68 @@ var Bag = function () {
 		key: "delete",
 		value: function _delete(filePath) {
 			(0, _incognito2.default)(this).files.delete(filePath);
+		}
+	}, {
+		key: "quickGenerate",
+		value: function quickGenerate(root, target, options) {
+			if (!options) {
+				options = {};
+			}
+
+			return new _promise2.default(function (resolve, reject) {
+				if (!options.replacements) {
+					options.replacements = {};
+				}
+
+				if (!options.ignoringStamps) {
+					options.ignoringStamps = [];
+				}
+
+				var ph = _placeholderJs2.default.refresh(target);
+
+				if (options.delimiters) {
+					ph.withThisDelimiters(options.delimiters.start, options.delimiters.end);
+				}
+
+				ph.replacing(options.replacements).ignoringStamps(options.ignoringStamps).with(root, function (errors) {
+					if (errors) {
+						reject(errors);
+					} else {
+						resolve();
+					}
+				});
+			});
+		}
+	}, {
+		key: "quickClean",
+		value: function quickClean(root, target, options) {
+			if (!options) {
+				options = {};
+			}
+
+			return new _promise2.default(function (resolve, reject) {
+				if (!options.replacements) {
+					options.replacements = {};
+				}
+
+				if (!options.ignoringStamps) {
+					options.ignoringStamps = [];
+				}
+
+				var ph = _placeholderJs2.default.using(root);
+
+				if (options.delimiters) {
+					ph.withThisDelimiters(options.delimiters.start, options.delimiters.end);
+				}
+
+				ph.cleanTo(target, function (errors) {
+					if (errors) {
+						reject(errors);
+					} else {
+						resolve();
+					}
+				});
+			});
 		}
 	}, {
 		key: "generate",

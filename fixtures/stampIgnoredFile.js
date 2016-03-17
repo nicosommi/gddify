@@ -1,6 +1,6 @@
 export default class Example {
 	/* stamp constructor */
-// ignored
+/* ignored */
 	/* endstamp */
 
 	/* ph properties */
