@@ -24,6 +24,7 @@
   "homepage": "https://github.com/nicosommi/godify",
   "dependencies": {
     "babybird": "0.0.1",
+    "clone": "^1.0.2",
     "flowsync": "^0.1.11",
     "incognito": "^0.1.4",
     "placeholder-js": "file:../placeholder-js",

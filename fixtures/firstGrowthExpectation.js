@@ -1,5 +1,7 @@
-export default class Example {
+export default class Apple {
 	/* stamp constructor */
+	constructor() {
+	}
 	/* endstamp */
 
 	/* ph properties */
