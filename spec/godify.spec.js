@@ -16,12 +16,41 @@ describe("Godify", () => {
 
 	describe(".add", () => {
 		it("should allow to add genes to growth and clean", () => {
+			const options = {};
+			const source = `${__dirname}/../fixtures/firstGene.js`;
+			const growth = `${__dirname}/../fixtures/firstGrowth.js`;
+			const clean = `${__dirname}/../fixtures/firstCleaned.js`;
 			godify.add(
-				`${__dirname}/../fixtures/firstGene.js`,
-				`${__dirname}/../fixtures/firstGrowth.js`,
-				`${__dirname}/../fixtures/firstCleaned.js`,
+				source,
+				growth,
+				clean,
+				options
+			);
+
+			godify.genes.should.eql([{ source, growth, clean, options}]);
+		});
+
+		it("should allow to add stable genes (keeps filename) to batch growth and clean", () => {
+			const options = {};
+			const firstGene = `${__dirname}/../fixtures/firstGene.js`;
+			const secondGene = `${__dirname}/../fixtures/secondGene.js`;
+			const genes = [firstGene, secondGene];
+			const firstGrowth = `${__dirname}/../fixtures/firstGene.js`;
+			const firstCleaned = `${__dirname}/../fixtures/firstGene.js`;
+			const secondGrowth = `${__dirname}/../fixtures/secondGene.js`;
+			const secondCleaned = `${__dirname}/../fixtures/secondGene.js`;
+
+			godify.add(
+				genes,
+				`${__dirname}/../fixtures`,
+				`${__dirname}/../fixtures`,
 				{}
 			);
+
+			godify.genes.should.eql([
+				{ source: firstGene, growth: firstGrowth, clean: firstCleaned, options },
+				{ source: secondGene, growth: secondGrowth, clean: secondCleaned, options }
+			]);
 		});
 	});
 

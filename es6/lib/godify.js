@@ -1,15 +1,17 @@
-import _ from "incognito";
 import clone from "clone";
 import Ph from "placeholder-js";
+import path from "path";
+
+const addGene = Symbol("addGene");
 
 export default class Godify {
 	constructor() {
-		_(this).genes = [];
+		this.genes = [];
 	}
 
-	add(source, growth, clean, optionsObject) {
+	[addGene](source, growth, clean, optionsObject) {
 		const options = clone(optionsObject, false);
-		_(this).genes.push(
+		this.genes.push(
 			{
 				source,
 				growth,
@@ -19,9 +21,22 @@ export default class Godify {
 		);
 	}
 
+	add(source, growth, clean, optionsObject) {
+		if(Array.isArray(source)) {
+			source.forEach(
+				sourceGene => {
+					const geneFileName = path.basename(sourceGene);
+					this[addGene](sourceGene, `${growth}/${geneFileName}`, `${clean}/${geneFileName}`, optionsObject);
+				}
+			);
+		} else {
+			this[addGene](source, growth, clean, optionsObject);
+		}
+	}
+
 	generate() {
 		return Promise.all(
-			_(this).genes.map(
+			this.genes.map(
 				gene => {
 					return new Promise(
 						(resolve, reject) => {
@@ -60,7 +75,7 @@ export default class Godify {
 
 	clean() {
 		return Promise.all(
-			_(this).genes.map(
+			this.genes.map(
 				gene => {
 					return new Promise(
 						(resolve, reject) => {
