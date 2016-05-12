@@ -1,7 +1,5 @@
 import Bag from "../es6/lib/bag.js";
 import fs from "fs";
-import chai from "chai";
-chai.should();
 
 describe("Bag", () => {
 	let bag;
@@ -115,12 +113,9 @@ describe("Bag", () => {
 						});
 				});
 
-				it("should throw when template do not exists", done => {
-					bag.quickGenerate(`${__dirname}/../fixtures/filledFileUnexisting.js`, `${__dirname}/../fixtures/emptyFile.js`)
-						.catch((error) => {
-							error.message.should.contain("ENOENT");
-							done();
-						});
+				it("should throw when template do not exists", () => {
+					return bag.quickGenerate(`${__dirname}/../fixtures/filledFileUnexisting.js`, `${__dirname}/../fixtures/emptyFile.js`)
+						.should.be.rejectedWith(/ENOENT/);
 				});
 			});
 		});
@@ -279,13 +274,10 @@ describe("Bag", () => {
 					});
 			});
 
-			it("should throw if the source do not exists", done => {
-				bag.quickClean(`${__dirname}/../fixtures/replacedFileButUnexisting.js`,
+			it("should throw if the source do not exists", () => {
+				return bag.quickClean(`${__dirname}/../fixtures/replacedFileButUnexisting.js`,
 					`${__dirname}/../fixtures/cleanFileGenerated.js`)
-					.catch(error => {
-						error.message.should.contain("ENOENT");
-						done();
-					});
+					.should.be.rejectedWith(/ENOENT/);
 			});
 		});
 	});

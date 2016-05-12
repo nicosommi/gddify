@@ -1,6 +1,4 @@
 import File from "../es6/lib/file.js";
-import chai from "chai";
-chai.should();
 
 describe("File", () => {
 	let file;

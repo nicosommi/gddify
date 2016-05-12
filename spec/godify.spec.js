@@ -1,7 +1,7 @@
 import Godify from "../es6/lib/godify.js";
-import chai from "chai";
-import fs from "fs";
-chai.should();
+import fs from "fs-extra";
+import del from "del";
+import Promise from "../es6/lib/promise.js";
 
 describe("Godify", () => {
 	let godify;
@@ -139,12 +139,11 @@ describe("Godify", () => {
 				);
 			});
 
-			it("should throw ENOENT if a gene does not exist", done => {
-				godify.generate()
-					.catch((error) => {
-						error.message.should.contain("ENOENT");
-						done();
-					});
+			afterEach(() => del([`${__dirname}/../fixtures/unexistingGene.js`, `${__dirname}/../fixtures/unexistingGrowth.js`, `${__dirname}/../fixtures/unexistingCleaned.js`]));
+
+			it("should throw ENOENT if a gene does not exist", () => {
+				return godify.generate()
+					.should.be.rejectedWith(/ENOENT/);
 			});
 		});
 	});
@@ -240,12 +239,11 @@ describe("Godify", () => {
 				);
 			});
 
-			it("should throw ENOENT if a growth does not exist (user forgot to run generate)", done => {
-				godify.clean()
-					.catch((error) => {
-						error.message.should.contain("ENOENT");
-						done();
-					});
+			afterEach(() => del([`${__dirname}/../fixtures/unexistingGrowth.js`, `${__dirname}/../fixtures/unexistingCleaned.js`]));
+
+			it("should throw ENOENT if a growth does not exist (user forgot to run generate)", () => {
+				return godify.clean()
+					.should.be.rejectedWith(/ENOENT/);
 			});
 		});
 	});

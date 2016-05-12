@@ -1,5 +1,5 @@
 import clone from "clone";
-import Ph from "placeholder-js";
+import Ph from "gene-js";
 import path from "path";
 
 const addGene = Symbol("addGene");

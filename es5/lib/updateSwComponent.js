@@ -9,60 +9,73 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _incognito = require("incognito");
+var _geneJs = require("gene-js");
 
-var _incognito2 = _interopRequireDefault(_incognito);
+var _path = require("path");
+
+var _path2 = _interopRequireDefault(_path);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var File = function () {
-	function File(path, cleanFilePath) {
-		_classCallCheck(this, File);
+var buildSwComponent = Symbol("buildSwComponent");
 
-		_get__("_")(this).path = path;
-		_get__("_")(this).replacements = {};
-		_get__("_")(this).ignoredStamps = [];
-		_get__("_")(this).cleanFilePath = cleanFilePath;
+var UpdateSwComponent = function () {
+	function UpdateSwComponent(targetSwComponentJson) {
+		_classCallCheck(this, UpdateSwComponent);
+
+		this.targetSwComponent = this[buildSwComponent](targetSwComponentJson);
 	}
 
-	_createClass(File, [{
-		key: "replacing",
-		value: function replacing(replacements) {
-			_get__("_")(this).replacements = replacements;
+	_createClass(UpdateSwComponent, [{
+		key: buildSwComponent,
+		value: function value(jsonObject) {
+			var result = new (_get__("SwComponent"))(jsonObject.name, jsonObject.type, jsonObject.options);
+			result.addSwBlocks(jsonObject.swBlocks);
+			return result;
 		}
 	}, {
-		key: "ignoringStamps",
-		value: function ignoringStamps(ignoredStamps) {
-			_get__("_")(this).ignoredStamps = ignoredStamps;
+		key: "synchronizeWith",
+		value: function synchronizeWith(rootSwComponentJson) {
+			var _this = this;
+
+			var rootSwComponent = this[buildSwComponent](rootSwComponentJson);
+			var typesOfBlocks = [];
+			rootSwComponent.swBlocks.forEach(function (swBlock) {
+				var found = typesOfBlocks.find(function (targetBlock) {
+					return targetBlock.type === swBlock.type;
+				});
+				if (!found) {
+					typesOfBlocks.push(swBlock);
+				}
+			});
+
+			return Promise.all(typesOfBlocks.map(function (swBlock) {
+				return _this.targetSwComponent.synchronizeWith(swBlock);
+			})).then(function () {
+				var replacer = function replacer(key, value) {
+					if (typeof value === "string") {
+						return value.replace(_get__("path").normalize(_this.targetSwComponent.options.basePath), "${basePath}");
+					} else {
+						return value;
+					}
+				};
+
+				process.stdout.write("\nCopy this into your component.js\n" + JSON.stringify(_this.targetSwComponent, replacer, "\t"));
+			});
 		}
 	}, {
-		key: "cleanFilePath",
-		get: function get() {
-			return _get__("_")(this).cleanFilePath;
-		}
-	}, {
-		key: "path",
-		get: function get() {
-			return _get__("_")(this).path;
-		}
-	}, {
-		key: "replacements",
-		get: function get() {
-			return _get__("_")(this).replacements;
-		}
-	}, {
-		key: "ignoredStamps",
-		get: function get() {
-			return _get__("_")(this).ignoredStamps;
+		key: "clean",
+		value: function clean(dirtyPhs) {
+			return this.targetSwComponent.clean(dirtyPhs);
 		}
 	}]);
 
-	return File;
+	return UpdateSwComponent;
 }();
 
-exports.default = File;
+exports.default = UpdateSwComponent;
 var _RewiredData__ = {};
 var _RewireAPI__ = {};
 
@@ -90,8 +103,11 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case "_":
-			return _incognito2.default;
+		case "SwComponent":
+			return _geneJs.SwComponent;
+
+		case "path":
+			return _path2.default;
 	}
 
 	return undefined;
@@ -156,17 +172,17 @@ function _with__(object) {
 	};
 }
 
-var _typeOfOriginalExport = typeof File === "undefined" ? "undefined" : _typeof(File);
+var _typeOfOriginalExport = typeof UpdateSwComponent === "undefined" ? "undefined" : _typeof(UpdateSwComponent);
 
 function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(File, name, {
+	Object.defineProperty(UpdateSwComponent, name, {
 		value: value,
 		enumerable: false,
 		configurable: true
 	});
 }
 
-if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(File)) {
+if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(UpdateSwComponent)) {
 	addNonEnumerableProperty('__get__', _get__);
 	addNonEnumerableProperty('__GetDependency__', _get__);
 	addNonEnumerableProperty('__Rewire__', _set__);

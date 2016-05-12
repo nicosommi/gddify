@@ -9,60 +9,43 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _incognito = require("incognito");
-
-var _incognito2 = _interopRequireDefault(_incognito);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _geneJs = require("gene-js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var File = function () {
-	function File(path, cleanFilePath) {
-		_classCallCheck(this, File);
+var buildSwBlock = Symbol("buildSwBlock");
 
-		_get__("_")(this).path = path;
-		_get__("_")(this).replacements = {};
-		_get__("_")(this).ignoredStamps = [];
-		_get__("_")(this).cleanFilePath = cleanFilePath;
+var UpdateSwBlock = function () {
+	function UpdateSwBlock(targetSwBlockJson) {
+		_classCallCheck(this, UpdateSwBlock);
+
+		this.targetSwBlock = this[buildSwBlock](targetSwBlockJson);
 	}
 
-	_createClass(File, [{
-		key: "replacing",
-		value: function replacing(replacements) {
-			_get__("_")(this).replacements = replacements;
+	_createClass(UpdateSwBlock, [{
+		key: buildSwBlock,
+		value: function value(jsonObject) {
+			var result = new (_get__("SwBlock"))(jsonObject.name, jsonObject.type, jsonObject.options);
+			result.addSourceCodeFiles(jsonObject.sourceCodeFiles);
+			return result;
 		}
 	}, {
-		key: "ignoringStamps",
-		value: function ignoringStamps(ignoredStamps) {
-			_get__("_")(this).ignoredStamps = ignoredStamps;
+		key: "synchronizeWith",
+		value: function synchronizeWith(rootSwBlockJson) {
+			this.rootSwBlock = this[buildSwBlock](rootSwBlockJson);
+			return this.targetSwBlock.synchronizeWith(this.rootSwBlock);
 		}
 	}, {
-		key: "cleanFilePath",
-		get: function get() {
-			return _get__("_")(this).cleanFilePath;
-		}
-	}, {
-		key: "path",
-		get: function get() {
-			return _get__("_")(this).path;
-		}
-	}, {
-		key: "replacements",
-		get: function get() {
-			return _get__("_")(this).replacements;
-		}
-	}, {
-		key: "ignoredStamps",
-		get: function get() {
-			return _get__("_")(this).ignoredStamps;
+		key: "clean",
+		value: function clean(dirtyPhs) {
+			return this.targetSwBlock.clean(dirtyPhs);
 		}
 	}]);
 
-	return File;
+	return UpdateSwBlock;
 }();
 
-exports.default = File;
+exports.default = UpdateSwBlock;
 var _RewiredData__ = {};
 var _RewireAPI__ = {};
 
@@ -90,8 +73,8 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
-		case "_":
-			return _incognito2.default;
+		case "SwBlock":
+			return _geneJs.SwBlock;
 	}
 
 	return undefined;
@@ -156,17 +139,17 @@ function _with__(object) {
 	};
 }
 
-var _typeOfOriginalExport = typeof File === "undefined" ? "undefined" : _typeof(File);
+var _typeOfOriginalExport = typeof UpdateSwBlock === "undefined" ? "undefined" : _typeof(UpdateSwBlock);
 
 function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(File, name, {
+	Object.defineProperty(UpdateSwBlock, name, {
 		value: value,
 		enumerable: false,
 		configurable: true
 	});
 }
 
-if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(File)) {
+if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(UpdateSwBlock)) {
 	addNonEnumerableProperty('__get__', _get__);
 	addNonEnumerableProperty('__GetDependency__', _get__);
 	addNonEnumerableProperty('__Rewire__', _set__);
