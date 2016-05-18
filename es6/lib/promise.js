@@ -1,4 +1,6 @@
-import Promise from "babybird";
-import prfun from "prfun/wrap";
+import Promise from "bluebird";
+Promise.config({
+	longStackTraces: true
+});
 
-export default prfun(Promise);
+export default Promise;

@@ -8,7 +8,7 @@ export default class UpdateSwBlock {
 	}
 
 	[buildSwBlock](jsonObject) {
-		const result = new SwBlock(jsonObject.name, jsonObject.type, jsonObject.options);
+		const result = new SwBlock(jsonObject.name, jsonObject.type, jsonObject.version, jsonObject.options);
 		result.addSourceCodeFiles(jsonObject.sourceCodeFiles);
 		return result;
 	}

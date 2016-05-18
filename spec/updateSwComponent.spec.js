@@ -14,11 +14,12 @@ describe("UpdateSwComponent", () => {
 
 	class SwComponent {
 		constructor() {
+			this.options = arguments[2];
 			constructorSpy.apply(this, arguments);
 		}
 
 		synchronizeWith() {
-			synchronizeWithSpy.apply(this, arguments);
+			return synchronizeWithSpy.apply(this, arguments);
 		}
 
 		clean() {
@@ -32,15 +33,17 @@ describe("UpdateSwComponent", () => {
 
 	beforeEach(
 		() => {
-			constructorSpy = sinon.spy();
-			synchronizeWithSpy = sinon.spy();
-			cleanSpy = sinon.spy();
+			constructorSpy = sinon.spy(() => Promise.resolve());
+			synchronizeWithSpy = sinon.spy(() => Promise.resolve());
+			cleanSpy = sinon.spy(() => Promise.resolve());
 			addSwBlocksSpy = sinon.spy(
 				function addSwBlocksSpyMethod() {
 					this.swBlocks = [
-						{ type: "type1" },
-						{ type: "type2" },
-						{ type: "type3" }
+						{ name: "blockname", type: "type1", version: "0.0.1" },
+						{ name: "blockname", type: "type2", version: "0.0.1" },
+						{ name: "blockname", type: "type2", version: "0.0.1" },
+						{ name: "blockname", type: "type3", version: "0.0.1" },
+						{ name: "blockname", type: "type4", version: "0.0.1" }
 					];
 				}
 			);
@@ -50,16 +53,10 @@ describe("UpdateSwComponent", () => {
 			swComponentJson = {
 				name,
 				type,
-				swBlocks: [
-					{ type: "type1" },
-					{ type: "type2" },
-					{ type: "type2" },
-					{ type: "type3" },
-					{ type: "type4" }
-				]
+				swBlocks: []
 			};
 			UpdateSwComponent.__Rewire__("SwComponent", SwComponent);
-			updateSwComponent = new UpdateSwComponent(swComponentJson);
+			updateSwComponent = new UpdateSwComponent(swComponentJson, "/abase/path", "clean-path");
 		}
 	);
 
@@ -69,7 +66,42 @@ describe("UpdateSwComponent", () => {
 		});
 	});
 
-	describe(".synchronizeWith(rootSwComponent)", () => {
+	describe(".synchronize(path[, name, type])", () => {
+		beforeEach(() => {
+			name = "anewname";
+			type = "anewtype";
+			addSwBlocksSpy = sinon.spy(
+				function addSwBlocksSpyMethod() {
+					this.swBlocks = [
+						{ name: "blockname", type: "type4", version: "0.0.2" },
+						{ name: "blockname", type: "type1", version: "0.0.1" },
+						{ name: "blockname", type: "type2", version: "0.0.1" },
+						{ name: "blockname", type: "type3", version: "0.0.1" },
+						{ name: "blockname", type: "type3", version: "0.2.1" },
+						{ name: "blockname", type: "type4", version: "0.0.1" }
+					];
+				}
+			);
+
+			swComponentJson = {
+				name,
+				type,
+				swBlocks: []
+			};
+
+			updateSwComponent = new UpdateSwComponent(swComponentJson, `${__dirname}/../fixtures`, "clean-path");
+
+			updateSwComponent.synchronizeWith = sinon.spy(() => Promise.resolve());
+
+			return updateSwComponent.synchronize("./root");
+		});
+
+		it("should call synchronizeWith", () => {
+			sinon.assert.callCount(updateSwComponent.synchronizeWith, 1);
+		});
+	});
+
+	describe(".synchronizeWith(path, root)", () => {
 		let rootSwComponentJson;
 
 		beforeEach(() => {
@@ -78,33 +110,37 @@ describe("UpdateSwComponent", () => {
 			addSwBlocksSpy = sinon.spy(
 				function addSwBlocksSpyMethod() {
 					this.swBlocks = [
-						{ type: "type4" },
-						{ type: "type1" },
-						{ type: "type2" },
-						{ type: "type3" },
-						{ type: "type3" },
-						{ type: "type4" }
+						{ name: "blockname", type: "type4", version: "0.0.2" },
+						{ name: "blockname", type: "type1", version: "0.0.1" },
+						{ name: "blockname", type: "type2", version: "0.0.1" },
+						{ name: "blockname", type: "type3", version: "0.0.1" },
+						{ name: "blockname", type: "type3", version: "0.2.1" },
+						{ name: "blockname", type: "type4", version: "0.0.1" }
 					];
 				}
 			);
 			rootSwComponentJson = {
 				name,
 				type,
-				swBlocks: [
-					{ type: "type4" },
-					{ type: "type1" },
-					{ type: "type2" },
-					{ type: "type3" },
-					{ type: "type3" },
-					{ type: "type4" }
-				]
+				swBlocks: []
 			};
-			updateSwComponent.synchronizeWith(rootSwComponentJson);
+
+			swComponentJson = {
+				name,
+				type,
+				swBlocks: []
+			};
+
+			return updateSwComponent.synchronizeWith("fromhere", rootSwComponentJson);
 		});
 
 		describe("(given a source sw component structure and a target sw component structure)", () => {
 			it("should call the swBlock synchronization method with the right arguments", () => {
-				synchronizeWithSpy.calledWith({ name, type, options }).should.be.true;
+				sinon.assert.calledWith(synchronizeWithSpy, { name: "blockname", type: "type3", version: "0.2.1" });
+			});
+
+			it("should call the swBlock synchronization method with the right arguments", () => {
+				sinon.assert.neverCalledWith(synchronizeWithSpy, { name: "blockname", type: "type3", version: "0.0.1" });
 			});
 
 			it("should call the swBlock synchronization method with the right arguments", () => {

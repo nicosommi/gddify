@@ -1,17 +1,16 @@
-import Godify from "../es6/lib/godify.js";
+import Gddify from "../es6/lib/gddify.js";
 import fs from "fs-extra";
 import del from "del";
-import Promise from "../es6/lib/promise.js";
 
-describe("Godify", () => {
-	let godify;
+describe("Gddify", () => {
+	let gddify;
 
 	beforeEach(() => {
-		godify = new Godify();
+		gddify = new Gddify();
 	});
 
 	it("should be a class", () => {
-		godify.should.be.instanceOf(Godify);
+		gddify.should.be.instanceOf(Gddify);
 	});
 
 	describe(".add", () => {
@@ -20,14 +19,14 @@ describe("Godify", () => {
 			const source = `${__dirname}/../fixtures/firstGene.js`;
 			const growth = `${__dirname}/../fixtures/firstGrowth.js`;
 			const clean = `${__dirname}/../fixtures/firstCleaned.js`;
-			godify.add(
+			gddify.add(
 				source,
 				growth,
 				clean,
 				options
 			);
 
-			godify.genes.should.eql([{ source, growth, clean, options}]);
+			gddify.genes.should.eql([{ source, growth, clean, options}]);
 		});
 
 		it("should allow to add stable genes (keeps filename) to batch growth and clean", () => {
@@ -40,14 +39,14 @@ describe("Godify", () => {
 			const secondGrowth = `${__dirname}/../fixtures/secondGene.js`;
 			const secondCleaned = `${__dirname}/../fixtures/secondGene.js`;
 
-			godify.add(
+			gddify.add(
 				genes,
 				`${__dirname}/../fixtures`,
 				`${__dirname}/../fixtures`,
 				{}
 			);
 
-			godify.genes.should.eql([
+			gddify.genes.should.eql([
 				{ source: firstGene, growth: firstGrowth, clean: firstCleaned, options },
 				{ source: secondGene, growth: secondGrowth, clean: secondCleaned, options }
 			]);
@@ -72,7 +71,7 @@ describe("Godify", () => {
 					ignoringStamps: ["astamp"]
 				};
 
-				godify.add(
+				gddify.add(
 					`${__dirname}/../fixtures/firstGene.js`,
 					`${__dirname}/../fixtures/firstGrowth.js`,
 					`${__dirname}/../fixtures/firstCleaned.js`,
@@ -86,7 +85,7 @@ describe("Godify", () => {
 					end: "*/"
 				};
 
-				godify.add(
+				gddify.add(
 					`${__dirname}/../fixtures/secondGene.js`,
 					`${__dirname}/../fixtures/secondGrowth.js`,
 					`${__dirname}/../fixtures/secondCleaned.js`,
@@ -97,14 +96,14 @@ describe("Godify", () => {
 				delete options.delimiters;
 				options.ignoringStamps = ["mangostamp"];
 
-				godify.add(
+				gddify.add(
 					`${__dirname}/../fixtures/thirdGene.md`,
 					`${__dirname}/../fixtures/thirdGrowth.md`,
 					`${__dirname}/../fixtures/thirdCleaned.md`,
 					options
 				);
 
-				godify.generate()
+				gddify.generate()
 					.then(() => {
 						firstGrowthExpectation = fs.readFileSync(`${__dirname}/../fixtures/firstGrowthExpectation.js`, {encoding: "utf8"});
 						firstGrowth = fs.readFileSync(`${__dirname}/../fixtures/firstGrowth.js`, {encoding: "utf8"});
@@ -131,7 +130,7 @@ describe("Godify", () => {
 
 		describe("(when error)", () => {
 			beforeEach(() => {
-				godify.add(
+				gddify.add(
 					`${__dirname}/../fixtures/unexistingGene.js`,
 					`${__dirname}/../fixtures/unexistingGrowth.js`,
 					`${__dirname}/../fixtures/unexistingCleaned.js`,
@@ -142,7 +141,7 @@ describe("Godify", () => {
 			afterEach(() => del([`${__dirname}/../fixtures/unexistingGene.js`, `${__dirname}/../fixtures/unexistingGrowth.js`, `${__dirname}/../fixtures/unexistingCleaned.js`]));
 
 			it("should throw ENOENT if a gene does not exist", () => {
-				return godify.generate()
+				return gddify.generate()
 					.should.be.rejectedWith(/ENOENT/);
 			});
 		});
@@ -166,7 +165,7 @@ describe("Godify", () => {
 					ignoringStamps: ["astamp"]
 				};
 
-				godify.add(
+				gddify.add(
 					`${__dirname}/../fixtures/firstGene.js`,
 					`${__dirname}/../fixtures/firstGrowth.js`,
 					`${__dirname}/../fixtures/firstCleaned.js`,
@@ -180,7 +179,7 @@ describe("Godify", () => {
 					end: "*/"
 				};
 
-				godify.add(
+				gddify.add(
 					`${__dirname}/../fixtures/secondGene.js`,
 					`${__dirname}/../fixtures/secondGrowth.js`,
 					`${__dirname}/../fixtures/secondCleaned.js`,
@@ -191,16 +190,16 @@ describe("Godify", () => {
 				delete options.delimiters;
 				options.ignoringStamps = ["mangostamp"];
 
-				godify.add(
+				gddify.add(
 					`${__dirname}/../fixtures/thirdGene.md`,
 					`${__dirname}/../fixtures/thirdGrowth.md`,
 					`${__dirname}/../fixtures/thirdCleaned.md`,
 					options
 				);
 
-				godify.generate()
+				gddify.generate()
 					.then(() => {
-						godify.clean()
+						gddify.clean()
 						.then(() => {
 							firstCleanedExpectation = fs.readFileSync(`${__dirname}/../fixtures/firstCleanedExpectation.js`, {encoding: "utf8"});
 							firstCleaned = fs.readFileSync(`${__dirname}/../fixtures/firstCleaned.js`, {encoding: "utf8"});
@@ -231,7 +230,7 @@ describe("Godify", () => {
 
 		describe("(when error)", () => {
 			beforeEach(() => {
-				godify.add(
+				gddify.add(
 					`${__dirname}/../fixtures/firstGene.js`,
 					`${__dirname}/../fixtures/unexistingGrowth.js`,
 					`${__dirname}/../fixtures/unexistingCleaned.js`,
@@ -242,7 +241,7 @@ describe("Godify", () => {
 			afterEach(() => del([`${__dirname}/../fixtures/unexistingGrowth.js`, `${__dirname}/../fixtures/unexistingCleaned.js`]));
 
 			it("should throw ENOENT if a growth does not exist (user forgot to run generate)", () => {
-				return godify.clean()
+				return gddify.clean()
 					.should.be.rejectedWith(/ENOENT/);
 			});
 		});

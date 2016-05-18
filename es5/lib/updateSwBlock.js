@@ -25,7 +25,7 @@ var UpdateSwBlock = function () {
 	_createClass(UpdateSwBlock, [{
 		key: buildSwBlock,
 		value: function value(jsonObject) {
-			var result = new (_get__("SwBlock"))(jsonObject.name, jsonObject.type, jsonObject.options);
+			var result = new (_get__("SwBlock"))(jsonObject.name, jsonObject.type, jsonObject.version, jsonObject.options);
 			result.addSourceCodeFiles(jsonObject.sourceCodeFiles);
 			return result;
 		}

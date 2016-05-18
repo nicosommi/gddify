@@ -7,24 +7,50 @@ exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint-disable no-console */
+
 
 var _geneJs = require("gene-js");
+
+var _semver = require("semver");
+
+var _semver2 = _interopRequireDefault(_semver);
+
+var _chalk = require("chalk");
+
+var _chalk2 = _interopRequireDefault(_chalk);
+
+var _promise = require("./promise.js");
+
+var _promise2 = _interopRequireDefault(_promise);
 
 var _path = require("path");
 
 var _path2 = _interopRequireDefault(_path);
 
+var _fsExtra = require("fs-extra");
+
+var _fsExtra2 = _interopRequireDefault(_fsExtra);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+var writeFile = _get__("Promise").promisify(_get__("fs").writeFile);
+
 var buildSwComponent = Symbol("buildSwComponent");
+var getMinifiedSwComponent = Symbol("getMinifiedSwComponent");
 
 var UpdateSwComponent = function () {
-	function UpdateSwComponent(targetSwComponentJson) {
+	function UpdateSwComponent(targetSwComponentJson, basePath, cleanPath) {
 		_classCallCheck(this, UpdateSwComponent);
 
+		if (!targetSwComponentJson.options) {
+			targetSwComponentJson.options = {};
+		}
+
+		targetSwComponentJson.options.basePath = basePath;
+		targetSwComponentJson.options.cleanPath = cleanPath;
 		this.targetSwComponent = this[buildSwComponent](targetSwComponentJson);
 	}
 
@@ -36,33 +62,114 @@ var UpdateSwComponent = function () {
 			return result;
 		}
 	}, {
-		key: "synchronizeWith",
-		value: function synchronizeWith(rootSwComponentJson) {
-			var _this = this;
+		key: getMinifiedSwComponent,
+		value: function value(component, name, type) {
+			var result = [];
+			if (name) {
+				component.swBlocks = component.swBlocks.filter(function (swBlock) {
+					return swBlock.name === name;
+				});
+			}
 
-			var rootSwComponent = this[buildSwComponent](rootSwComponentJson);
-			var typesOfBlocks = [];
-			rootSwComponent.swBlocks.forEach(function (swBlock) {
-				var found = typesOfBlocks.find(function (targetBlock) {
+			if (type) {
+				component.swBlocks = component.swBlocks.filter(function (swBlock) {
+					return swBlock.type === type;
+				});
+			}
+
+			component.swBlocks.forEach(function (swBlock) {
+				var index = void 0;
+				var found = result.find(function (targetBlock, i) {
+					index = i;
 					return targetBlock.type === swBlock.type;
 				});
 				if (!found) {
-					typesOfBlocks.push(swBlock);
+					result.push(swBlock);
+				} else if (_get__("semver").gt(swBlock.version, found.version)) {
+					result.splice(index, 1, swBlock);
 				}
 			});
+			return result;
+		}
+	}, {
+		key: "update",
+		value: function update(name, type) {
+			var _this = this;
 
-			return Promise.all(typesOfBlocks.map(function (swBlock) {
-				return _this.targetSwComponent.synchronizeWith(swBlock);
+			console.log(_get__("chalk").magenta("Beginning update..."));
+			var sources = this.targetSwComponent.options.sources;
+			sources.push("./");
+
+			return _get__("Promise").all(sources.map(function (source) {
+				console.log(_get__("chalk").magenta("Reading from " + source + "..."));
+				return _this.synchronize(source, name, type);
 			})).then(function () {
-				var replacer = function replacer(key, value) {
-					if (typeof value === "string") {
-						return value.replace(_get__("path").normalize(_this.targetSwComponent.options.basePath), "${basePath}");
-					} else {
-						return value;
-					}
-				};
+				console.log(_get__("chalk").green("Everything updated from all sources."));
+			});
+		}
+	}, {
+		key: "synchronize",
+		value: function synchronize(sourcePath, name, type) {
+			var _this2 = this;
 
-				process.stdout.write("\nCopy this into your component.js\n" + JSON.stringify(_this.targetSwComponent, replacer, "\t"));
+			console.log(_get__("chalk").magenta("Generation begins..."));
+			var rootBasePath = this.targetSwComponent.options.basePath + "/" + sourcePath;
+			var rootSwComponentJson = require(_get__("path").normalize(rootBasePath + "/swComponent.json"));
+			rootSwComponentJson.options.basePath = rootBasePath;
+
+			console.log(_get__("chalk").magenta("Synchronization begins..."));
+			return this.synchronizeWith(sourcePath, rootSwComponentJson, name, type).then(function (newJson) {
+				console.log(_get__("chalk").magenta("Writing configuration..."));
+				return _get__("writeFile")(_get__("path").normalize(_this2.targetSwComponent.options.basePath + "/swComponent.json"), JSON.stringify(newJson, null, "\t")).then(function () {
+					console.log(_get__("chalk").green("All done."));
+					return _get__("Promise").resolve();
+				});
+			}, function (error) {
+				var message = error.message || error;
+				console.log(_get__("chalk").red("ERROR: " + message));
+				return _get__("Promise").resolve();
+			});
+		}
+	}, {
+		key: "synchronizeWith",
+		value: function synchronizeWith(fromPath, rootSwComponentJson, name, type) {
+			var _this3 = this;
+
+			console.log(_get__("chalk").magenta("building objects and picking newer blocks"));
+			var rootSwComponent = this[buildSwComponent](rootSwComponentJson);
+			var newerBlocks = this[getMinifiedSwComponent](rootSwComponent, name, type);
+
+			console.log(_get__("chalk").magenta("synchronizing old blocks"));
+			return _get__("Promise").map(newerBlocks, function (swBlock) {
+				console.log(_get__("chalk").green("About to update block " + swBlock.type + " to version " + swBlock.version + "... "));
+				var syncPromise = _this3.targetSwComponent.synchronizeWith(swBlock);
+				return _get__("Promise").resolve(syncPromise).reflect();
+			}, { concurrency: 1 }).then(function (inspections) {
+				var errorCount = 0;
+				inspections.forEach(function (inspection) {
+					if (!inspection.isFulfilled()) {
+						errorCount++;
+						console.log(_get__("chalk").yellow(inspection.reason()));
+					}
+				});
+				if (errorCount) {
+					return _get__("Promise").reject(new Error("Error/Warnings occurred during synchronization."));
+				} else {
+					console.log(_get__("chalk").green("Component " + _this3.targetSwComponent.name + " updated."));
+					console.log(_get__("chalk").magenta("Adding the new source..."));
+					if (!_this3.targetSwComponent.options.sources) {
+						_this3.targetSwComponent.options.sources = [fromPath];
+					} else {
+						var existingSource = _this3.targetSwComponent.options.sources.find(function (currentSource) {
+							return currentSource === fromPath;
+						});
+						if (!existingSource) {
+							_this3.targetSwComponent.options.sources.push(fromPath);
+						}
+					}
+					_this3.targetSwComponent.options.sources = _this3.targetSwComponent.options.sources;
+					return _get__("Promise").resolve(_this3.targetSwComponent);
+				}
 			});
 		}
 	}, {
@@ -103,11 +210,26 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
 	switch (variableName) {
+		case "Promise":
+			return _promise2.default;
+
+		case "fs":
+			return _fsExtra2.default;
+
 		case "SwComponent":
 			return _geneJs.SwComponent;
 
+		case "semver":
+			return _semver2.default;
+
+		case "chalk":
+			return _chalk2.default;
+
 		case "path":
 			return _path2.default;
+
+		case "writeFile":
+			return writeFile;
 	}
 
 	return undefined;

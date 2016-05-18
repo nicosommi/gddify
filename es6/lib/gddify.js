@@ -4,7 +4,7 @@ import path from "path";
 
 const addGene = Symbol("addGene");
 
-export default class Godify {
+export default class Gddify {
 	constructor() {
 		this.genes = [];
 	}

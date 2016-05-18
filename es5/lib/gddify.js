@@ -27,14 +27,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var addGene = Symbol("addGene");
 
-var Godify = function () {
-	function Godify() {
-		_classCallCheck(this, Godify);
+var Gddify = function () {
+	function Gddify() {
+		_classCallCheck(this, Gddify);
 
 		this.genes = [];
 	}
 
-	_createClass(Godify, [{
+	_createClass(Gddify, [{
 		key: addGene,
 		value: function value(source, growth, clean, optionsObject) {
 			var options = _get__("clone")(optionsObject, false);
@@ -113,10 +113,10 @@ var Godify = function () {
 		}
 	}]);
 
-	return Godify;
+	return Gddify;
 }();
 
-exports.default = Godify;
+exports.default = Gddify;
 var _RewiredData__ = {};
 var _RewireAPI__ = {};
 
@@ -216,17 +216,17 @@ function _with__(object) {
 	};
 }
 
-var _typeOfOriginalExport = typeof Godify === "undefined" ? "undefined" : _typeof(Godify);
+var _typeOfOriginalExport = typeof Gddify === "undefined" ? "undefined" : _typeof(Gddify);
 
 function addNonEnumerableProperty(name, value) {
-	Object.defineProperty(Godify, name, {
+	Object.defineProperty(Gddify, name, {
 		value: value,
 		enumerable: false,
 		configurable: true
 	});
 }
 
-if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(Godify)) {
+if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(Gddify)) {
 	addNonEnumerableProperty('__get__', _get__);
 	addNonEnumerableProperty('__GetDependency__', _get__);
 	addNonEnumerableProperty('__Rewire__', _set__);
