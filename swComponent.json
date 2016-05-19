@@ -1,8 +1,205 @@
 {
-	"name": "example",
-	"type": "exampletype",
-	"options": {
-		"sources": []
-	},
-	"swBlocks": []
+  "name": "gddify",
+  "type": "openSourceComponent",
+  "options": {
+    "sources": [
+      "./"
+    ],
+    "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+    "cleanPath": ".gdd-clean"
+  },
+  "swBlocks": [
+    {
+      "name": "nodejs",
+      "type": "runtime",
+      "version": "0.0.1",
+      "options": {
+        "jsonification": [
+          {
+            "target": "package.json",
+            "to": "package.json"
+          }
+        ],
+        "sources": [
+          "./"
+        ],
+        "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+        "cleanPath": ".gdd-clean"
+      },
+      "sourceCodeFiles": [
+        {
+          "name": "package.json",
+          "path": "package.js",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean",
+            "jsonification": [
+              {
+                "target": "package.json",
+                "to": "package.json"
+              }
+            ]
+          }
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "options": {
+            "jsonification": [
+              {
+                "target": "package.json",
+                "to": "package.json"
+              }
+            ],
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        }
+      ]
+    },
+    {
+      "name": "gulp",
+      "type": "buildingTool",
+      "version": "0.0.0",
+      "options": {
+        "sources": [
+          "./"
+        ],
+        "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+        "cleanPath": ".gdd-clean"
+      },
+      "sourceCodeFiles": [
+        {
+          "name": "gulpfile.babel.js",
+          "path": "gulpfile.babel.js",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        },
+        {
+          "name": "tasks/build.js",
+          "path": "tasks/build.js",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        },
+        {
+          "name": "tasks/clean.js",
+          "path": "tasks/clean.js",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        },
+        {
+          "name": "tasks/deploy.js",
+          "path": "tasks/deploy.js",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        },
+        {
+          "name": "tasks/suppress-errors.js",
+          "path": "tasks/suppress-errors.js",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        },
+        {
+          "name": "tasks/test-local.js",
+          "path": "tasks/test-local.js",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        },
+        {
+          "name": "tasks/test-watch.js",
+          "path": "tasks/test-watch.js",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        },
+        {
+          "name": "tasks/test.js",
+          "path": "tasks/test.js",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        },
+        {
+          "name": ".babelrc",
+          "path": ".babelrc",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        }
+      ]
+    },
+    {
+      "name": "mit",
+      "type": "license",
+      "version": "0.0.0",
+      "options": {
+        "sources": [
+          "./"
+        ],
+        "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+        "cleanPath": ".gdd-clean"
+      },
+      "sourceCodeFiles": [
+        {
+          "name": "LICENSE",
+          "path": "LICENSE",
+          "options": {
+            "sources": [
+              "./"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        }
+      ]
+    }
+  ]
 }

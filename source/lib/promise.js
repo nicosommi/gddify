@@ -1,6 +1,6 @@
 import Promise from "bluebird";
 Promise.config({
-	longStackTraces: true
+  longStackTraces: true
 });
 
 export default Promise;

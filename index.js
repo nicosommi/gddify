@@ -1,8 +1,8 @@
-var UpdateSwComponent = require("./es5/lib/updateSwComponent.js").default;
-var UpdateSwBlock = require("./es5/lib/updateSwBlock.js").default;
-var Gddify = require("./es5/lib/gddify.js");
+var UpdateSwComponent = require('./dist/lib/updateSwComponent.js').default
+var UpdateSwBlock = require('./dist/lib/updateSwBlock.js').default
+var Gddify = require('./dist/lib/gddify.js')
 
-Gddify.UpdateSwComponent = UpdateSwComponent;
-Gddify.UpdateSwBlock = UpdateSwBlock;
+Gddify.UpdateSwComponent = UpdateSwComponent
+Gddify.UpdateSwBlock = UpdateSwBlock
 
-module.exports = Gddify;
+module.exports = Gddify

@@ -1,8 +1,11 @@
-# Gddify.js [![npm version](https://img.shields.io/npm/v/gdd.svg)](https://www.npmjs.com/package/gdd) [![license type](https://img.shields.io/npm/l/gdd.svg)](https://github.com/nicosommi/gdd.git/blob/master/LICENSE) [![npm downloads](https://img.shields.io/npm/dm/gdd.svg)](https://www.npmjs.com/package/gdd) ![ECMAScript 6 & 5](https://img.shields.io/badge/ECMAScript-6%20/%205-red.svg)
+# Gddify.js [![npm version](https://img.shields.io/npm/v/gdd.svg)](https://www.npmjs.com/package/gdd) [![license type](https://img.shields.io/npm/l/gdd.svg)](https://github.com/nicosommi/gdd.git/blob/master/LICENSE) [![npm downloads](https://img.shields.io/npm/dm/gdd.svg)](https://www.npmjs.com/package/gdd) ![ECMAScript 6 & 5](https://img.shields.io/badge/ECMAScript-6%20/%205-red.svg) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 It makes it easy to work with the GDD approach.
 Compose software components by putting blocks togheter and updating them whenever you want.
 Ah yeah, and with no development effort for generators and template creation.
+Thinked with the SRP in mind, this is ideal for microservices.
+It let's you minimize the maintenance effort at almost no additional cost.
+It's also useful for scaffolding and quality assurance across your company, among other things.
 Read more on [http://nicosommi.com](http://nicosommi.com)
 
 ## Usage examples
@@ -14,7 +17,7 @@ npm i gdd --save-dev
 After that, add this line in your scripts section of your package.json:
 ```javascript
 "scripts": {
-	"gdd": "gdd"
+	"gddify": "gddify"
 }
 ```
 And you're ready to proceed with the first generation.
@@ -22,40 +25,43 @@ And you're ready to proceed with the first generation.
 ### Generation / Creation / Source addition
 #### From the registered public sw component ng (node, angular, es6, browserify, express, bootstrap, jquery, etc.):
 ```shell
-npm run gdd generate -- --from-registered ng
+npm run gddify generate -- --from ng
 ```
 And there you are, you have a fully functional webapp.
 
-#### From your private component repo:
+#### From your git repository:
 ```shell
-npm run gdd generate -- --from https://github.com/me/myotherproject
+npm run gddify generate -- --from gitrepository:https://github.com/me/myotherproject
 ```
-#### From your private component path:
+#### From your local path:
 ```shell
-npm run gdd generate -- --from ../myotherproject
+npm run gddify generate -- --from localpath:../myotherproject
 ```
 
 ### Update
 ```shell
-npm run gdd update
+npm run gddify update
 ```
 With this you will pull all of your block to the latest version according to the sources that they have configured.
 Gdd compares using the semver package.
 
+### Refresh
+```shell
+npm run gddify refresh
+```
+This is just an update from the local project.
+
 ### Compile
 ```shell
-npm run gdd compile
+npm run gddify compile
 ```
 This will clean up your component to the configured folder.
 
-### Publish / increment
+### Add
 ```shell
-npm run gdd increment [patch] -- --name myblock
-npm run gdd increment minor -- --name myblock
-npm run gdd increment major -- --name myblock
+npm run gddify add -- --name mycomponent --type tasks --glob "./tasks/**/*"
 ```
-This will increase the version of your block named myblock in one path release (default), minor release, or major release respectively. You can also do that manually on the swComponent.json file on your project root folder.
-Gddify uses the semver package to check version numbers.
+This adds all files that matches the glob into a component name mycomponent of type tasks (create or append).
 
 ## How it works
 Basically, it creates and maintains a swComponent.json on the project roots with the information related to your project and their sources.

@@ -1,8 +1,0 @@
-
-> gddify@0.1.2 build /home/nicosommi/workspace/nicosommi/gddify
-> gulp build "-"
-
-[12:46:31] Requiring external module babel-register
-[12:46:32] Using gulpfile ~/workspace/nicosommi/gddify/gulpfile.babel.js
-[12:46:32] Task '-' is not in your gulpfile
-[12:46:32] Please check the documentation for proper gulpfile formatting

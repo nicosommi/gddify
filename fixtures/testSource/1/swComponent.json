@@ -1,0 +1,8 @@
+{
+  "name": "default",
+  "type": "default",
+  "options": {
+    "basePath": "",
+    "sources": []
+  }
+}
