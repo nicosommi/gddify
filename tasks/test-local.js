@@ -9,7 +9,7 @@ const paths = {
 }
 
 function defineTestTask (taskName, reporters) {
-  gulp.task(taskName, ['build'], (cb) => {
+  gulp.task(taskName, (cb) => {
     gulp.src(paths.sourceCode)
       .pipe(istanbul({
         includeUntested: true
