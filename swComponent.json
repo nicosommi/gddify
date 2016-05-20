@@ -7,7 +7,7 @@
       "../block-js",
       "../gene-js"
     ],
-    "basePath": "/home/nicosommi/workspace/nicosommi/gddify/./",
+    "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
     "cleanPath": ".gdd-clean"
   },
   "swBlocks": [
@@ -263,6 +263,35 @@
         {
           "name": "spec/promise.spec.js",
           "path": "spec/promise.spec.js",
+          "options": {
+            "sources": [
+              "./",
+              "../block-js",
+              "../gene-js"
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        }
+      ]
+    },
+    {
+      "name": "docs",
+      "type": "docs",
+      "version": "0.0.0",
+      "options": {
+        "sources": [
+          "./",
+          "../block-js",
+          "../gene-js"
+        ],
+        "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+        "cleanPath": ".gdd-clean"
+      },
+      "sourceCodeFiles": [
+        {
+          "name": "README.md",
+          "path": "README.md",
           "options": {
             "sources": [
               "./",

@@ -1,5 +1,6 @@
 import UpdateSwComponent from '../source/lib/updateSwComponent.js'
 import sinon from 'sinon'
+import path from 'path'
 
 describe('UpdateSwComponent', () => {
   let constructorSpy,
@@ -192,6 +193,64 @@ describe('UpdateSwComponent', () => {
 
     it('should take a js object form a file and put a json into the destination', () => {
       sinon.assert.calledWith(writeJsonSpy, destination, jsObject, { spaces: 2 })
+    })
+  })
+
+  describe('increment', () => {
+    let writeJsonSpy,
+      expectedJson
+
+    beforeEach(() => {
+      writeJsonSpy = sinon.spy(() => Promise.resolve())
+      UpdateSwComponent.__Rewire__('writeJson', writeJsonSpy)
+
+      addSwBlocksSpy = sinon.spy(
+        function addSwBlocksSpyMethod () {
+          this.swBlocks = [
+            { name: 'blockname', type: 'type4', version: '0.0.0', sourceCodeFiles: [] }
+          ]
+        }
+      )
+
+      swComponentJson = {
+        options: {
+          basePath: `${__dirname}/../fixtures/testSource`
+        },
+        swBlocks: [
+          {
+            name: 'blockname',
+            type: 'type4',
+            version: '0.0.0',
+            sourceCodeFiles: []
+          }
+        ]
+      }
+
+      UpdateSwComponent.__Rewire__('SwComponent', SwComponent)
+
+      updateSwComponent = new UpdateSwComponent(swComponentJson)
+    })
+
+    describe('patch', () => {
+      beforeEach(() => {
+        expectedJson = {
+          options: {
+            basePath: `${__dirname}/../fixtures/testSource`
+          },
+          swBlocks: [
+            {
+              name: 'blockname',
+              type: 'type4',
+              version: '0.0.1',
+              sourceCodeFiles: []
+            }
+          ]
+        }
+        return updateSwComponent.increment('patch', 'blockname', 'type4')
+      })
+      it('should increase the patch version number', () => {
+        sinon.assert.calledWith(writeJsonSpy, path.normalize(`${__dirname}/../fixtures/testSource/swComponent.json`), expectedJson, { spaces: 2 })
+      })
     })
   })
 

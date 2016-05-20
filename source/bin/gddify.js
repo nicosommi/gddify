@@ -56,8 +56,9 @@ export default function invoke (env) {
           return updateSwComponent.add(argv.glob, argv.name, argv.type)
         case 'addfile':
           return updateSwComponent.addFile(argv.path, argv.name, argv.type)
+        case 'increment':
+          return updateSwComponent.increment(argv.release, argv.name, argv.type)
         case 'jsonification':
-        console.log('paackage is ', {is: path.normalize(`${env.cwd}/${argv.from}`)})
           return updateSwComponent.jsonification(path.normalize(`${env.cwd}/${argv.from}`), path.normalize(`${env.cwd}/${argv.to}`))
         default:
           console.log(chalk.yellow('Invalid command. Use gddify [generate|update|compile|refresh|add|addfile].'))

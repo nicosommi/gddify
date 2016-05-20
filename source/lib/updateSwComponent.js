@@ -15,6 +15,7 @@ const getNewerBlocks = Symbol('getNewerBlocks')
 const updateFrom = Symbol('updateFrom')
 const saveConfiguration = Symbol('saveConfiguration')
 const addSourceCodeFile = Symbol('addSourceCodeFile')
+const filterBlocks = Symbol('filterBlocks')
 
 export default class UpdateSwComponent {
   constructor (targetSwComponentJson) {
@@ -31,17 +32,24 @@ export default class UpdateSwComponent {
     return result
   }
 
-  [ getNewerBlocks ] (component, name, type) {
-    const result = []
+  [ filterBlocks ] (blocks, name, type) {
+    let result = blocks
     if (name) {
-      component.swBlocks = component.swBlocks.filter(swBlock => swBlock.name === name)
+      result = result.filter(block => block.name === name)
     }
 
     if (type) {
-      component.swBlocks = component.swBlocks.filter(swBlock => swBlock.type === type)
+      result = result.filter(block => block.type === type)
     }
+    return result
+  }
 
-    component.swBlocks
+  [ getNewerBlocks ] (component, name, type) {
+    const result = []
+    const newerBlocks = this[filterBlocks](component.swBlocks, name, type)
+
+    // TODO: use a Set on result
+    newerBlocks
       .forEach(
         (swBlock) => {
           let index
@@ -73,6 +81,18 @@ export default class UpdateSwComponent {
         console.log(chalk.magenta(`File ${sourceCodeFilePath} already exists, omitted`))
       }
     }
+  }
+
+  increment (release, name, type) {
+    console.log(chalk.green('Incrementing the release...'))
+    const blocks = this[filterBlocks](this.targetSwComponent.swBlocks, name, type)
+    blocks.forEach(
+      block => {
+        block.version = semver.inc(block.version, release)
+      }
+    )
+    return this[saveConfiguration](this.targetSwComponent)
+      .then(() => console.log(chalk.green('Increment finished.')))
   }
 
   jsonification (source, destination) {
@@ -279,8 +299,7 @@ export default class UpdateSwComponent {
           .then(() => this.targetSwComponent.synchronizeWith(swBlock))
           .then(() => this.jsonificate(swBlock))
         return Promise.resolve(syncPromise).reflect()
-      },
-      { concurrency: 1 }
+      }
     )
       .then((inspections) => {
         let errorCount = 0
@@ -297,7 +316,7 @@ export default class UpdateSwComponent {
         } else {
           console.log(chalk.green(`Component ${this.targetSwComponent.name} updated.`))
           console.log(chalk.magenta('Adding the new source...'))
-          this.addSource(fromPath);
+          this.addSource(fromPath)
           return Promise.resolve(this.targetSwComponent)
         }
       })

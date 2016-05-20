@@ -10,7 +10,8 @@ describe('gddify', () => {
     addFileSpy,
     addSpy,
     cleanSpy,
-    jsonificationSpy
+    jsonificationSpy,
+    incrementSpy
 
   class UpdateSwComponent {
     synchronize () {
@@ -40,6 +41,10 @@ describe('gddify', () => {
     clean () {
       return cleanSpy.apply(this, arguments)
     }
+
+    increment () {
+      return incrementSpy.apply(this, arguments)
+    }
   }
 
   beforeEach(() => {
@@ -50,6 +55,7 @@ describe('gddify', () => {
     addSpy = sinon.spy()
     cleanSpy = sinon.spy()
     jsonificationSpy = sinon.spy()
+    incrementSpy = sinon.spy()
 
     argv = {}
     env = {
@@ -176,6 +182,24 @@ describe('gddify', () => {
 
       it('should output correctly as default', () => {
         sinon.assert.calledWith(chalk.yellow, 'Invalid command. Use gddify [generate|update|compile|refresh|add|addfile].')
+      })
+    })
+
+    describe('increment', () => {
+      beforeEach(() => {
+        argv = {
+          _: ['increment'],
+          'release': 'patch',
+          'name': 'blockName',
+          'type': 'blockType'
+        }
+
+        invoke.__Rewire__('argv', argv)
+        return invoke(env)
+      })
+
+      it('should call the increment', () => {
+        sinon.assert.calledWith(incrementSpy, 'patch', 'blockName', 'blockType')
       })
     })
   })
