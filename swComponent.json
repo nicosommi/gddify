@@ -11,6 +11,11 @@
       },
       {
         "path": "../gene-js/"
+      },
+      {
+        "path": "../../integracionesagiles/intag-homepage",
+        "name": "nodejs",
+        "type": "runtime"
       }
     ],
     "basePath": "/home/nicosommi/workspace/nicosommi/gddify/./",
@@ -20,7 +25,7 @@
     {
       "name": "nodejs",
       "type": "runtime",
-      "version": "0.0.1",
+      "version": "0.0.3",
       "options": {
         "jsonification": [
           {
@@ -37,6 +42,11 @@
           },
           {
             "path": "../gene-js/"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "nodejs",
+            "type": "runtime"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -56,6 +66,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -87,6 +102,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -109,6 +129,11 @@
           },
           {
             "path": "../gene-js/"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "nodejs",
+            "type": "runtime"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -128,6 +153,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -147,6 +177,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -166,6 +201,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -185,6 +225,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -204,6 +249,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -223,6 +273,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -242,6 +297,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -261,6 +321,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -280,6 +345,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -302,6 +372,11 @@
           },
           {
             "path": "../gene-js/"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "nodejs",
+            "type": "runtime"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -321,6 +396,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -343,6 +423,11 @@
           },
           {
             "path": "../gene-js/"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "nodejs",
+            "type": "runtime"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -362,6 +447,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -381,6 +471,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -403,6 +498,11 @@
           },
           {
             "path": "../gene-js/"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "nodejs",
+            "type": "runtime"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -422,6 +522,11 @@
               },
               {
                 "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",

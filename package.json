@@ -12,6 +12,7 @@
       "after",
       "afterEach",
       "it",
+      "xit",
       "expect"
     ]
   },
