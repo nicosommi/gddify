@@ -126,7 +126,7 @@ export default class UpdateSwComponent {
     this.addSource('./')
     const sources = this.targetSwComponent.options.sources
 
-    return this[updateFrom](name, type, sources)
+    return this[updateFrom](sources)
       .then(() => {
         console.log(chalk.green('Update finished.'))
         return Promise.resolve()
@@ -135,19 +135,19 @@ export default class UpdateSwComponent {
 
   refresh (name, type) {
     console.log(chalk.green('Beginning refresh...'))
-    return this[updateFrom](name, type, ['./'])
+    return this[updateFrom]([{path: './', name, type}])
       .then(() => {
         console.log(chalk.green('Refresh finished.'))
         return Promise.resolve()
       })
   }
 
-  [ updateFrom ] (name, type, sources) {
+  [ updateFrom ] (sources) {
     return Promise.mapSeries(
       sources,
       source => {
         console.log(chalk.magenta(`Reading from ${source}...`))
-        return this.synchronize(source, name, type)
+        return this.synchronize(source.path, source.name, source.type)
       }
     )
       .then(() => {
@@ -181,13 +181,19 @@ export default class UpdateSwComponent {
       })
   }
 
-  addSource (fromPath) {
+  addSource (path, name, type) {
+    const newSource = { path, name, type }
     if (!this.targetSwComponent.options.sources) {
-      this.targetSwComponent.options.sources = [fromPath]
+      this.targetSwComponent.options.sources = [newSource]
     } else {
-      const existingSource = this.targetSwComponent.options.sources.find(currentSource => (currentSource === fromPath))
+      const existingSource = this.targetSwComponent.options.sources.find(
+        currentSource => {
+          return (currentSource.path === newSource.path && currentSource.name === newSource.name && currentSource.type === newSource.type)
+        }
+      )
+
       if (!existingSource) {
-        this.targetSwComponent.options.sources.push(fromPath)
+        this.targetSwComponent.options.sources.push(newSource)
       }
     }
   }
@@ -316,7 +322,7 @@ export default class UpdateSwComponent {
         } else {
           console.log(chalk.green(`Component ${this.targetSwComponent.name} updated.`))
           console.log(chalk.magenta('Adding the new source...'))
-          this.addSource(fromPath)
+          this.addSource(fromPath, name, type)
           return Promise.resolve(this.targetSwComponent)
         }
       })

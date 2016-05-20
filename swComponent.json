@@ -3,11 +3,17 @@
   "type": "openSourceComponent",
   "options": {
     "sources": [
-      "./",
-      "../block-js",
-      "../gene-js"
+      {
+        "path": "../block-js/"
+      },
+      {
+        "path": "./"
+      },
+      {
+        "path": "../gene-js/"
+      }
     ],
-    "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+    "basePath": "/home/nicosommi/workspace/nicosommi/gddify/./",
     "cleanPath": ".gdd-clean"
   },
   "swBlocks": [
@@ -23,9 +29,15 @@
           }
         ],
         "sources": [
-          "./",
-          "../block-js",
-          "../gene-js"
+          {
+            "path": "../block-js/"
+          },
+          {
+            "path": "./"
+          },
+          {
+            "path": "../gene-js/"
+          }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
         "cleanPath": ".gdd-clean"
@@ -36,9 +48,15 @@
           "path": "package.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean",
@@ -61,9 +79,15 @@
               }
             ],
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -77,9 +101,15 @@
       "version": "0.0.0",
       "options": {
         "sources": [
-          "./",
-          "../block-js",
-          "../gene-js"
+          {
+            "path": "../block-js/"
+          },
+          {
+            "path": "./"
+          },
+          {
+            "path": "../gene-js/"
+          }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
         "cleanPath": ".gdd-clean"
@@ -90,9 +120,15 @@
           "path": "gulpfile.babel.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -103,9 +139,15 @@
           "path": "tasks/build.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -116,9 +158,15 @@
           "path": "tasks/clean.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -129,9 +177,15 @@
           "path": "tasks/deploy.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -142,9 +196,15 @@
           "path": "tasks/suppress-errors.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -155,9 +215,15 @@
           "path": "tasks/test-local.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -168,9 +234,15 @@
           "path": "tasks/test-watch.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -181,9 +253,15 @@
           "path": "tasks/test.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -194,9 +272,15 @@
           "path": ".babelrc",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -210,9 +294,15 @@
       "version": "0.0.0",
       "options": {
         "sources": [
-          "./",
-          "../block-js",
-          "../gene-js"
+          {
+            "path": "../block-js/"
+          },
+          {
+            "path": "./"
+          },
+          {
+            "path": "../gene-js/"
+          }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
         "cleanPath": ".gdd-clean"
@@ -223,9 +313,15 @@
           "path": "LICENSE",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -239,9 +335,15 @@
       "version": "0.0.0",
       "options": {
         "sources": [
-          "./",
-          "../block-js",
-          "../gene-js"
+          {
+            "path": "../block-js/"
+          },
+          {
+            "path": "./"
+          },
+          {
+            "path": "../gene-js/"
+          }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
         "cleanPath": ".gdd-clean"
@@ -252,9 +354,15 @@
           "path": "source/lib/promise.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -265,9 +373,15 @@
           "path": "spec/promise.spec.js",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"
@@ -278,12 +392,18 @@
     {
       "name": "docs",
       "type": "docs",
-      "version": "0.0.2",
+      "version": "0.0.4",
       "options": {
         "sources": [
-          "./",
-          "../block-js",
-          "../gene-js"
+          {
+            "path": "../block-js/"
+          },
+          {
+            "path": "./"
+          },
+          {
+            "path": "../gene-js/"
+          }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
         "cleanPath": ".gdd-clean"
@@ -294,9 +414,15 @@
           "path": "README.md",
           "options": {
             "sources": [
-              "./",
-              "../block-js",
-              "../gene-js"
+              {
+                "path": "../block-js/"
+              },
+              {
+                "path": "./"
+              },
+              {
+                "path": "../gene-js/"
+              }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
             "cleanPath": ".gdd-clean"

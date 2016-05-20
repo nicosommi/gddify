@@ -178,7 +178,7 @@ var UpdateSwComponent = function () {
       this.addSource('./');
       var sources = this.targetSwComponent.options.sources;
 
-      return this[updateFrom](name, type, sources).then(function () {
+      return this[updateFrom](sources).then(function () {
         console.log(_get__('chalk').green('Update finished.'));
         return _get__('Promise').resolve();
       });
@@ -187,19 +187,19 @@ var UpdateSwComponent = function () {
     key: 'refresh',
     value: function refresh(name, type) {
       console.log(_get__('chalk').green('Beginning refresh...'));
-      return this[updateFrom](name, type, ['./']).then(function () {
+      return this[updateFrom]([{ path: './', name: name, type: type }]).then(function () {
         console.log(_get__('chalk').green('Refresh finished.'));
         return _get__('Promise').resolve();
       });
     }
   }, {
     key: updateFrom,
-    value: function value(name, type, sources) {
+    value: function value(sources) {
       var _this2 = this;
 
       return _get__('Promise').mapSeries(sources, function (source) {
         console.log(_get__('chalk').magenta('Reading from ' + source + '...'));
-        return _this2.synchronize(source, name, type);
+        return _this2.synchronize(source.path, source.name, source.type);
       }).then(function () {
         console.log(_get__('chalk').green('Everything updated from all sources.'));
       });
@@ -234,15 +234,17 @@ var UpdateSwComponent = function () {
     }
   }, {
     key: 'addSource',
-    value: function addSource(fromPath) {
+    value: function addSource(path, name, type) {
+      var newSource = { path: path, name: name, type: type };
       if (!this.targetSwComponent.options.sources) {
-        this.targetSwComponent.options.sources = [fromPath];
+        this.targetSwComponent.options.sources = [newSource];
       } else {
         var existingSource = this.targetSwComponent.options.sources.find(function (currentSource) {
-          return currentSource === fromPath;
+          return currentSource.path === newSource.path && currentSource.name === newSource.name && currentSource.type === newSource.type;
         });
+
         if (!existingSource) {
-          this.targetSwComponent.options.sources.push(fromPath);
+          this.targetSwComponent.options.sources.push(newSource);
         }
       }
     }
@@ -372,7 +374,7 @@ var UpdateSwComponent = function () {
         } else {
           console.log(_get__('chalk').green('Component ' + _this5.targetSwComponent.name + ' updated.'));
           console.log(_get__('chalk').magenta('Adding the new source...'));
-          _this5.addSource(fromPath);
+          _this5.addSource(fromPath, name, type);
           return _get__('Promise').resolve(_this5.targetSwComponent);
         }
       });

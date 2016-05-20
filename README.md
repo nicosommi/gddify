@@ -1,5 +1,6 @@
 <!-- ph replacements -->
-<!-- name, /'name': 'gddify'/g, 'name': 'gddify' -->
+<!-- name, /gddify/g, gddify -->
+<!-- namePascal, /Gddify/g, Gddify -->
 <!-- endph -->
 <!-- ph ignoringStamps -->
 <!-- endph -->
@@ -164,16 +165,16 @@ I'm an enterpreneur and a open source developer.
 ![node 0.12.x](https://img.shields.io/badge/node-0.12.x-brightgreen.svg) ![node 0.11.x](https://img.shields.io/badge/node-0.11.x-brightgreen.svg) ![node 0.10.x](https://img.shields.io/badge/node-0.10.x-brightgreen.svg)
 ![iojs 2.x.x](https://img.shields.io/badge/iojs-2.x.x-brightgreen.svg) ![iojs 1.x.x](https://img.shields.io/badge/iojs-1.x.x-brightgreen.svg)
 <!-- endph -->
-<!-- stamp installation -->
+<!-- ph installation -->
 # Installation
 
 Copy and paste the following command into your terminal to install Gddify:
 
 ```
-npm install block-js --save-dev
+npm install gddify --save-dev
 ```
 
-<!-- endstamp -->
+<!-- endph -->
 <!-- stamp contribute -->
 # How to Contribute
 

@@ -136,7 +136,7 @@ describe('UpdateSwComponent', () => {
         type,
         options: {
           basePath: `${__dirname}/../fixtures/testSource`,
-          sources: ['1', '2']
+          sources: [{path: '1', name: blockName, type: blockType}, {path: '2', name: 'name2', type: 'type2'}]
         }
       }
       updateSwComponent = new UpdateSwComponent(swComponentJson)
@@ -146,6 +146,10 @@ describe('UpdateSwComponent', () => {
 
     it('should call synchronizeWith for each source plus one because of the refresh', () => {
       sinon.assert.callCount(updateSwComponent.synchronize, 3)
+    })
+
+    it('should call synchronizeWith for each source plus one because of the refresh', () => {
+      sinon.assert.calledWith(updateSwComponent.synchronize, '1', 'blockName', 'blockType')
     })
   })
 
@@ -169,7 +173,7 @@ describe('UpdateSwComponent', () => {
       return updateSwComponent.refresh(blockName, blockType)
     })
 
-    it('should call synchronizeWith for each source plus one because of the refresh', () => {
+    it('should call synchronizeWith just once', () => {
       sinon.assert.callCount(updateSwComponent.synchronize, 1)
     })
   })
