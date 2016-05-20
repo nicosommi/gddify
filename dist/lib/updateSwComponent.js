@@ -49,6 +49,7 @@ var getNewerBlocks = Symbol('getNewerBlocks');
 var updateFrom = Symbol('updateFrom');
 var saveConfiguration = Symbol('saveConfiguration');
 var addSourceCodeFile = Symbol('addSourceCodeFile');
+var filterBlocks = Symbol('filterBlocks');
 
 var UpdateSwComponent = function () {
   function UpdateSwComponent(targetSwComponentJson) {
@@ -69,22 +70,30 @@ var UpdateSwComponent = function () {
       return result;
     }
   }, {
-    key: getNewerBlocks,
-    value: function value(component, name, type) {
-      var result = [];
+    key: filterBlocks,
+    value: function value(blocks, name, type) {
+      var result = blocks;
       if (name) {
-        component.swBlocks = component.swBlocks.filter(function (swBlock) {
-          return swBlock.name === name;
+        result = result.filter(function (block) {
+          return block.name === name;
         });
       }
 
       if (type) {
-        component.swBlocks = component.swBlocks.filter(function (swBlock) {
-          return swBlock.type === type;
+        result = result.filter(function (block) {
+          return block.type === type;
         });
       }
+      return result;
+    }
+  }, {
+    key: getNewerBlocks,
+    value: function value(component, name, type) {
+      var result = [];
+      var newerBlocks = this[filterBlocks](component.swBlocks, name, type);
 
-      component.swBlocks.forEach(function (swBlock) {
+      // TODO: use a Set on result
+      newerBlocks.forEach(function (swBlock) {
         var index = void 0;
         var found = result.find(function (targetBlock, i) {
           index = i;
@@ -118,6 +127,18 @@ var UpdateSwComponent = function () {
           console.log(_get__('chalk').magenta('File ' + sourceCodeFilePath + ' already exists, omitted'));
         }
       }
+    }
+  }, {
+    key: 'increment',
+    value: function increment(release, name, type) {
+      console.log(_get__('chalk').green('Incrementing the release...'));
+      var blocks = this[filterBlocks](this.targetSwComponent.swBlocks, name, type);
+      blocks.forEach(function (block) {
+        block.version = _get__('semver').inc(block.version, release);
+      });
+      return this[saveConfiguration](this.targetSwComponent).then(function () {
+        return console.log(_get__('chalk').green('Increment finished.'));
+      });
     }
   }, {
     key: 'jsonification',
@@ -338,7 +359,7 @@ var UpdateSwComponent = function () {
           return _this5.jsonificate(swBlock);
         });
         return _get__('Promise').resolve(syncPromise).reflect();
-      }, { concurrency: 1 }).then(function (inspections) {
+      }).then(function (inspections) {
         var errorCount = 0;
         inspections.forEach(function (inspection) {
           if (!inspection.isFulfilled()) {
@@ -454,7 +475,13 @@ function _update_operation__(operation, variableName, prefix) {
 }
 
 function _set__(variableName, value) {
-  return _RewiredData__[variableName] = value;
+  if ((typeof variableName === 'undefined' ? 'undefined' : _typeof(variableName)) === 'object') {
+    Object.keys(variableName).forEach(function (name) {
+      _RewiredData__[name] = variableName[name];
+    });
+  } else {
+    return _RewiredData__[variableName] = value;
+  }
 }
 
 function _reset__(variableName) {

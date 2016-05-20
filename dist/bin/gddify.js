@@ -88,8 +88,9 @@ function invoke(env) {
         return updateSwComponent.add(_get__('argv').glob, _get__('argv').name, _get__('argv').type);
       case 'addfile':
         return updateSwComponent.addFile(_get__('argv').path, _get__('argv').name, _get__('argv').type);
+      case 'increment':
+        return updateSwComponent.increment(_get__('argv').release, _get__('argv').name, _get__('argv').type);
       case 'jsonification':
-        console.log('paackage is ', { is: _get__('path').normalize(env.cwd + '/' + _get__('argv').from) });
         return updateSwComponent.jsonification(_get__('path').normalize(env.cwd + '/' + _get__('argv').from), _get__('path').normalize(env.cwd + '/' + _get__('argv').to));
       default:
         console.log(_get__('chalk').yellow('Invalid command. Use gddify [generate|update|compile|refresh|add|addfile].'));
@@ -185,7 +186,13 @@ function _update_operation__(operation, variableName, prefix) {
 }
 
 function _set__(variableName, value) {
-  return _RewiredData__[variableName] = value;
+  if ((typeof variableName === 'undefined' ? 'undefined' : _typeof(variableName)) === 'object') {
+    Object.keys(variableName).forEach(function (name) {
+      _RewiredData__[name] = variableName[name];
+    });
+  } else {
+    return _RewiredData__[variableName] = value;
+  }
 }
 
 function _reset__(variableName) {

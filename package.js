@@ -5,7 +5,7 @@
 /* license, /MIT/g, MIT */
 /* homepage, /'homepage': '[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)'/g, 'homepage': 'https://github.com/nicosommi/gddify' */
 /* url, /'url': 'git+[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)'/g, 'url': 'git+https://github.com/nicosommi/gddify\.git' */
-/* main, /'main': '[a-zA-Z\.\/]+'/ig, 'main': 'index\.js' */
+/* main, /'main': '[a-zA-Z\.\/]+'/ig, 'main': 'index.js' */
 /* endph */
 /* ph ignoringStamps */
 /* endph */
@@ -15,7 +15,7 @@ module.exports =
   'name': 'gddify',
   'version': '0.1.2',
   'description': 'a gdd utility',
-  'main': 'index\.js',
+  'main': 'index.js',
   'standard': {
     'globals': [
       'describe',
@@ -55,6 +55,8 @@ module.exports =
     'flowsync': '^0.1.12',
     /* endph */
     /* stamp componentCliDeps */
+    'liftoff': '^2.2.1',
+    'yargs': '^4.7.1',
     /* endstamp */
     /* stamp promises */
     'bluebird': '^3.3.5',

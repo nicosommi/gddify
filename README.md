@@ -1,6 +1,13 @@
+<!-- ph replacements -->
+<!-- name, /'name': 'gddify'/g, 'name': 'gddify' -->
+<!-- endph -->
+<!-- ph ignoringStamps -->
+<!-- endph -->
+<!-- ph title -->
 # Gddify.js [![npm version](https://img.shields.io/npm/v/gddify.svg)](https://www.npmjs.com/package/gddify) [![license type](https://img.shields.io/npm/l/gddify.svg)](https://github.com/nicosommi/gddify.git/blob/master/LICENSE) [![npm downloads](https://img.shields.io/npm/dm/gddify.svg)](https://www.npmjs.com/package/gddify) ![ECMAScript 6 & 5](https://img.shields.io/badge/ECMAScript-6%20/%205-red.svg) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+<!-- endph -->
 
-##- ph description -##
+<!-- ph description -->
 It makes it easy to work with the GDD approach.
 Compose software components by putting blocks togheter and updating them whenever you want.
 Ah yeah, and with no development effort for generators and template creation.
@@ -8,9 +15,9 @@ Thinked with the SRP in mind, this is ideal for microservices.
 It let's you minimize the maintenance effort at almost no additional cost.
 It's also useful for scaffolding and quality assurance across your company, among other things.
 Read more on [http://nicosommi.com](http://nicosommi.com)
-##- endph -##
+<!-- endph -->
 
-##- stamp usagesAndExamples -##
+<!-- ph usagesAndExamples -->
 ## Usage & examples
 ### Prerequisites per project
 ```shell
@@ -95,8 +102,8 @@ npm run gddify increment -- --name mycomponent --type tasks --release "major"
 This increments the version component named mycomponent of type tasks using the release type (according to [semver](http://semver.npmjs.com/)).
 It's particularly useful when you want to allow other blocks to be refreshed/updated.
 
-##- endstamp -##
-##- stamp howItWorks -##
+<!-- endph -->
+<!-- ph howItWorks -->
 ## How it works
 Basically, it creates and maintains a swComponent.json on the project roots with the information related to your project and their sources.
 Using that, it implements the [GDD approach](http://nicosommi.com), based on gene, block and component information provided by other GDD projects out there.
@@ -107,7 +114,9 @@ With gdd you will be able to create and compose projects from your other project
 Microservices, project bootstrapping, scaffolding (and with updates), among others.
 
 *Is it hard to learn? Not at all.*
-It's intuitive. It's just common sense. Nothing else that the commands here and understanding the GDD approach. The most advanced task you will need to do is to create a regular expressions. But come on, if you want to be called a developer, you should know how to create a regular expression!
+It's intuitive. It's just common sense. Nothing else that the commands here and understanding the GDD approach.
+As this is a change in your current workflow it may be uncomfortable at the beginning, but you get used to it.
+The most advanced task you will need to do is to create a regular expressions. But come on, if you want to be called a developer or even an advanced text-processor user, you should know how to create a regular expression! In complex cases it requires to think the regular expression very well, as well as how many place holders and stamps to include, to ignore, etc. If you don't know what that is go [here](http://nicosommi.com).
 
 *Is this different than yeoman? Absolutely.*
 Gddify is a tool for applying a development process aspect/practice that you can attach to your development process, like TDD/BDD (but with a different purpose). It's true that you may accomplish with GDD the same stuff that you previously did with yeoman, and it does not require ANY effort on building up a generator, it just requires you to provide meta information in the source code files by following the development process aspect. So in this way, you can just completely avoid efforts building up templates and generators, testing them properly, and creating complex updating processes. Also there are many other uses cases.
@@ -134,7 +143,7 @@ Currently it's built-in inside this package. As the community grows and contribu
 But, please, don't. Read why [here](http://nicosommi.com/?p=518).
 
 *Can I use it already? Yes.*
-But as it's still on a early version, you should use it carefully, taking care of committing all your changes before running gddify, so you can always stash them after that.
+But as it's still on a early version, you should use it carefully, taking care of committing all your changes before running gddify, so you can always stash them after that. It's not rock solid yet but it has a high test coverage and it follow good practices for the source code (js standard).
 
 *There are requirements? Yes.*
 Gddify requires node.js and your commitment to the GDD approach to be really useful.
@@ -143,8 +152,9 @@ Gddify requires node.js and your commitment to the GDD approach to be really use
 You can either send me an email to nicosommi@gmail.com or visit my company website http://www.integracionesagiles.com
 I'm an enterpreneur and a open source developer.
 
-##- endstamp -##
-##- stamp qualityAndCompatibility -##
+<!-- endph -->
+<!-- ph qualityAndCompatibility -->
+# Quality and Compatibility
 # Quality and Compatibility
 
 [![Build Status](https://travis-ci.org/nicosommi/gddify.png?branch=master)](https://travis-ci.org/nicosommi/gddify) [![Coverage Status](https://coveralls.io/repos/nicosommi/gddify/badge.svg)](https://coveralls.io/r/nicosommi/gddify)  [![bitHound Score](https://www.bithound.io/github/nicosommi/gddify/badges/score.svg)](https://www.bithound.io/github/nicosommi/gddify)  [![Dependency Status](https://david-dm.org/nicosommi/gddify.png?theme=shields.io)](https://david-dm.org/nicosommi/gddify?theme=shields.io) [![Dev Dependency Status](https://david-dm.org/nicosommi/gddify/dev-status.svg)](https://david-dm.org/nicosommi/gddify?theme=shields.io#info=devDependencies)
@@ -153,31 +163,31 @@ I'm an enterpreneur and a open source developer.
 
 ![node 0.12.x](https://img.shields.io/badge/node-0.12.x-brightgreen.svg) ![node 0.11.x](https://img.shields.io/badge/node-0.11.x-brightgreen.svg) ![node 0.10.x](https://img.shields.io/badge/node-0.10.x-brightgreen.svg)
 ![iojs 2.x.x](https://img.shields.io/badge/iojs-2.x.x-brightgreen.svg) ![iojs 1.x.x](https://img.shields.io/badge/iojs-1.x.x-brightgreen.svg)
-##- endstamp -##
-##- stamp installation -##
+<!-- endph -->
+<!-- stamp installation -->
 # Installation
 
 Copy and paste the following command into your terminal to install Gddify:
 
 ```
-npm install gdd --save-dev
+npm install block-js --save-dev
 ```
 
-##- endstamp -##
-##- stamp contribute -##
+<!-- endstamp -->
+<!-- stamp contribute -->
 # How to Contribute
 
 You can submit your ideas through our [issues system](https://github.com/nicosommi/gddify/issues), or make the modifications yourself and submit them to us in the form of a [GitHub pull request](https://help.github.com/articles/using-pull-requests/).
 
 Also I accept [donations](http://nicosommi.com). If this component helps you out, it will be enough for me, but if you want to show me how much did it helped you by giving me some money, it will be great for me and my dog, who wants to eat. But seriously I rely on that to keep going with the development.
 I also offer [services](http://integracionesagiles.com) like consultation, development help, mentoring, etc.
-##- endstamp -##
-##- stamp runningtests -##
+<!-- endstamp -->
+<!-- stamp runningtests -->
 ## Running Tests
 
-It's easy to run the test suite locally, and *highly recommended* if you're using Gddify.js on a platform we aren't automatically testing for.
+It's easy to run the test suite locally, and *highly recommended* if you're using gddify on a platform we aren't automatically testing for.
 
 ```
 npm test
 ```
-##- endstamp -##
+<!-- endstamp -->
