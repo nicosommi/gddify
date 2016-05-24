@@ -304,31 +304,35 @@ export default class UpdateSwComponent {
           .then(() => this.jsonificate(swBlock))
           .then(
             () => {
+              console.log(chalk.magenta(`About to write configuration... `))
               return this[saveConfiguration](this.targetSwComponent)
+                .then(() => {
+                  console.log(chalk.magenta(`Configuration written  for type ${swBlock.type} to version ${swBlock.version}... `))
+                })
             }
           )
         return Promise.resolve(syncPromise).reflect()
       }
     )
-      .then((inspections) => {
-        let errorCount = 0
-        inspections.forEach(
-          inspection => {
-            if (!inspection.isFulfilled()) {
-              errorCount++
-              console.log(chalk.yellow(inspection.reason()))
-            }
+    .then((inspections) => {
+      let errorCount = 0
+      inspections.forEach(
+        inspection => {
+          if (!inspection.isFulfilled()) {
+            errorCount++
+            console.log(chalk.yellow(inspection.reason()))
           }
-        )
-        if (errorCount) {
-          return Promise.reject(new Error('Error/Warnings occurred during synchronization.'))
-        } else {
-          console.log(chalk.green(`Component ${this.targetSwComponent.name} updated.`))
-          console.log(chalk.magenta('Adding the new source...'))
-          this.addSource(fromPath, name, type)
-          return Promise.resolve(this.targetSwComponent)
         }
-      })
+      )
+      if (errorCount) {
+        return Promise.reject(new Error('Error/Warnings occurred during synchronization.'))
+      } else {
+        console.log(chalk.green(`Component ${this.targetSwComponent.name} updated.`))
+        console.log(chalk.magenta('Adding the new source...'))
+        this.addSource(fromPath, name, type)
+        return Promise.resolve(this.targetSwComponent)
+      }
+    })
   }
 
   clean (dirtyPhs) {

@@ -356,7 +356,10 @@ var UpdateSwComponent = function () {
         }).then(function () {
           return _this4.jsonificate(swBlock);
         }).then(function () {
-          return _this4[saveConfiguration](_this4.targetSwComponent);
+          console.log(_get__('chalk').magenta('About to write configuration... '));
+          return _this4[saveConfiguration](_this4.targetSwComponent).then(function () {
+            console.log(_get__('chalk').magenta('Configuration written  for type ' + swBlock.type + ' to version ' + swBlock.version + '... '));
+          });
         });
         return _get__('Promise').resolve(syncPromise).reflect();
       }).then(function (inspections) {

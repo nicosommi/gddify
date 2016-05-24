@@ -1,6 +1,6 @@
 {
   "name": "gddify",
-  "version": "0.1.2",
+  "version": "0.0.1",
   "description": "a gdd utility",
   "main": "index.js",
   "standard": {
@@ -15,9 +15,6 @@
       "xit",
       "expect"
     ]
-  },
-  "bin": {
-    "gddify": "./dist/bin/gddify.js"
   },
   "scripts": {
     "gddify": "gddify",
@@ -38,8 +35,11 @@
     "flowsync": "^0.1.12",
     "liftoff": "^2.2.1",
     "yargs": "^4.7.1",
-    "bluebird": "^3.3.5",
+    "sinon": "^1.17.3",
+    "should": "^8.2.2",
+    "mocha": "^2.2.5",
     "incognito": "^0.1.4",
+    "bluebird": "^3.3.5",
     "debug": "^2.2.0"
   },
   "devDependencies": {

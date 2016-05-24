@@ -1,20 +1,20 @@
 /* ph replacements */
 /* name, /'name': 'gddify'/g, 'name': 'gddify' */
-/* version, /'version': '\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b'/ig, 'version': '0.1.2' */
+/* version, /'version': '\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b'/ig, 'version': '0.0.1' */
 /* description, /'description': 'a\ gdd\ utility'/g, 'description': 'a gdd utility' */
-/* license, /MIT/g, MIT */
-/* homepage, /'homepage': '[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)'/g, 'homepage': 'https://github.com/nicosommi/gddify' */
-/* url, /'url': 'git+[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)'/g, 'url': 'git+https://github.com/nicosommi/gddify\.git' */
 /* main, /'main': '[a-zA-Z\.\/]+'/ig, 'main': 'index.js' */
+/* license, /MIT/g, MIT */
 /* endph */
 /* ph ignoringStamps */
-/* uicomponent */
+/* webapp_scripts, service_scripts */
+/* webapp_depende, service_dependencies */
+/* webapp_devDependencies, service_devDependencies */
 /* endph */
 
 module.exports =
 {
   'name': 'gddify',
-  'version': '0.1.2',
+  'version': '0.0.1',
   'description': 'a gdd utility',
   'main': 'index.js',
   'standard': {
@@ -31,13 +31,16 @@ module.exports =
     ]
   },
   /* ph bin */
-  'bin': {
-    'gddify': './dist/bin/gddify.js'
-  },
   /* endph */
   'scripts': {
     /* ph componentScripts */
     /* endph */
+    /* stamp webapp_scripts */
+    /* endstamp */
+    /* stamp lib_scripts */
+    /* endstamp */
+    /* stamp service_scripts */
+    /* endstamp */
     'gddify': 'gddify',
     'test': 'gulp test',
     'build': 'gulp build',
@@ -55,37 +58,39 @@ module.exports =
     'semver': '^5.1.0',
     'glob': '^7.0.3',
     'flowsync': '^0.1.12',
-    /* endph */
-    /* stamp componentCliDeps */
     'liftoff': '^2.2.1',
     'yargs': '^4.7.1',
+    /* endph */
+    /* stamp webapp_dependencies */
     /* endstamp */
-    /* stamp promises */
-    'bluebird': '^3.3.5',
-    /* endstamp */
-    /* stamp es6 */
+    /* stamp lib_dependencies */
+    'sinon': '^1.17.3',
+    'should': '^8.2.2',
+    'mocha': '^2.2.5',
     'incognito': '^0.1.4',
     /* endstamp */
-    /* stamp debuggable */
-    'debug': '^2.2.0'
+    /* stamp service_dependencies */
     /* endstamp */
+    'bluebird': '^3.3.5',
+    'debug': '^2.2.0'
   },
   'devDependencies': {
     /* ph componentDevDependencies */
     /* endph */
-    /* stamp unitTest */
+    /* stamp webapp_devDependencies */
+    /* endstamp */
+    /* stamp lib_devDependencies */
     'sinon': '^1.17.3',
     'should': '^8.2.2',
     'mocha': '^2.2.5',
     /* endstamp */
-    /* stamp transpiler */
+    /* stamp service_devDependencies */
+    /* endstamp */
     'babel': '^6.5.2',
     'babel-core': '^6.6.4',
     'babel-eslint': '^3.1.30',
     'babel-plugin-rewire': '^1.0.0-rc-1',
     'babel-preset-es2015': '^6.6.0',
-    /* endstamp */
-    /* stamp componentBuild */
     'gulp': '^3.9.1',
     'gulp-babel': '^6.1.2',
     'gulp-babel-istanbul': '^1.0.0',
@@ -94,20 +99,21 @@ module.exports =
     'gulp-util': '^3.0.6',
     'run-sequence': '^1.1.5',
     'del': '^2.2.0',
-    /* endstamp */
-    /* stamp uicomponent*/
-    /* endstamp */
-    /* stamp componentUtils */
     'coveralls': '^2.11.2'
-    /* endstamp */
   },
+  /* ph repository */
   'repository': {
     'type': 'git',
     'url': 'git+https://github.com/nicosommi/gddify.git'
   },
+  /* endph */
   /* ph extra */
   /* endph */
   'readmeFilename': 'README.md',
+  /* ph contributors */
   'contributors': [],
+  /* endph */
+  /* ph homepage */
   'homepage': 'https://github.com/nicosommi/gddify'
+  /* endph */
 }
