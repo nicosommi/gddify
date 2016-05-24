@@ -8,6 +8,7 @@
 /* main, /'main': '[a-zA-Z\.\/]+'/ig, 'main': 'index.js' */
 /* endph */
 /* ph ignoringStamps */
+/* uicomponent */
 /* endph */
 
 module.exports =
@@ -94,6 +95,8 @@ module.exports =
     'run-sequence': '^1.1.5',
     'del': '^2.2.0',
     /* endstamp */
+    /* stamp uicomponent*/
+    /* endstamp */
     /* stamp componentUtils */
     'coveralls': '^2.11.2'
     /* endstamp */
@@ -108,4 +111,3 @@ module.exports =
   'contributors': [],
   'homepage': 'https://github.com/nicosommi/gddify'
 }
-

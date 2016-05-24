@@ -213,19 +213,15 @@ var UpdateSwComponent = function () {
   }, {
     key: 'synchronize',
     value: function synchronize(sourcePath, name, type) {
-      var _this3 = this;
-
       console.log(_get__('chalk').green('Generation begins...'));
       var rootBasePath = this.targetSwComponent.options.basePath + '/' + sourcePath;
       var rootSwComponentJson = require(_get__('path').normalize(rootBasePath + '/swComponent.json'));
       rootSwComponentJson.options.basePath = rootBasePath;
 
       console.log(_get__('chalk').magenta('Synchronization begins...'));
-      return this.synchronizeWith(sourcePath, rootSwComponentJson, name, type).then(function (newJson) {
-        return _this3[saveConfiguration](newJson).then(function () {
-          console.log(_get__('chalk').green('All done.'));
-          return _get__('Promise').resolve();
-        });
+      return this.synchronizeWith(sourcePath, rootSwComponentJson, name, type).then(function () {
+        console.log(_get__('chalk').green('All done.'));
+        return _get__('Promise').resolve();
       }, function (error) {
         var message = error.message || error;
         console.log(_get__('chalk').red('ERROR: ' + message));
@@ -320,7 +316,7 @@ var UpdateSwComponent = function () {
   }, {
     key: 'jsonificate',
     value: function jsonificate(block) {
-      var _this4 = this;
+      var _this3 = this;
 
       console.log(_get__('chalk').magenta('Jsonificate block begun...'));
       if (block.options && block.options.jsonification && Array.isArray(block.options.jsonification)) {
@@ -329,8 +325,8 @@ var UpdateSwComponent = function () {
             return jsonificateFile.target === scf.name;
           });
           if (sourceCodeFile) {
-            console.log('dire', { from: _this4.targetSwComponent.options.basePath + '/' + sourceCodeFile.path, to: _this4.targetSwComponent.options.basePath + '/' + jsonificateFile.to });
-            return _this4.jsonification(_this4.targetSwComponent.options.basePath + '/' + sourceCodeFile.path, _this4.targetSwComponent.options.basePath + '/' + jsonificateFile.to);
+            console.log('dire', { from: _this3.targetSwComponent.options.basePath + '/' + sourceCodeFile.path, to: _this3.targetSwComponent.options.basePath + '/' + jsonificateFile.to });
+            return _this3.jsonification(_this3.targetSwComponent.options.basePath + '/' + sourceCodeFile.path, _this3.targetSwComponent.options.basePath + '/' + jsonificateFile.to);
           } else {
             console.log(_get__('chalk').yellow('WARNING: jsonification file not found on block ' + block.name + '-' + block.type + ' jsonification target ' + jsonificateFile.target));
             return _get__('Promise').resolve();
@@ -346,7 +342,7 @@ var UpdateSwComponent = function () {
   }, {
     key: 'synchronizeWith',
     value: function synchronizeWith(fromPath, rootSwComponentJson, name, type) {
-      var _this5 = this;
+      var _this4 = this;
 
       console.log(_get__('chalk').green('building objects and picking newer blocks'));
       var rootSwComponent = this[buildSwComponent](rootSwComponentJson);
@@ -355,10 +351,12 @@ var UpdateSwComponent = function () {
       console.log(_get__('chalk').magenta('synchronizing old blocks'));
       return _get__('Promise').mapSeries(newerBlocks, function (swBlock) {
         console.log(_get__('chalk').green('About to update block ' + swBlock.type + ' to version ' + swBlock.version + '... '));
-        var syncPromise = _this5.inquireBlock(swBlock).then(function () {
-          return _this5.targetSwComponent.synchronizeWith(swBlock);
+        var syncPromise = _this4.inquireBlock(swBlock).then(function () {
+          return _this4.targetSwComponent.synchronizeWith(swBlock);
         }).then(function () {
-          return _this5.jsonificate(swBlock);
+          return _this4.jsonificate(swBlock);
+        }).then(function () {
+          return _this4[saveConfiguration](_this4.targetSwComponent);
         });
         return _get__('Promise').resolve(syncPromise).reflect();
       }).then(function (inspections) {
@@ -372,10 +370,10 @@ var UpdateSwComponent = function () {
         if (errorCount) {
           return _get__('Promise').reject(new Error('Error/Warnings occurred during synchronization.'));
         } else {
-          console.log(_get__('chalk').green('Component ' + _this5.targetSwComponent.name + ' updated.'));
+          console.log(_get__('chalk').green('Component ' + _this4.targetSwComponent.name + ' updated.'));
           console.log(_get__('chalk').magenta('Adding the new source...'));
-          _this5.addSource(fromPath, name, type);
-          return _get__('Promise').resolve(_this5.targetSwComponent);
+          _this4.addSource(fromPath, name, type);
+          return _get__('Promise').resolve(_this4.targetSwComponent);
         }
       });
     }

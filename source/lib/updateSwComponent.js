@@ -168,13 +168,11 @@ export default class UpdateSwComponent {
 
     console.log(chalk.magenta('Synchronization begins...'))
     return this.synchronizeWith(sourcePath, rootSwComponentJson, name, type)
-      .then(newJson => {
-        return this[saveConfiguration](newJson)
-          .then(() => {
-            console.log(chalk.green('All done.'))
-            return Promise.resolve()
-          })
-      }, error => {
+      .then(() => {
+        console.log(chalk.green('All done.'))
+        return Promise.resolve()
+      },
+      error => {
         const message = error.message || error
         console.log(chalk.red(`ERROR: ${message}`))
         return Promise.resolve()
@@ -304,6 +302,11 @@ export default class UpdateSwComponent {
         const syncPromise = this.inquireBlock(swBlock)
           .then(() => this.targetSwComponent.synchronizeWith(swBlock))
           .then(() => this.jsonificate(swBlock))
+          .then(
+            () => {
+              return this[saveConfiguration](this.targetSwComponent)
+            }
+          )
         return Promise.resolve(syncPromise).reflect()
       }
     )

@@ -4,9 +4,6 @@
   "options": {
     "sources": [
       {
-        "path": "../block-js/"
-      },
-      {
         "path": "./"
       },
       {
@@ -16,6 +13,14 @@
         "path": "../../integracionesagiles/intag-homepage",
         "name": "nodejs",
         "type": "runtime"
+      },
+      {
+        "path": "../../integracionesagiles/intag-homepage",
+        "name": "gulp",
+        "type": "buildingTool"
+      },
+      {
+        "path": "../block-js/"
       }
     ],
     "basePath": "/home/nicosommi/workspace/nicosommi/gddify/./",
@@ -25,7 +30,7 @@
     {
       "name": "nodejs",
       "type": "runtime",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "options": {
         "jsonification": [
           {
@@ -34,9 +39,6 @@
           }
         ],
         "sources": [
-          {
-            "path": "../block-js/"
-          },
           {
             "path": "./"
           },
@@ -47,6 +49,14 @@
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "gulp",
+            "type": "buildingTool"
+          },
+          {
+            "path": "../block-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -59,9 +69,6 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -71,6 +78,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -95,9 +110,6 @@
             ],
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -107,6 +119,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -118,12 +138,9 @@
     {
       "name": "gulp",
       "type": "buildingTool",
-      "version": "0.0.0",
+      "version": "0.0.6",
       "options": {
         "sources": [
-          {
-            "path": "../block-js/"
-          },
           {
             "path": "./"
           },
@@ -134,6 +151,14 @@
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "gulp",
+            "type": "buildingTool"
+          },
+          {
+            "path": "../block-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -146,9 +171,6 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -158,30 +180,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
-              }
-            ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
-            "cleanPath": ".gdd-clean"
-          }
-        },
-        {
-          "name": "tasks/build.js",
-          "path": "tasks/build.js",
-          "options": {
-            "sources": [
-              {
-                "path": "../block-js/"
-              },
-              {
-                "path": "./"
-              },
-              {
-                "path": "../gene-js/"
               },
               {
                 "path": "../../integracionesagiles/intag-homepage",
-                "name": "nodejs",
-                "type": "runtime"
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -194,9 +200,6 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -206,30 +209,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
-              }
-            ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
-            "cleanPath": ".gdd-clean"
-          }
-        },
-        {
-          "name": "tasks/deploy.js",
-          "path": "tasks/deploy.js",
-          "options": {
-            "sources": [
-              {
-                "path": "../block-js/"
-              },
-              {
-                "path": "./"
-              },
-              {
-                "path": "../gene-js/"
               },
               {
                 "path": "../../integracionesagiles/intag-homepage",
-                "name": "nodejs",
-                "type": "runtime"
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -242,9 +229,6 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -254,54 +238,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
-              }
-            ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
-            "cleanPath": ".gdd-clean"
-          }
-        },
-        {
-          "name": "tasks/test-local.js",
-          "path": "tasks/test-local.js",
-          "options": {
-            "sources": [
-              {
-                "path": "../block-js/"
-              },
-              {
-                "path": "./"
-              },
-              {
-                "path": "../gene-js/"
               },
               {
                 "path": "../../integracionesagiles/intag-homepage",
-                "name": "nodejs",
-                "type": "runtime"
-              }
-            ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
-            "cleanPath": ".gdd-clean"
-          }
-        },
-        {
-          "name": "tasks/test-watch.js",
-          "path": "tasks/test-watch.js",
-          "options": {
-            "sources": [
+                "name": "gulp",
+                "type": "buildingTool"
+              },
               {
                 "path": "../block-js/"
-              },
-              {
-                "path": "./"
-              },
-              {
-                "path": "../gene-js/"
-              },
-              {
-                "path": "../../integracionesagiles/intag-homepage",
-                "name": "nodejs",
-                "type": "runtime"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -314,9 +258,6 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -326,6 +267,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -338,8 +287,34 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
+                "path": "./"
               },
+              {
+                "path": "../gene-js/"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "nodejs",
+                "type": "runtime"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
+              }
+            ],
+            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "cleanPath": ".gdd-clean"
+          }
+        },
+        {
+          "name": "tasks/build.js",
+          "path": "tasks/build.js",
+          "options": {
+            "sources": [
               {
                 "path": "./"
               },
@@ -350,6 +325,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -365,9 +348,6 @@
       "options": {
         "sources": [
           {
-            "path": "../block-js/"
-          },
-          {
             "path": "./"
           },
           {
@@ -377,6 +357,14 @@
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "gulp",
+            "type": "buildingTool"
+          },
+          {
+            "path": "../block-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -389,9 +377,6 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -401,6 +386,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -416,9 +409,6 @@
       "options": {
         "sources": [
           {
-            "path": "../block-js/"
-          },
-          {
             "path": "./"
           },
           {
@@ -428,6 +418,14 @@
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "gulp",
+            "type": "buildingTool"
+          },
+          {
+            "path": "../block-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -440,9 +438,6 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -452,6 +447,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -464,9 +467,6 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -476,6 +476,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -491,9 +499,6 @@
       "options": {
         "sources": [
           {
-            "path": "../block-js/"
-          },
-          {
             "path": "./"
           },
           {
@@ -503,6 +508,14 @@
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
+          },
+          {
+            "path": "../../integracionesagiles/intag-homepage",
+            "name": "gulp",
+            "type": "buildingTool"
+          },
+          {
+            "path": "../block-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -515,9 +528,6 @@
           "options": {
             "sources": [
               {
-                "path": "../block-js/"
-              },
-              {
                 "path": "./"
               },
               {
@@ -527,6 +537,14 @@
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
+              },
+              {
+                "path": "../../integracionesagiles/intag-homepage",
+                "name": "gulp",
+                "type": "buildingTool"
+              },
+              {
+                "path": "../block-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
