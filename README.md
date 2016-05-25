@@ -5,7 +5,7 @@
 <!-- ph ignoringStamps -->
 <!-- endph -->
 <!-- ph title -->
-# Gddify.js [![npm version](https://img.shields.io/npm/v/gddify.svg)](https://www.npmjs.com/package/gddify) [![license type](https://img.shields.io/npm/l/gddify.svg)](https://github.com/nicosommi/gddify.git/blob/master/LICENSE) [![npm downloads](https://img.shields.io/npm/dm/gddify.svg)](https://www.npmjs.com/package/gddify) ![ECMAScript 6 & 5](https://img.shields.io/badge/ECMAScript-6%20/%205-red.svg) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+# Gddify [![npm version](https://img.shields.io/npm/v/gddify.svg)](https://www.npmjs.com/package/gddify) [![license type](https://img.shields.io/npm/l/gddify.svg)](https://github.com/nicosommi/gddify.git/blob/master/LICENSE) [![npm downloads](https://img.shields.io/npm/dm/gddify.svg)](https://www.npmjs.com/package/gddify) ![ECMAScript 6 & 5](https://img.shields.io/badge/ECMAScript-6%20/%205-red.svg) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 <!-- endph -->
 
 <!-- ph description -->
@@ -35,7 +35,7 @@ After that, add this line in your scripts section of your package.json:
 ```
 And you're ready to proceed with your first generation.
 
-Oh yeah you can also use it globally, but [I don't like it](http://nicosommi.com/?p=518). But it's easier:
+Oh yeah you can also use it globally, it's easier, but [I don't like it](http://nicosommi.com/?p=518) for most cases. Just like this:
 ```shell
 npm i -g gddify
 ```
@@ -43,62 +43,59 @@ npm i -g gddify
 ### Generation / Creation / Source addition
 #### Create
 ```shell
-npm i --save-dev git://github.com/nicosommi/webapp.git
-npm run gddify generate -- --from node_modules/webapp
+npm install --prefix ./.sources git://github.com/nicosommi/gddify.git
+gddify generate --from ./.sources/gddify
 ```
 And there you are, you have a fully functional webapp. But hey, don't get me wrong. That webapp is just a GDD developed web application. It can be anything from any repo that was created following GDD.
 
-The global option:
+Also, you can generate just some blocks with type filtering (or name filtering):
 ```shell
-gddify generate --from node_modules/webapp
+gddify generate --from ./.sources/gddify --type runtime
+```
+
+The project-local option (and all will be with this format):
+```shell
+npm run gddify generate -- --from node_modules/webapp
 ```
 
 ### Update
 ```shell
-npm run gddify update
+gddify update
 ```
 With this you will pull all of your block to the latest version according to the sources that they have configured.
 Gdd compares using the semver package.
 
-The global option:
-```shell
-gddify update
-```
+Update also supports type and name filtering.
 
 ### Refresh
 ```shell
-npm run gddify refresh
-```
-This is just an update from the local project.
-
-The global option:
-```shell
 gddify refresh
 ```
+This is just an update from the local project. Also supports filtering.
 
 ### Compile
 ```shell
-npm run gddify compile
+gddify compile
 ```
-This will clean up your component to the configured folder.
+This will clean up your component's meta data and it will throw the files into the configured folder.
 
 ### Add
 ```shell
-npm run gddify add -- --name mycomponent --type tasks --glob "./tasks/**/*"
+gddify add --name mycomponent --type tasks --glob "./tasks/**/*"
 ```
 This adds all files that matches the glob into a component named mycomponent of type tasks (create or append).
 
 ### Add file
 ```shell
-npm run gddify addfile -- --name mycomponent --type tasks --path "./tasks/build.js"
+gddify addfile --name mycomponent --type tasks --path "./tasks/build.js"
 ```
 This adds that file into a component named mycomponent of type tasks (create or append).
 
 ### Increment
 ```shell
-npm run gddify increment -- --name mycomponent --type tasks --release "patch"
-npm run gddify increment -- --name mycomponent --type tasks --release "minor"
-npm run gddify increment -- --name mycomponent --type tasks --release "major"
+gddify increment --name mycomponent --type tasks --release "patch"
+gddify increment --name mycomponent --type tasks --release "minor"
+gddify increment --name mycomponent --type tasks --release "major"
 ```
 This increments the version component named mycomponent of type tasks using the release type (according to [semver](http://semver.npmjs.com/)).
 It's particularly useful when you want to allow other blocks to be refreshed/updated.
@@ -144,10 +141,13 @@ Currently it's built-in inside this package. As the community grows and contribu
 But, please, don't. Read why [here](http://nicosommi.com/?p=518).
 
 *Can I use it already? Yes.*
-But as it's still on a early version, you should use it carefully, taking care of committing all your changes before running gddify, so you can always stash them after that. It's not rock solid yet but it has a high test coverage and it follow good practices for the source code (js standard).
+But as it's still on a early-early-early version, so you should use it carefully, taking care of committing all your changes before running gddify, so you can always stash them after that. It's not rock solid yet but it has a high test coverage and it follow good practices for the source code (js standard). Also, on complex cases you will need to do some stuff manually yet.
 
-*There are requirements? Yes.*
+*There are requirements to use gddify? Yes.*
 Gddify requires node.js and your commitment to the GDD approach to be really useful.
+
+*What happens with files with no comment support? We use a intermmediate file.*
+For example, for package.json, you can maintain a package.js that, using the provided jsonification command, compiles that js to package.json automatically. You can see how it's done by looking the swComponent.json for this repo.
 
 *How can I get help/support/new features? Contact me.*
 You can either send me an email to nicosommi@gmail.com or visit my company website http://www.integracionesagiles.com
@@ -156,14 +156,13 @@ I'm an enterpreneur and a open source developer.
 <!-- endph -->
 <!-- ph qualityAndCompatibility -->
 # Quality and Compatibility
-# Quality and Compatibility
 
 [![Build Status](https://travis-ci.org/nicosommi/gddify.png?branch=master)](https://travis-ci.org/nicosommi/gddify) [![Coverage Status](https://coveralls.io/repos/nicosommi/gddify/badge.svg)](https://coveralls.io/r/nicosommi/gddify)  [![bitHound Score](https://www.bithound.io/github/nicosommi/gddify/badges/score.svg)](https://www.bithound.io/github/nicosommi/gddify)  [![Dependency Status](https://david-dm.org/nicosommi/gddify.png?theme=shields.io)](https://david-dm.org/nicosommi/gddify?theme=shields.io) [![Dev Dependency Status](https://david-dm.org/nicosommi/gddify/dev-status.svg)](https://david-dm.org/nicosommi/gddify?theme=shields.io#info=devDependencies)
 
 *Every build and release is automatically tested on the following platforms:*
 
-![node 0.12.x](https://img.shields.io/badge/node-0.12.x-brightgreen.svg) ![node 0.11.x](https://img.shields.io/badge/node-0.11.x-brightgreen.svg) ![node 0.10.x](https://img.shields.io/badge/node-0.10.x-brightgreen.svg)
-![iojs 2.x.x](https://img.shields.io/badge/iojs-2.x.x-brightgreen.svg) ![iojs 1.x.x](https://img.shields.io/badge/iojs-1.x.x-brightgreen.svg)
+![node 5.x](https://img.shields.io/badge/node-5.x-brightgreen.svg)
+![node 6.x](https://img.shields.io/badge/node-6.x-brightgreen.svg)
 <!-- endph -->
 <!-- ph installation -->
 # Installation
@@ -180,7 +179,7 @@ npm install gddify --save-dev
 
 You can submit your ideas through our [issues system](https://github.com/nicosommi/gddify/issues), or make the modifications yourself and submit them to us in the form of a [GitHub pull request](https://help.github.com/articles/using-pull-requests/).
 
-Also I accept [donations](http://nicosommi.com). If this component helps you out, it will be enough for me, but if you want to show me how much did it helped you by giving me some money, it will be great for me and my dog, who wants to eat. But seriously I rely on that to keep going with the development.
+Contact me for any business reason [here](http://nicosommi.com).
 I also offer [services](http://integracionesagiles.com) like consultation, development help, mentoring, etc.
 <!-- endstamp -->
 <!-- stamp runningtests -->
