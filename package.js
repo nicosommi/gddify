@@ -7,7 +7,7 @@
 /* endph */
 /* ph ignoringStamps */
 /* webapp_scripts, service_scripts */
-/* webapp_depende, service_dependencies */
+/* webapp_dependencies, service_dependencies */
 /* webapp_devDependencies, service_devDependencies */
 /* endph */
 
@@ -64,9 +64,6 @@ module.exports =
     /* stamp webapp_dependencies */
     /* endstamp */
     /* stamp lib_dependencies */
-    'sinon': '^1.17.3',
-    'should': '^8.2.2',
-    'mocha': '^2.2.5',
     'incognito': '^0.1.4',
     /* endstamp */
     /* stamp service_dependencies */

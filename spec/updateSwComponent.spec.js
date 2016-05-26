@@ -1,6 +1,10 @@
 import UpdateSwComponent from '../source/lib/updateSwComponent.js'
 import sinon from 'sinon'
 import path from 'path'
+import fs from 'fs-extra'
+import Promise from '../source/lib/promise.js'
+
+const move = Promise.promisify(fs.move)
 
 describe('UpdateSwComponent', () => {
   let constructorSpy,
@@ -197,6 +201,80 @@ describe('UpdateSwComponent', () => {
 
     it('should take a js object form a file and put a json into the destination', () => {
       sinon.assert.calledWith(writeJsonSpy, destination, jsObject, { spaces: 2 })
+    })
+  })
+
+  describe('move', () => {
+    let moveSpy,
+      destination,
+      source
+
+    beforeEach(() => {
+      destination = `../fixtures/afiledestination.json`
+      source = `../fixtures/afile.js`
+      moveSpy = sinon.spy()
+      UpdateSwComponent.__Rewire__('move', moveSpy)
+
+      const block = {
+        options: {
+          move: [
+            {
+              target: 'afile',
+              to: destination
+            }
+          ]
+        },
+        sourceCodeFiles: [
+          {
+            name: 'afile',
+            path: source
+          }
+        ]
+      }
+
+      updateSwComponent = new UpdateSwComponent(swComponentJson)
+      return updateSwComponent.move(block)
+    })
+
+    it('should take a file and move it into the destination', () => {
+      sinon.assert.calledWith(moveSpy, `${swComponentJson.options.basePath}/${source}`, `${swComponentJson.options.basePath}/${destination}`, { clobber: true })
+    })
+  })
+
+  describe('copy', () => {
+    let copySpy,
+      destination,
+      source
+
+    beforeEach(() => {
+      destination = `../fixtures/afiledestination.json`
+      source = `../fixtures/afile.js`
+      copySpy = sinon.spy()
+      UpdateSwComponent.__Rewire__('copy', copySpy)
+
+      const block = {
+        options: {
+          copy: [
+            {
+              target: 'afile',
+              to: destination
+            }
+          ]
+        },
+        sourceCodeFiles: [
+          {
+            name: 'afile',
+            path: source
+          }
+        ]
+      }
+
+      updateSwComponent = new UpdateSwComponent(swComponentJson)
+      return updateSwComponent.copy(block)
+    })
+
+    it('should take a file and move it into the destination', () => {
+      sinon.assert.calledWith(copySpy, `${swComponentJson.options.basePath}/${source}`, `${swComponentJson.options.basePath}/${destination}`, { clobber: true })
     })
   })
 

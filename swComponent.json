@@ -30,7 +30,7 @@
     {
       "name": "nodejs",
       "type": "runtime",
-      "version": "0.0.5",
+      "version": "0.0.7",
       "options": {
         "jsonification": [
           {
@@ -138,7 +138,7 @@
     {
       "name": "gulp",
       "type": "buildingTool",
-      "version": "0.0.7",
+      "version": "0.0.9",
       "options": {
         "sources": [
           {
@@ -495,7 +495,7 @@
     {
       "name": "docs",
       "type": "docs",
-      "version": "0.0.4",
+      "version": "0.0.5",
       "options": {
         "sources": [
           {

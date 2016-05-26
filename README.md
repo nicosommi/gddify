@@ -19,6 +19,26 @@ Read more on [http://nicosommi.com](http://nicosommi.com)
 <!-- endph -->
 
 <!-- ph usagesAndExamples -->
+## Quickstart / Cookbook for a node.js library
+```shell
+mkdir myproject
+cd myproject
+npm init
+npm i -g gddify
+npm i git://github.com/nicosommi/gene-js.git
+gddify generate --from ./node_modules/gene-js
+npm i
+npm test
+```
+Then, customize the package.js file at your own taste (replacements, place holders and stamps).
+
+Then, run
+```shell
+gddify refresh
+```
+
+And there you go, a node.js library with es6, test, watch, a LICENSE, a README.md, a .gitignore, and more things to come soon.
+
 ## Usage & examples
 ### Prerequisites per project
 ```shell
@@ -43,8 +63,8 @@ npm i -g gddify
 ### Generation / Creation / Source addition
 #### Create
 ```shell
-npm install --prefix ./.sources git://github.com/nicosommi/gddify.git
-gddify generate --from ./.sources/gddify
+npm install git://github.com/nicosommi/gddify.git
+gddify generate --from ./node_modules/gddify
 ```
 And there you are, you have a fully functional webapp. But hey, don't get me wrong. That webapp is just a GDD developed web application. It can be anything from any repo that was created following GDD.
 
@@ -179,8 +199,10 @@ npm install gddify --save-dev
 
 You can submit your ideas through our [issues system](https://github.com/nicosommi/gddify/issues), or make the modifications yourself and submit them to us in the form of a [GitHub pull request](https://help.github.com/articles/using-pull-requests/).
 
-Contact me for any business reason [here](http://nicosommi.com).
-I also offer [services](http://integracionesagiles.com) like consultation, development help, mentoring, etc.
+If this component helps you out, it will be enough for me.
+If you want to support the project contact to nicosommi@gmail.com
+I also offer different kinds of [services through integraciones agiles](http://integracionesagiles.com)
+
 <!-- endstamp -->
 <!-- stamp runningtests -->
 ## Running Tests

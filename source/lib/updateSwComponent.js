@@ -8,6 +8,8 @@ import Glob from 'glob'
 // import inquirer from "inquirer"
 
 const writeJson = Promise.promisify(fs.writeJson)
+const move = Promise.promisify(fs.move)
+const copy = Promise.promisify(fs.copy)
 const glob = Promise.promisify(Glob)
 
 const buildSwComponent = Symbol('buildSwComponent')
@@ -16,6 +18,7 @@ const updateFrom = Symbol('updateFrom')
 const saveConfiguration = Symbol('saveConfiguration')
 const addSourceCodeFile = Symbol('addSourceCodeFile')
 const filterBlocks = Symbol('filterBlocks')
+const process = Symbol('process')
 
 export default class UpdateSwComponent {
   constructor (targetSwComponentJson) {
@@ -264,29 +267,49 @@ export default class UpdateSwComponent {
   // }
   }
 
-  jsonificate (block) {
-    console.log(chalk.magenta(`Jsonificate block begun...`))
-    if (block.options && block.options.jsonification && Array.isArray(block.options.jsonification)) {
+  [process] (block, property, callTo) {
+    console.log(chalk.magenta(`${property} block begun...`))
+    if (block.options && block.options[property] && Array.isArray(block.options[property])) {
       return Promise.mapSeries(
-        block.options.jsonification,
-        jsonificateFile => {
-          const sourceCodeFile = block.sourceCodeFiles.find(scf => jsonificateFile.target === scf.name)
+        block.options[property],
+        file => {
+          const sourceCodeFile = block.sourceCodeFiles.find(scf => file.target === scf.name)
           if (sourceCodeFile) {
-            console.log('dire', {from: `${this.targetSwComponent.options.basePath}/${sourceCodeFile.path}`, to: `${this.targetSwComponent.options.basePath}/${jsonificateFile.to}`})
-            return this.jsonification(`${this.targetSwComponent.options.basePath}/${sourceCodeFile.path}`, `${this.targetSwComponent.options.basePath}/${jsonificateFile.to}`)
+            console.log(chalk.magenta(`${property} on file ${this.targetSwComponent.options.basePath}/${sourceCodeFile.path} to ${this.targetSwComponent.options.basePath}/${file.to}...`))
+            return callTo.call(this, `${this.targetSwComponent.options.basePath}/${sourceCodeFile.path}`, `${this.targetSwComponent.options.basePath}/${file.to}`)
           } else {
-            console.log(chalk.yellow(`WARNING: jsonification file not found on block ${block.name}-${block.type} jsonification target ${jsonificateFile.target}`))
+            console.log(chalk.yellow(`WARNING: ${property} file not found on block ${block.name}-${block.type} with target ${file.target}`))
             return Promise.resolve()
           }
         }
       )
       .then(() => {
-        console.log(chalk.magenta(`Jsonificate block ended.`))
+        console.log(chalk.magenta(`${property} block ended.`))
         return Promise.resolve()
       })
     } else {
       return Promise.resolve()
     }
+  }
+
+  copyFile (source, to) {
+    return copy(source, to, { clobber: true })
+  }
+
+  copy (block) {
+    return this[process](block, 'copy', this.copyFile)
+  }
+
+  jsonificate (block) {
+    return this[process](block, 'jsonification', this.jsonification)
+  }
+
+  moveFile (source, to) {
+    return move(source, to, { clobber: true })
+  }
+
+  move (block) {
+    return this[process](block, 'move', this.moveFile)
   }
 
   synchronizeWith (fromPath, rootSwComponentJson, name, type) {
@@ -302,6 +325,8 @@ export default class UpdateSwComponent {
         const syncPromise = this.inquireBlock(swBlock)
           .then(() => this.targetSwComponent.synchronizeWith(swBlock))
           .then(() => this.jsonificate(swBlock))
+          .then(() => this.move(swBlock))
+          .then(() => this.copy(swBlock))
           .then(
             () => {
               console.log(chalk.magenta(`About to write configuration... `))

@@ -42,6 +42,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 // import inquirer from "inquirer"
 
 var writeJson = _get__('Promise').promisify(_get__('fs').writeJson);
+var move = _get__('Promise').promisify(_get__('fs').move);
+var copy = _get__('Promise').promisify(_get__('fs').copy);
 var glob = _get__('Promise').promisify(_get__('Glob'));
 
 var buildSwComponent = Symbol('buildSwComponent');
@@ -50,6 +52,7 @@ var updateFrom = Symbol('updateFrom');
 var saveConfiguration = Symbol('saveConfiguration');
 var addSourceCodeFile = Symbol('addSourceCodeFile');
 var filterBlocks = Symbol('filterBlocks');
+var process = Symbol('process');
 
 var UpdateSwComponent = function () {
   function UpdateSwComponent(targetSwComponentJson) {
@@ -314,30 +317,55 @@ var UpdateSwComponent = function () {
       // }
     }
   }, {
-    key: 'jsonificate',
-    value: function jsonificate(block) {
+    key: process,
+    value: function value(block, property, callTo) {
       var _this3 = this;
 
-      console.log(_get__('chalk').magenta('Jsonificate block begun...'));
-      if (block.options && block.options.jsonification && Array.isArray(block.options.jsonification)) {
-        return _get__('Promise').mapSeries(block.options.jsonification, function (jsonificateFile) {
+      console.log(_get__('chalk').magenta(property + ' block begun...'));
+      if (block.options && block.options[property] && Array.isArray(block.options[property])) {
+        return _get__('Promise').mapSeries(block.options[property], function (file) {
           var sourceCodeFile = block.sourceCodeFiles.find(function (scf) {
-            return jsonificateFile.target === scf.name;
+            return file.target === scf.name;
           });
           if (sourceCodeFile) {
-            console.log('dire', { from: _this3.targetSwComponent.options.basePath + '/' + sourceCodeFile.path, to: _this3.targetSwComponent.options.basePath + '/' + jsonificateFile.to });
-            return _this3.jsonification(_this3.targetSwComponent.options.basePath + '/' + sourceCodeFile.path, _this3.targetSwComponent.options.basePath + '/' + jsonificateFile.to);
+            console.log(_get__('chalk').magenta(property + ' on file ' + _this3.targetSwComponent.options.basePath + '/' + sourceCodeFile.path + ' to ' + _this3.targetSwComponent.options.basePath + '/' + file.to + '...'));
+            return callTo.call(_this3, _this3.targetSwComponent.options.basePath + '/' + sourceCodeFile.path, _this3.targetSwComponent.options.basePath + '/' + file.to);
           } else {
-            console.log(_get__('chalk').yellow('WARNING: jsonification file not found on block ' + block.name + '-' + block.type + ' jsonification target ' + jsonificateFile.target));
+            console.log(_get__('chalk').yellow('WARNING: ' + property + ' file not found on block ' + block.name + '-' + block.type + ' with target ' + file.target));
             return _get__('Promise').resolve();
           }
         }).then(function () {
-          console.log(_get__('chalk').magenta('Jsonificate block ended.'));
+          console.log(_get__('chalk').magenta(property + ' block ended.'));
           return _get__('Promise').resolve();
         });
       } else {
         return _get__('Promise').resolve();
       }
+    }
+  }, {
+    key: 'copyFile',
+    value: function copyFile(source, to) {
+      return _get__('copy')(source, to, { clobber: true });
+    }
+  }, {
+    key: 'copy',
+    value: function copy(block) {
+      return this[process](block, 'copy', this.copyFile);
+    }
+  }, {
+    key: 'jsonificate',
+    value: function jsonificate(block) {
+      return this[process](block, 'jsonification', this.jsonification);
+    }
+  }, {
+    key: 'moveFile',
+    value: function moveFile(source, to) {
+      return _get__('move')(source, to, { clobber: true });
+    }
+  }, {
+    key: 'move',
+    value: function move(block) {
+      return this[process](block, 'move', this.moveFile);
     }
   }, {
     key: 'synchronizeWith',
@@ -355,6 +383,10 @@ var UpdateSwComponent = function () {
           return _this4.targetSwComponent.synchronizeWith(swBlock);
         }).then(function () {
           return _this4.jsonificate(swBlock);
+        }).then(function () {
+          return _this4.move(swBlock);
+        }).then(function () {
+          return _this4.copy(swBlock);
         }).then(function () {
           console.log(_get__('chalk').magenta('About to write configuration... '));
           return _this4[saveConfiguration](_this4.targetSwComponent).then(function () {
@@ -448,6 +480,12 @@ function _get_original__(variableName) {
 
     case 'path':
       return _path2.default;
+
+    case 'copy':
+      return copy;
+
+    case 'move':
+      return move;
   }
 
   return undefined;
