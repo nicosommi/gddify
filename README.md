@@ -21,20 +21,25 @@ Read more on [http://nicosommi.com](http://nicosommi.com)
 <!-- ph usagesAndExamples -->
 ## Quickstart / Cookbook for a node.js library
 ```shell
+npm i -g gddify
+
 mkdir myproject
 cd myproject
 npm init
-npm i -g gddify
+
 npm i git://github.com/nicosommi/gene-js.git
+
 gddify generate --from ./node_modules/gene-js
+
 npm i
-npm test
 ```
 Then, customize the package.js file at your own taste (replacements, place holders and stamps).
 
 Then, run
 ```shell
 gddify refresh
+
+npm test
 ```
 
 And there you go, a node.js library with es6, test, watch, a LICENSE, a README.md, a .gitignore, and more things to come soon.
@@ -128,21 +133,26 @@ Using that, it implements the [GDD approach](http://nicosommi.com), based on gen
 
 With gdd you will be able to create and compose projects from your other projects or from projects on the repo.
 
-*Use cases? A lot.*
+## F.A.Q.
+*Use cases? A lot.*  
 Microservices, project bootstrapping, scaffolding (and with updates), among others.
 
-*Is it hard to learn? Not at all.*
-It's intuitive. It's just common sense. Nothing else that the commands here and understanding the GDD approach.
+*Is it hard to learn? Not at all.*  
+It's intuitive.  
+It's just common sense.  
+Nothing else that the commands here and understanding the GDD approach.  
 As this is a change in your current workflow it may be uncomfortable at the beginning, but you get used to it.
-The most advanced task you will need to do is to create a regular expressions. But come on, if you want to be called a developer or even an advanced text-processor user, you should know how to create a regular expression! In complex cases it requires to think the regular expression very well, as well as how many place holders and stamps to include, to ignore, etc. If you don't know what that is go [here](http://nicosommi.com).
+The most advanced task you will need to do is to create a regular expressions.  
+But come on, if you want to be called a developer or even an advanced text-processor user, you should know how to create a regular expression! In complex cases it requires to think the regular expression very well, as well as how many place holders and stamps to include, to ignore, etc.  
+If you don't know what that is go [here](http://nicosommi.com).
 
-*Is this different than yeoman? Absolutely.*
+*Is this different than yeoman? Absolutely.*  
 Gddify is a tool for applying a development process aspect/practice that you can attach to your development process, like TDD/BDD (but with a different purpose). It's true that you may accomplish with GDD the same stuff that you previously did with yeoman, and it does not require ANY effort on building up a generator, it just requires you to provide meta information in the source code files by following the development process aspect. So in this way, you can just completely avoid efforts building up templates and generators, testing them properly, and creating complex updating processes. Also there are many other uses cases.
 
-*Does gdd use any template language to build concrete files? No.*
+*Does gdd use any template language to build concrete files? No.*  
 You don't have to *learn* anything special. Read more why [here](http://nicosommi.com).
 
-*There is any advatange by using this approach? A lot.*
+*There is any advatange by using this approach? A lot.*  
 For example, you can test everything you do with no rare/template code, just regular development in your well known main source code language.
 No more reinventing the wheel everytime.
 No more question/wizard development.
@@ -151,25 +161,25 @@ The impact for technology decisions and package/stack/vendor-lock is now minimiz
 Reduces the work overhead on complex architectures.
 There are more advatanges, keep reading [here](http://nicosommi.com).
 
-*Can I use gdd on other languages different than javascript? Yes.*
+*Can I use gdd on other languages different than javascript? Yes.*  
 It's language agnostic. You will need node.js installed in order to run it, but it can contain any kind of components. Java, C#, PHP, Ruby, etc.
 
-*There is a repo with known packages? Yes.*
-Currently it's built-in inside this package. As the community grows and contributes there will be an official repo. If you want to submit your project to be in the repo, feel free to open a new issue or create a new PR.
+*There is a repo with known packages? No.*
+You can just use any repo or even folder that contains a valid swComponent.json file!
 
-*Can I install gdd globally? Yes.*
-But, please, don't. Read why [here](http://nicosommi.com/?p=518).
+*Can I install gdd globally? Yes.*  
 
-*Can I use it already? Yes.*
+*Can I use it already? Yes.*  
 But as it's still on a early-early-early version, so you should use it carefully, taking care of committing all your changes before running gddify, so you can always stash them after that. It's not rock solid yet but it has a high test coverage and it follow good practices for the source code (js standard). Also, on complex cases you will need to do some stuff manually yet.
 
-*There are requirements to use gddify? Yes.*
+*There are requirements to use gddify? Yes.*  
 Gddify requires node.js and your commitment to the GDD approach to be really useful.
 
-*What happens with files with no comment support? We use a intermmediate file.*
-For example, for package.json, you can maintain a package.js that, using the provided jsonification command, compiles that js to package.json automatically. You can see how it's done by looking the swComponent.json for this repo.
+*What happens with files with no comment support? We use a intermmediate file.*  
+For example, for package.json, you can maintain a package.js that, using the provided jsonification command, compiles that js to package.json automatically. You can see how it's done by looking the swComponent.json for this repo.  
+You can configure blocks to jsonificate, copy or move their files after the synchronization occurs.
 
-*How can I get help/support/new features? Contact me.*
+*How can I get help/support/new features? Contact me.*  
 You can either send me an email to nicosommi@gmail.com or visit my company website http://www.integracionesagiles.com
 I'm an enterpreneur and a open source developer.
 
@@ -187,10 +197,13 @@ I'm an enterpreneur and a open source developer.
 <!-- ph installation -->
 # Installation
 
-Copy and paste the following command into your terminal to install Gddify:
-
+Local
 ```
 npm install gddify --save-dev
+```
+Global
+```
+npm install -g gddify
 ```
 
 <!-- endph -->
@@ -199,10 +212,8 @@ npm install gddify --save-dev
 
 You can submit your ideas through our [issues system](https://github.com/nicosommi/gddify/issues), or make the modifications yourself and submit them to us in the form of a [GitHub pull request](https://help.github.com/articles/using-pull-requests/).
 
-If this component helps you out, it will be enough for me.
-If you want to support the project contact to nicosommi@gmail.com
-I also offer different kinds of [services through integraciones agiles](http://integracionesagiles.com)
-
+Also I accept [donations](http://nicosommi.com). If this component helps you out, it will be enough for me, but if you want to show me how much did it helped you by giving me some money, it will be great for me and my dog, who wants to eat. But seriously I rely on that to keep going with the development.
+I also offer [services](http://integracionesagiles.com) like consultation, development help, mentoring, etc.
 <!-- endstamp -->
 <!-- stamp runningtests -->
 ## Running Tests

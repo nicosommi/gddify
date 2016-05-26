@@ -30,12 +30,18 @@
     {
       "name": "nodejs",
       "type": "runtime",
-      "version": "0.0.7",
+      "version": "0.0.8",
       "options": {
         "jsonification": [
           {
             "target": "package.json",
             "to": "package.json"
+          }
+        ],
+        "copy": [
+          {
+            "target": ".gitignore",
+            "to": ".gitignore"
           }
         ],
         "sources": [
@@ -95,12 +101,18 @@
                 "target": "package.json",
                 "to": "package.json"
               }
+            ],
+            "copy": [
+              {
+                "target": ".gitignore",
+                "to": ".gitignore"
+              }
             ]
           }
         },
         {
           "name": ".gitignore",
-          "path": ".gitignore",
+          "path": ".npmignore",
           "options": {
             "jsonification": [
               {
@@ -130,7 +142,13 @@
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
-            "cleanPath": ".gdd-clean"
+            "cleanPath": ".gdd-clean",
+            "copy": [
+              {
+                "target": ".gitignore",
+                "to": ".gitignore"
+              }
+            ]
           }
         }
       ]
