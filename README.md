@@ -33,7 +33,7 @@ gddify generate --from ./node_modules/gene-js
 
 npm i
 ```
-Then, customize the package.js file at your own taste (replacements, place holders and stamps).
+Then, customize the files at your own taste (replacements, place holders and stamps).
 
 Then, run
 ```shell
