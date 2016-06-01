@@ -389,6 +389,8 @@ var UpdateSwComponent = function () {
           return _this4.copy(swBlock);
         }).then(function () {
           console.log(_get__('chalk').magenta('About to write configuration... '));
+          console.log(_get__('chalk').magenta('Adding the new source...'));
+          _this4.addSource(fromPath, name, type);
           return _this4[saveConfiguration](_this4.targetSwComponent).then(function () {
             console.log(_get__('chalk').magenta('Configuration written  for type ' + swBlock.type + ' to version ' + swBlock.version + '... '));
           });
@@ -406,8 +408,6 @@ var UpdateSwComponent = function () {
           return _get__('Promise').reject(new Error('Error/Warnings occurred during synchronization.'));
         } else {
           console.log(_get__('chalk').green('Component ' + _this4.targetSwComponent.name + ' updated.'));
-          console.log(_get__('chalk').magenta('Adding the new source...'));
-          _this4.addSource(fromPath, name, type);
           return _get__('Promise').resolve(_this4.targetSwComponent);
         }
       });
