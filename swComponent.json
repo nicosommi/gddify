@@ -18,9 +18,12 @@
       },
       {
         "path": "./"
+      },
+      {
+        "path": "../gene-js/"
       }
     ],
-    "basePath": "/home/nicosommi/workspace/nicosommi/gddify/./",
+    "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
     "cleanPath": ".gdd-clean"
   },
   "swBlocks": [
@@ -57,6 +60,9 @@
           },
           {
             "path": "./"
+          },
+          {
+            "path": "../gene-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -83,6 +89,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -127,6 +136,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -162,6 +174,9 @@
           },
           {
             "path": "./"
+          },
+          {
+            "path": "../gene-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -188,6 +203,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -214,6 +232,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -240,6 +261,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -266,6 +290,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -292,6 +319,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -318,6 +348,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -347,6 +380,9 @@
           },
           {
             "path": "./"
+          },
+          {
+            "path": "../gene-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -373,6 +409,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -402,6 +441,9 @@
           },
           {
             "path": "./"
+          },
+          {
+            "path": "../gene-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -428,6 +470,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -454,6 +499,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -483,6 +531,9 @@
           },
           {
             "path": "./"
+          },
+          {
+            "path": "../gene-js/"
           }
         ],
         "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
@@ -509,6 +560,9 @@
               },
               {
                 "path": "./"
+              },
+              {
+                "path": "../gene-js/"
               }
             ],
             "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
