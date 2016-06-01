@@ -4,9 +4,6 @@
   "options": {
     "sources": [
       {
-        "path": "../gene-js/"
-      },
-      {
         "path": "../../integracionesagiles/intag-homepage",
         "name": "nodejs",
         "type": "runtime"
@@ -46,9 +43,6 @@
         ],
         "sources": [
           {
-            "path": "../gene-js/"
-          },
-          {
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
@@ -74,9 +68,6 @@
           "path": "package.js",
           "options": {
             "sources": [
-              {
-                "path": "../gene-js/"
-              },
               {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
@@ -122,9 +113,6 @@
             ],
             "sources": [
               {
-                "path": "../gene-js/"
-              },
-              {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
@@ -160,9 +148,6 @@
       "options": {
         "sources": [
           {
-            "path": "../gene-js/"
-          },
-          {
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
@@ -188,9 +173,6 @@
           "path": "gulpfile.babel.js",
           "options": {
             "sources": [
-              {
-                "path": "../gene-js/"
-              },
               {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
@@ -218,9 +200,6 @@
           "options": {
             "sources": [
               {
-                "path": "../gene-js/"
-              },
-              {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
@@ -246,9 +225,6 @@
           "path": "tasks/suppress-errors.js",
           "options": {
             "sources": [
-              {
-                "path": "../gene-js/"
-              },
               {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
@@ -276,9 +252,6 @@
           "options": {
             "sources": [
               {
-                "path": "../gene-js/"
-              },
-              {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
@@ -305,9 +278,6 @@
           "options": {
             "sources": [
               {
-                "path": "../gene-js/"
-              },
-              {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
@@ -333,9 +303,6 @@
           "path": "tasks/build.js",
           "options": {
             "sources": [
-              {
-                "path": "../gene-js/"
-              },
               {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
@@ -366,9 +333,6 @@
       "options": {
         "sources": [
           {
-            "path": "../gene-js/"
-          },
-          {
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
@@ -394,9 +358,6 @@
           "path": "LICENSE",
           "options": {
             "sources": [
-              {
-                "path": "../gene-js/"
-              },
               {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
@@ -427,9 +388,6 @@
       "options": {
         "sources": [
           {
-            "path": "../gene-js/"
-          },
-          {
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
@@ -456,9 +414,6 @@
           "options": {
             "sources": [
               {
-                "path": "../gene-js/"
-              },
-              {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
                 "type": "runtime"
@@ -484,9 +439,6 @@
           "path": "spec/promise.spec.js",
           "options": {
             "sources": [
-              {
-                "path": "../gene-js/"
-              },
               {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",
@@ -517,9 +469,6 @@
       "options": {
         "sources": [
           {
-            "path": "../gene-js/"
-          },
-          {
             "path": "../../integracionesagiles/intag-homepage",
             "name": "nodejs",
             "type": "runtime"
@@ -545,9 +494,6 @@
           "path": "README.md",
           "options": {
             "sources": [
-              {
-                "path": "../gene-js/"
-              },
               {
                 "path": "../../integracionesagiles/intag-homepage",
                 "name": "nodejs",

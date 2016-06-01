@@ -330,6 +330,8 @@ export default class UpdateSwComponent {
           .then(
             () => {
               console.log(chalk.magenta(`About to write configuration... `))
+              console.log(chalk.magenta('Adding the new source...'))
+              this.addSource(fromPath, name, type)
               return this[saveConfiguration](this.targetSwComponent)
                 .then(() => {
                   console.log(chalk.magenta(`Configuration written  for type ${swBlock.type} to version ${swBlock.version}... `))
@@ -353,8 +355,6 @@ export default class UpdateSwComponent {
         return Promise.reject(new Error('Error/Warnings occurred during synchronization.'))
       } else {
         console.log(chalk.green(`Component ${this.targetSwComponent.name} updated.`))
-        console.log(chalk.magenta('Adding the new source...'))
-        this.addSource(fromPath, name, type)
         return Promise.resolve(this.targetSwComponent)
       }
     })

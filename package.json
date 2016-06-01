@@ -3,9 +3,6 @@
   "version": "0.0.2",
   "description": "a gdd utility",
   "main": "index.js",
-  "bin": {
-    "gddify": "./dist/bin/gddify.js"
-  },
   "standard": {
     "globals": [
       "describe",
@@ -19,6 +16,9 @@
       "expect"
     ]
   },
+  "bin": {
+    "gddify": "./dist/bin/gddify.js"
+  },
   "scripts": {
     "gddify": "gddify",
     "test": "gulp test",
@@ -31,7 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "fs-extra": "^0.26.7",
-    "gene-js": "0.0.1",
+    "gene-js": "0.0.2",
     "inquirer": "^1.0.2",
     "semver": "^5.1.0",
     "glob": "^7.0.3",
