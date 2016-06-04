@@ -146,7 +146,14 @@ var UpdateSwComponent = function () {
   }, {
     key: 'jsonification',
     value: function jsonification(source, destination) {
-      return _get__('writeJson')(destination, require(source), { spaces: 2 });
+      var merge = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+      var content = require(source);
+      if (merge) {
+        var newContent = require(destination);
+        Object.assign(content, newContent);
+      }
+      return _get__('writeJson')(destination, content, { spaces: 2 });
     }
   }, {
     key: 'addFile',
