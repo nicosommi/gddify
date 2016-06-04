@@ -1,10 +1,7 @@
 import UpdateSwComponent from '../source/lib/updateSwComponent.js'
 import sinon from 'sinon'
 import path from 'path'
-import fs from 'fs-extra'
 import Promise from '../source/lib/promise.js'
-
-const move = Promise.promisify(fs.move)
 
 describe('UpdateSwComponent', () => {
   let constructorSpy,
@@ -183,24 +180,53 @@ describe('UpdateSwComponent', () => {
   })
 
   describe('jsonification', () => {
-    let writeJsonSpy,
-      jsObject,
-      destination,
-      source
+    describe('(use case: js to json)', () => {
+      let writeJsonSpy,
+        jsObject,
+        destination,
+        source
 
-    beforeEach(() => {
-      destination = `${__dirname}/../fixtures/adestination.json`
-      source = `${__dirname}/../fixtures/jsonLikeJs.js`
-      jsObject = require(source)
-      writeJsonSpy = sinon.spy()
-      UpdateSwComponent.__Rewire__('writeJson', writeJsonSpy)
+      beforeEach(() => {
+        destination = `${__dirname}/../fixtures/adestination.json`
+        source = `${__dirname}/../fixtures/jsonLikeJs.js`
+        jsObject = require(source)
+        writeJsonSpy = sinon.spy()
+        UpdateSwComponent.__Rewire__('writeJson', writeJsonSpy)
 
-      updateSwComponent = new UpdateSwComponent(swComponentJson)
-      return updateSwComponent.jsonification(source, destination)
+        updateSwComponent = new UpdateSwComponent(swComponentJson)
+        return updateSwComponent.jsonification(source, destination)
+      })
+
+      it('should take a js object form a file and put a json into the destination', () => {
+        sinon.assert.calledWith(writeJsonSpy, destination, jsObject, { spaces: 2 })
+      })
     })
 
-    it('should take a js object form a file and put a json into the destination', () => {
-      sinon.assert.calledWith(writeJsonSpy, destination, jsObject, { spaces: 2 })
+    describe('(use case: merge)', () => {
+      let writeJsonSpy,
+        jsObject,
+        destination,
+        source,
+        expectation
+
+      beforeEach(() => {
+        destination = `${__dirname}/../fixtures/adestinationWithData.json`
+        source = `${__dirname}/../fixtures/jsonLikeJs.js`
+        jsObject = require(source)
+        writeJsonSpy = sinon.spy()
+        UpdateSwComponent.__Rewire__('writeJson', writeJsonSpy)
+
+        expectation = require(destination)
+
+        Object.assign(expectation, jsObject)
+
+        updateSwComponent = new UpdateSwComponent(swComponentJson)
+        return updateSwComponent.jsonification(source, destination, true)
+      })
+
+      it('should allow to preserve current additional data that already on the target', () => {
+        sinon.assert.calledWith(writeJsonSpy, destination, expectation, { spaces: 2 })
+      })
     })
   })
 

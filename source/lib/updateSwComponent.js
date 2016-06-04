@@ -98,8 +98,13 @@ export default class UpdateSwComponent {
       .then(() => console.log(chalk.green('Increment finished.')))
   }
 
-  jsonification (source, destination) {
-    return writeJson(destination, require(source), { spaces: 2 })
+  jsonification (source, destination, merge = false) {
+    let content = require(source)
+    if (merge) {
+      let newContent = require(destination)
+      Object.assign(content, newContent)
+    }
+    return writeJson(destination, content, { spaces: 2 })
   }
 
   addFile (filePath, name, type) {
