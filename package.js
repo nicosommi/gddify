@@ -56,7 +56,7 @@ module.exports =
   'dependencies': {
     /* ph componentDependencies */
     'fs-extra': '^0.26.7',
-    'gene-js': '0.0.2',
+    'gene-js': '0.0.3',
     'inquirer': '^1.0.2',
     'semver': '^5.1.0',
     'glob': '^7.0.3',
