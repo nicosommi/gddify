@@ -10,6 +10,7 @@ describe('UpdateSwComponent', () => {
     addSwBlocksSpy,
     addSwBlockSpy,
     getMetaSpy,
+    setMetaSpy,
     updateSwComponent,
     name,
     type,
@@ -30,9 +31,15 @@ describe('UpdateSwComponent', () => {
       return getMetaSpy.apply(this, arguments)
     }
 
+    setMeta () {
+      return setMetaSpy.apply(this, arguments)
+    }
+
     clean () {
       return cleanSpy.apply(this, arguments)
     }
+
+    // FIXME: improve testing -> do not mock unnecesary things like addSwBlock, it changes the behavior
 
     addSwBlocks () {
       return addSwBlocksSpy.apply(this, arguments)
@@ -49,6 +56,7 @@ describe('UpdateSwComponent', () => {
       synchronizeWithSpy = sinon.spy(() => Promise.resolve())
       cleanSpy = sinon.spy(() => Promise.resolve())
       getMetaSpy = sinon.spy(() => Promise.resolve())
+      setMetaSpy = sinon.spy(() => Promise.resolve())
       addSwBlockSpy = sinon.spy(() => Promise.resolve())
       addSwBlocksSpy = sinon.spy(
         function addSwBlocksSpyMethod () {
@@ -469,39 +477,49 @@ describe('UpdateSwComponent', () => {
   })
 
   describe('.synchronizeWith(path, root)', () => {
-    let rootSwComponentJson
-
-    beforeEach(() => {
-      name = 'anewname'
-      type = 'anewtype'
-      addSwBlocksSpy = sinon.spy(
-        function addSwBlocksSpyMethod () {
-          this.swBlocks = [
-            { name: 'blockname', type: 'type4', version: '0.0.2' },
-            { name: 'blockname', type: 'type1', version: '0.0.1' },
-            { name: 'blockname', type: 'type2', version: '0.0.1' },
-            { name: 'blockname', type: 'type3', version: '0.0.1' },
-            { name: 'blockname', type: 'type3', version: '0.2.1' },
-            { name: 'blockname', type: 'type4', version: '0.0.1' }
-          ]
-        }
-      )
-      rootSwComponentJson = {
-        name,
-        type,
-        swBlocks: []
-      }
-
-      swComponentJson = {
-        name,
-        type,
-        swBlocks: []
-      }
-
-      return updateSwComponent.synchronizeWith('fromhere', rootSwComponentJson)
-    })
-
     describe('(given a source sw component structure and a target sw component structure)', () => {
+      let rootSwComponentJson,
+        metaObject,
+        blocks
+
+      beforeEach(() => {
+        blocks = [{ name: 'blockname', type: 'type4', version: '0.0.2' },
+        { name: 'blockname', type: 'type1', version: '0.0.1' },
+        { name: 'blockname', type: 'type2', version: '0.0.1' },
+        { name: 'blockname', type: 'type3', version: '0.0.1' },
+        { name: 'blockname', type: 'type3', version: '0.2.1' },
+        { name: 'blockname', type: 'type4', version: '0.0.1' }]
+        name = 'anewname'
+        type = 'anewtype'
+        addSwBlocksSpy = sinon.spy(
+          function addSwBlocksSpyMethod () {
+            this.swBlocks = blocks
+          }
+        )
+        rootSwComponentJson = {
+          name,
+          type,
+          swBlocks: []
+        }
+
+        metaObject = { name: 'example' }
+
+        getMetaSpy = sinon.spy(() => Promise.resolve(metaObject))
+        setMetaSpy = sinon.spy(() => Promise.resolve())
+
+        updateSwComponent.targetSwComponent.swBlocks = []
+
+        return updateSwComponent.synchronizeWith('fromhere', rootSwComponentJson)
+      })
+
+      it('should generate all blocks from the origin, and not just one per type', () => {
+        sinon.assert.callCount(addSwBlockSpy, 6)
+      })
+
+      it('should call the setMeta on the target with the getMeta from the root', () => {
+        sinon.assert.calledWith(setMetaSpy, metaObject)
+      })
+
       it('should call the swBlock synchronization method with the right arguments', () => {
         sinon.assert.calledWith(synchronizeWithSpy, { name: 'blockname', type: 'type3', version: '0.2.1' })
       })
