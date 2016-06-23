@@ -52,6 +52,7 @@ var updateFrom = Symbol('updateFrom');
 var saveConfiguration = Symbol('saveConfiguration');
 var addSourceCodeFile = Symbol('addSourceCodeFile');
 var filterBlocks = Symbol('filterBlocks');
+var ensureBlocks = Symbol('ensureBlocks');
 var process = Symbol('process');
 
 var UpdateSwComponent = function () {
@@ -255,73 +256,12 @@ var UpdateSwComponent = function () {
       }
     }
   }, {
-    key: 'inquireBlock',
-    value: function inquireBlock(block) {
-      // / TBD: there are issues with paths and ph contents to think about yet
-      return _get__('Promise').resolve(block);
-      // const found = this.targetSwComponent.swBlocks.find(potentialMatch => (potentialMatch.type === block.type))
-      // console.log(chalk.green(`inquirer found is ${found}`))
-      // if(!found) {
-      // 	return block.getMeta()
-      // 		.then(metaBlock => {
-      // 			return Promise.mapSeries(
-      // 				metaBlock.sourceCodeFiles,
-      // 				sourceCodeFile => {
-      // 					console.log(chalk.green(`inquirer going through keys`), { sourceCodeFile })
-      // 					return Promise.mapSeries(
-      // 						Object.keys(sourceCodeFile.replacements),
-      // 						replacementKey => {
-      // 							const replacementObject = sourceCodeFile.replacements[replacementKey]
-      // 							console.log(chalk.green(`inquirer replacement object`, {replacementObject}))
-      // 							if(replacementObject) {
-      // 								const questions = [
-      // 									{
-      // 										message: `What do you want to put as the value in the replacement named '${replacementKey}' for the file ${sourceCodeFile.path}?`,
-      // 										type: "input",
-      // 										name: "value",
-      // 										default: replacementObject.value
-      // 									},
-      // 									{
-      // 										message: `And for it's regex?`,
-      // 										type: "input",
-      // 										name: "regex",
-      // 										default: replacementObject.regex
-      // 									}
-      // 								]
-      //
-      // 								return inquirer.prompt(questions)
-      // 									.then(answers => {
-      // 										const originalSourceCodeFile = block.sourceCodeFiles.find(scf => (scf.path === sourceCodeFile.path))
-      // 										if(originalSourceCodeFile) {
-      // 											if(!originalSourceCodeFile.options) {
-      // 												originalSourceCodeFile.options = {}
-      // 											}
-      // 											if(!originalSourceCodeFile.options.replacements) {
-      // 												originalSourceCodeFile.options.replacements = {}
-      // 											}
-      // 											if(!originalSourceCodeFile.options.replacements[replacementKey]) {
-      // 												originalSourceCodeFile.options.replacements[replacementKey] = {}
-      // 											}
-      // 											const replacement = originalSourceCodeFile.options.replacements[replacementKey]
-      // 											replacement.value = answers.value
-      // 											replacement.regex = answers.regex
-      // 											console.log(chalk.green(`all right replacements set`, { originalSourceCodeFile }))
-      // 										} else {
-      // 											console.log(chalk.red(`replacement originalSourceCodeFile not found`, { sourceCodeFile, answers }))
-      // 										}
-      // 										return Promise.resolve()
-      // 									})
-      // 							} else {
-      // 								return Promise.resolve()
-      // 							}
-      // 						}
-      // 					)
-      // 				}
-      // 			)
-      // 		})
-      // } else {
-      // 	return Promise.resolve()
-      // }
+    key: 'replicateMeta',
+    value: function replicateMeta(path, name, type) {
+      // for each block
+      // get meta
+      // create block
+      // initialize files with meta
     }
   }, {
     key: process,
@@ -375,48 +315,75 @@ var UpdateSwComponent = function () {
       return this[process](block, 'move', this.moveFile);
     }
   }, {
+    key: 'inquireBlock',
+    value: function inquireBlock(block) {
+      return _get__('Promise').resolve(block);
+    }
+  }, {
+    key: ensureBlocks,
+    value: function value(rootSwComponent, name, type) {
+      var _this4 = this;
+
+      console.log(_get__('chalk').yellow('ensureBlocks'));
+      var rootBlocks = this[filterBlocks](rootSwComponent.swBlocks, name, type);
+      rootBlocks.forEach(function (rootBlock) {
+        var block = _this4.targetSwComponent.swBlocks.find(function (swBlock) {
+          return (swBlock.name === rootBlock.name || !rootBlock.name) && (swBlock.type === rootBlock.type || !rootBlock.type);
+        });
+        if (!block) {
+          block = { name: rootBlock.name, type: rootBlock.type, options: rootBlock.options, version: '0.0.0', sourceCodeFiles: rootBlock.sourceCodeFiles };
+          _this4.targetSwComponent.addSwBlock(block);
+        }
+      });
+    }
+  }, {
     key: 'synchronizeWith',
     value: function synchronizeWith(fromPath, rootSwComponentJson, name, type) {
-      var _this4 = this;
+      var _this5 = this;
 
       console.log(_get__('chalk').green('building objects and picking newer blocks'));
       var rootSwComponent = this[buildSwComponent](rootSwComponentJson);
+      this[ensureBlocks](rootSwComponent, name, type);
       var newerBlocks = this[getNewerBlocks](rootSwComponent, name, type);
 
       console.log(_get__('chalk').magenta('synchronizing old blocks'));
-      return _get__('Promise').mapSeries(newerBlocks, function (swBlock) {
-        console.log(_get__('chalk').green('About to update block ' + swBlock.type + ' to version ' + swBlock.version + '... '));
-        var syncPromise = _this4.inquireBlock(swBlock).then(function () {
-          return _this4.targetSwComponent.synchronizeWith(swBlock);
-        }).then(function () {
-          return _this4.jsonificate(swBlock);
-        }).then(function () {
-          return _this4.move(swBlock);
-        }).then(function () {
-          return _this4.copy(swBlock);
-        }).then(function () {
-          console.log(_get__('chalk').magenta('About to write configuration... '));
-          console.log(_get__('chalk').magenta('Adding the new source...'));
-          _this4.addSource(fromPath, name, type);
-          return _this4[saveConfiguration](_this4.targetSwComponent).then(function () {
-            console.log(_get__('chalk').magenta('Configuration written  for type ' + swBlock.type + ' to version ' + swBlock.version + '... '));
+      return rootSwComponent.getMeta().then(function (metaObject) {
+        return _this5.targetSwComponent.setMeta(metaObject);
+      }).then(function () {
+        return _get__('Promise').mapSeries(newerBlocks, function (swBlock) {
+          console.log(_get__('chalk').green('About to update block ' + swBlock.type + ' to version ' + swBlock.version + '... '));
+          var syncPromise = _this5.inquireBlock(swBlock).then(function () {
+            return _this5.targetSwComponent.synchronizeWith(swBlock);
+          }).then(function () {
+            return _this5.jsonificate(swBlock);
+          }).then(function () {
+            return _this5.move(swBlock);
+          }).then(function () {
+            return _this5.copy(swBlock);
+          }).then(function () {
+            console.log(_get__('chalk').magenta('About to write configuration... '));
+            console.log(_get__('chalk').magenta('Adding the new source...'));
+            _this5.addSource(fromPath, name, type);
+            return _this5[saveConfiguration](_this5.targetSwComponent).then(function () {
+              console.log(_get__('chalk').magenta('Configuration written  for type ' + swBlock.type + ' to version ' + swBlock.version + '... '));
+            });
           });
-        });
-        return _get__('Promise').resolve(syncPromise).reflect();
-      }).then(function (inspections) {
-        var errorCount = 0;
-        inspections.forEach(function (inspection) {
-          if (!inspection.isFulfilled()) {
-            errorCount++;
-            console.log(_get__('chalk').yellow(inspection.reason()));
+          return _get__('Promise').resolve(syncPromise).reflect();
+        }).then(function (inspections) {
+          var errorCount = 0;
+          inspections.forEach(function (inspection) {
+            if (!inspection.isFulfilled()) {
+              errorCount++;
+              console.log(_get__('chalk').yellow(inspection.reason()));
+            }
+          });
+          if (errorCount) {
+            return _get__('Promise').reject(new Error('Error/Warnings occurred during synchronization.'));
+          } else {
+            console.log(_get__('chalk').green('Component ' + _this5.targetSwComponent.name + ' updated.'));
+            return _get__('Promise').resolve(_this5.targetSwComponent);
           }
         });
-        if (errorCount) {
-          return _get__('Promise').reject(new Error('Error/Warnings occurred during synchronization.'));
-        } else {
-          console.log(_get__('chalk').green('Component ' + _this4.targetSwComponent.name + ' updated.'));
-          return _get__('Promise').resolve(_this4.targetSwComponent);
-        }
       });
     }
   }, {

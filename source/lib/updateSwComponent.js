@@ -18,6 +18,7 @@ const updateFrom = Symbol('updateFrom')
 const saveConfiguration = Symbol('saveConfiguration')
 const addSourceCodeFile = Symbol('addSourceCodeFile')
 const filterBlocks = Symbol('filterBlocks')
+const ensureBlocks = Symbol('ensureBlocks')
 const process = Symbol('process')
 
 export default class UpdateSwComponent {
@@ -204,72 +205,11 @@ export default class UpdateSwComponent {
     }
   }
 
-  inquireBlock (block) {
-    // / TBD: there are issues with paths and ph contents to think about yet
-    return Promise.resolve(block)
-  // const found = this.targetSwComponent.swBlocks.find(potentialMatch => (potentialMatch.type === block.type))
-  // console.log(chalk.green(`inquirer found is ${found}`))
-  // if(!found) {
-  // 	return block.getMeta()
-  // 		.then(metaBlock => {
-  // 			return Promise.mapSeries(
-  // 				metaBlock.sourceCodeFiles,
-  // 				sourceCodeFile => {
-  // 					console.log(chalk.green(`inquirer going through keys`), { sourceCodeFile })
-  // 					return Promise.mapSeries(
-  // 						Object.keys(sourceCodeFile.replacements),
-  // 						replacementKey => {
-  // 							const replacementObject = sourceCodeFile.replacements[replacementKey]
-  // 							console.log(chalk.green(`inquirer replacement object`, {replacementObject}))
-  // 							if(replacementObject) {
-  // 								const questions = [
-  // 									{
-  // 										message: `What do you want to put as the value in the replacement named '${replacementKey}' for the file ${sourceCodeFile.path}?`,
-  // 										type: "input",
-  // 										name: "value",
-  // 										default: replacementObject.value
-  // 									},
-  // 									{
-  // 										message: `And for it's regex?`,
-  // 										type: "input",
-  // 										name: "regex",
-  // 										default: replacementObject.regex
-  // 									}
-  // 								]
-  //
-  // 								return inquirer.prompt(questions)
-  // 									.then(answers => {
-  // 										const originalSourceCodeFile = block.sourceCodeFiles.find(scf => (scf.path === sourceCodeFile.path))
-  // 										if(originalSourceCodeFile) {
-  // 											if(!originalSourceCodeFile.options) {
-  // 												originalSourceCodeFile.options = {}
-  // 											}
-  // 											if(!originalSourceCodeFile.options.replacements) {
-  // 												originalSourceCodeFile.options.replacements = {}
-  // 											}
-  // 											if(!originalSourceCodeFile.options.replacements[replacementKey]) {
-  // 												originalSourceCodeFile.options.replacements[replacementKey] = {}
-  // 											}
-  // 											const replacement = originalSourceCodeFile.options.replacements[replacementKey]
-  // 											replacement.value = answers.value
-  // 											replacement.regex = answers.regex
-  // 											console.log(chalk.green(`all right replacements set`, { originalSourceCodeFile }))
-  // 										} else {
-  // 											console.log(chalk.red(`replacement originalSourceCodeFile not found`, { sourceCodeFile, answers }))
-  // 										}
-  // 										return Promise.resolve()
-  // 									})
-  // 							} else {
-  // 								return Promise.resolve()
-  // 							}
-  // 						}
-  // 					)
-  // 				}
-  // 			)
-  // 		})
-  // } else {
-  // 	return Promise.resolve()
-  // }
+  replicateMeta (path, name, type) {
+    // for each block
+    // get meta
+    // create block
+    // initialize files with meta
   }
 
   [process] (block, property, callTo) {
@@ -317,52 +257,77 @@ export default class UpdateSwComponent {
     return this[process](block, 'move', this.moveFile)
   }
 
+  inquireBlock (block) {
+    return Promise.resolve(block)
+  }
+
+  [ensureBlocks] (rootSwComponent, name, type) {
+    console.log(chalk.yellow('ensureBlocks'))
+    const rootBlocks = this[filterBlocks](rootSwComponent.swBlocks, name, type)
+    rootBlocks.forEach(
+      rootBlock => {
+        let block = this.targetSwComponent.swBlocks.find(
+          swBlock => ((swBlock.name === rootBlock.name || !rootBlock.name) && (swBlock.type === rootBlock.type || !rootBlock.type))
+        )
+        if (!block) {
+          block = { name: rootBlock.name, type: rootBlock.type, options: rootBlock.options, version: '0.0.0', sourceCodeFiles: rootBlock.sourceCodeFiles }
+          this.targetSwComponent.addSwBlock(block)
+        }
+      }
+    )
+  }
+
   synchronizeWith (fromPath, rootSwComponentJson, name, type) {
     console.log(chalk.green('building objects and picking newer blocks'))
     const rootSwComponent = this[buildSwComponent](rootSwComponentJson)
+    this[ensureBlocks](rootSwComponent, name, type)
     const newerBlocks = this[getNewerBlocks](rootSwComponent, name, type)
 
     console.log(chalk.magenta('synchronizing old blocks'))
-    return Promise.mapSeries(
-      newerBlocks,
-      swBlock => {
-        console.log(chalk.green(`About to update block ${swBlock.type} to version ${swBlock.version}... `))
-        const syncPromise = this.inquireBlock(swBlock)
-          .then(() => this.targetSwComponent.synchronizeWith(swBlock))
-          .then(() => this.jsonificate(swBlock))
-          .then(() => this.move(swBlock))
-          .then(() => this.copy(swBlock))
-          .then(
-            () => {
-              console.log(chalk.magenta(`About to write configuration... `))
-              console.log(chalk.magenta('Adding the new source...'))
-              this.addSource(fromPath, name, type)
-              return this[saveConfiguration](this.targetSwComponent)
-                .then(() => {
-                  console.log(chalk.magenta(`Configuration written  for type ${swBlock.type} to version ${swBlock.version}... `))
-                })
+    return rootSwComponent.getMeta()
+      .then(metaObject => this.targetSwComponent.setMeta(metaObject))
+      .then(() => {
+        return Promise.mapSeries(
+          newerBlocks,
+          swBlock => {
+            console.log(chalk.green(`About to update block ${swBlock.type} to version ${swBlock.version}... `))
+            const syncPromise = this.inquireBlock(swBlock)
+              .then(() => this.targetSwComponent.synchronizeWith(swBlock))
+              .then(() => this.jsonificate(swBlock))
+              .then(() => this.move(swBlock))
+              .then(() => this.copy(swBlock))
+              .then(
+                () => {
+                  console.log(chalk.magenta(`About to write configuration... `))
+                  console.log(chalk.magenta('Adding the new source...'))
+                  this.addSource(fromPath, name, type)
+                  return this[saveConfiguration](this.targetSwComponent)
+                    .then(() => {
+                      console.log(chalk.magenta(`Configuration written  for type ${swBlock.type} to version ${swBlock.version}... `))
+                    })
+                }
+              )
+            return Promise.resolve(syncPromise).reflect()
+          }
+        )
+        .then((inspections) => {
+          let errorCount = 0
+          inspections.forEach(
+            inspection => {
+              if (!inspection.isFulfilled()) {
+                errorCount++
+                console.log(chalk.yellow(inspection.reason()))
+              }
             }
           )
-        return Promise.resolve(syncPromise).reflect()
-      }
-    )
-    .then((inspections) => {
-      let errorCount = 0
-      inspections.forEach(
-        inspection => {
-          if (!inspection.isFulfilled()) {
-            errorCount++
-            console.log(chalk.yellow(inspection.reason()))
+          if (errorCount) {
+            return Promise.reject(new Error('Error/Warnings occurred during synchronization.'))
+          } else {
+            console.log(chalk.green(`Component ${this.targetSwComponent.name} updated.`))
+            return Promise.resolve(this.targetSwComponent)
           }
-        }
-      )
-      if (errorCount) {
-        return Promise.reject(new Error('Error/Warnings occurred during synchronization.'))
-      } else {
-        console.log(chalk.green(`Component ${this.targetSwComponent.name} updated.`))
-        return Promise.resolve(this.targetSwComponent)
-      }
-    })
+        })
+      })
   }
 
   clean (dirtyPhs) {
