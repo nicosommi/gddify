@@ -71,7 +71,7 @@ npm i -g gddify
 npm install git://github.com/nicosommi/gddify.git
 gddify generate --from ./node_modules/gddify
 ```
-And there you are, you have a fully functional webapp. But hey, don't get me wrong. That webapp is just a GDD developed web application. It can be anything from any repo that was created following GDD.
+That's almost it, you have a clone from gddify. Now you need to edit the meta data and refresh. But hey, don't get me wrong. Is just a GDD developed library. It can be anything from any repo that was created following GDD.
 
 Also, you can generate just some blocks with type filtering (or name filtering):
 ```shell
