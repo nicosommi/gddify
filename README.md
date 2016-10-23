@@ -9,13 +9,12 @@
 <!-- endph -->
 
 <!-- ph description -->
-It makes it easy to work with the GDD approach.
-Compose software components by putting blocks togheter and updating them whenever you want.
-Ah yeah, and with no development effort for generators and template creation.
-Thinked with the SRP in mind, this is ideal for microservices.
-It let's you minimize the maintenance effort at almost no additional cost.
-It's also useful for scaffolding and quality assurance across your company, among other things.
-Read more on [http://nicosommi.com](http://nicosommi.com)
+It makes it easy to work with the GDD approach... which is still in development.
+
+The idea is to create self describing software components that hold software blocks that are similar patterns among files.
+
+With that self describing meta data in place on the source code you get code generation and synchronization for free. No more generator development.
+
 <!-- endph -->
 
 <!-- ph usagesAndExamples -->
@@ -92,6 +91,8 @@ Gdd compares using the semver package.
 
 Update also supports type and name filtering.
 
+Update will not generate new blocks from sources.
+
 ### Refresh
 ```shell
 gddify refresh
@@ -128,7 +129,8 @@ It's particularly useful when you want to allow other blocks to be refreshed/upd
 <!-- endph -->
 <!-- ph howItWorks -->
 ## How it works
-Basically, it creates and maintains a swComponent.json on the project roots with the information related to your project and their sources.
+Basically, it creates and maintains a swComponent.json on the project roots with the information related to your project and their sources.  
+
 Using that, it implements the [GDD approach](http://nicosommi.com), based on gene, block and component information provided by other GDD projects out there.
 
 With gdd you will be able to create and compose projects from your other projects or from projects on the repo.
@@ -137,17 +139,16 @@ With gdd you will be able to create and compose projects from your other project
 *Use cases? A lot.*  
 Microservices, project bootstrapping, scaffolding (and with updates), among others.
 
-*Is it hard to learn? Not at all.*  
-It's intuitive.  
-It's just common sense.  
-Nothing else that the commands here and understanding the GDD approach.  
+*Is it hard to learn? No.*  
+It aims to be intuitive. It will require a mindset change and some time thinking about how are you going to build your components and blocks. But once that's done is common sense.  
+It will take some time to understand the commands here and the GDD approach.  
 As this is a change in your current workflow it may be uncomfortable at the beginning, but you get used to it.
-The most advanced task you will need to do is to create a regular expressions.  
-But come on, if you want to be called a developer or even an advanced text-processor user, you should know how to create a regular expression! In complex cases it requires to think the regular expression very well, as well as how many place holders and stamps to include, to ignore, etc.  
+Technically speaking, the most advanced task you will need to do is to create a regular expressions for string replacement.  
 If you don't know what that is go [here](http://nicosommi.com).
 
 *Is this different than yeoman? Absolutely.*  
-Gddify is a tool for applying a development process aspect/practice that you can attach to your development process, like TDD/BDD (but with a different purpose). It's true that you may accomplish with GDD the same stuff that you previously did with yeoman, and it does not require ANY effort on building up a generator, it just requires you to provide meta information in the source code files by following the development process aspect. So in this way, you can just completely avoid efforts building up templates and generators, testing them properly, and creating complex updating processes. Also there are many other uses cases.
+Gddify is a tool for applying a development process aspect/practice that you can attach to your development process, like TDD/BDD (but with a different purpose).
+You can just have code generation and refresh for free.
 
 *Does gdd use any template language to build concrete files? No.*  
 You don't have to *learn* anything special. Read more why [here](http://nicosommi.com).
@@ -155,10 +156,8 @@ You don't have to *learn* anything special. Read more why [here](http://nicosomm
 *There is any advatange by using this approach? A lot.*  
 For example, you can test everything you do with no rare/template code, just regular development in your well known main source code language.
 No more reinventing the wheel everytime.
-No more question/wizard development.
+No more question/wizard/generator development.
 No vendor-lock learning curve.
-The impact for technology decisions and package/stack/vendor-lock is now minimized (if you do GDD correctly).
-Reduces the work overhead on complex architectures.
 There are more advatanges, keep reading [here](http://nicosommi.com).
 
 *Can I use gdd on other languages different than javascript? Yes.*  
@@ -178,10 +177,6 @@ Gddify requires node.js and your commitment to the GDD approach to be really use
 *What happens with files with no comment support? We use a intermmediate file.*  
 For example, for package.json, you can maintain a package.js that, using the provided jsonification command, compiles that js to package.json automatically. You can see how it's done by looking the swComponent.json for this repo.  
 You can configure blocks to jsonificate, copy or move their files after the synchronization occurs.
-
-*How can I get help/support/new features? Contact me.*  
-You can either send me an email to nicosommi@gmail.com or visit my company website http://www.integracionesagiles.com
-I'm an enterpreneur and a open source developer.
 
 <!-- endph -->
 <!-- ph qualityAndCompatibility -->
@@ -212,8 +207,8 @@ npm install -g gddify
 
 You can submit your ideas through our [issues system](https://github.com/nicosommi/gddify/issues), or make the modifications yourself and submit them to us in the form of a [GitHub pull request](https://help.github.com/articles/using-pull-requests/).
 
-For GDD-related service [go here](http://integracionesagiles.com)
-Or contact me to nicosommi@gmail.com for any business related thing or anything else.
+Test coverage and js standard is a must for this project.
+
 <!-- endstamp -->
 <!-- stamp runningtests -->
 ## Running Tests

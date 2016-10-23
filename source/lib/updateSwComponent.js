@@ -156,7 +156,7 @@ export default class UpdateSwComponent {
       sources,
       source => {
         console.log(chalk.magenta(`Reading from ${source}...`))
-        return this.synchronize(source.path, source.name, source.type)
+        return this.synchronize(source.path, source.name, source.type, { generate: false })
       }
     )
       .then(() => {
@@ -167,25 +167,6 @@ export default class UpdateSwComponent {
   [ saveConfiguration ] (newConfiguration) {
     console.log(chalk.magenta('Writing configuration...'))
     return writeJson(path.normalize(`${this.targetSwComponent.options.basePath}/swComponent.json`), newConfiguration, { spaces: 2 })
-  }
-
-  synchronize (sourcePath, name, type) {
-    console.log(chalk.green('Generation begins...'))
-    const rootBasePath = `${this.targetSwComponent.options.basePath}/${sourcePath}`
-    const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
-    rootSwComponentJson.options.basePath = rootBasePath
-
-    console.log(chalk.magenta('Synchronization begins...'))
-    return this.synchronizeWith(sourcePath, rootSwComponentJson, name, type)
-      .then(() => {
-        console.log(chalk.green('All done.'))
-        return Promise.resolve()
-      },
-      error => {
-        const message = error.message || error
-        console.log(chalk.red(`ERROR: ${message}`))
-        return Promise.resolve()
-      })
   }
 
   addSource (path, name, type) {
@@ -277,10 +258,31 @@ export default class UpdateSwComponent {
     )
   }
 
-  synchronizeWith (fromPath, rootSwComponentJson, name, type) {
+  synchronize (sourcePath, name, type, options) {
+    console.log(chalk.green('Generation begins...'))
+    const rootBasePath = `${this.targetSwComponent.options.basePath}/${sourcePath}`
+    const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
+    rootSwComponentJson.options.basePath = rootBasePath
+
+    console.log(chalk.magenta('Synchronization begins...'))
+    return this.synchronizeWith(sourcePath, rootSwComponentJson, name, type, options)
+      .then(() => {
+        console.log(chalk.green('All done.'))
+        return Promise.resolve()
+      },
+      error => {
+        const message = error.message || error
+        console.log(chalk.red(`ERROR: ${message}`))
+        return Promise.resolve()
+      })
+  }
+
+  synchronizeWith (fromPath, rootSwComponentJson, name, type, options = { generate: true }) {
     console.log(chalk.green('building objects and picking newer blocks'))
     const rootSwComponent = this[buildSwComponent](rootSwComponentJson)
-    this[ensureBlocks](rootSwComponent, name, type)
+    if(options.generate) {
+      this[ensureBlocks](rootSwComponent, name, type)
+    }
     const newerBlocks = this[getNewerBlocks](rootSwComponent, name, type)
 
     console.log(chalk.magenta('synchronizing old blocks'))
