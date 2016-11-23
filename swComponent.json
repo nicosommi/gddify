@@ -23,7 +23,7 @@
         "path": "../gene-js/"
       }
     ],
-    "basePath": "/home/nicosommi/workspace/nicosommi/gddify/./",
+    "basePath": "/home/nicosommi/workspace/my-repos/gddify/./",
     "cleanPath": ".gdd-clean"
   },
   "swBlocks": [
@@ -65,7 +65,7 @@
             "path": "../gene-js/"
           }
         ],
-        "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+        "basePath": "/home/nicosommi/workspace/my-repos/gddify",
         "cleanPath": ".gdd-clean"
       },
       "sourceCodeFiles": [
@@ -94,7 +94,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean",
             "jsonification": [
               {
@@ -141,7 +141,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean",
             "copy": [
               {
@@ -179,7 +179,7 @@
             "path": "../gene-js/"
           }
         ],
-        "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+        "basePath": "/home/nicosommi/workspace/my-repos/gddify",
         "cleanPath": ".gdd-clean"
       },
       "sourceCodeFiles": [
@@ -208,7 +208,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         },
@@ -237,7 +237,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         },
@@ -266,7 +266,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         },
@@ -295,7 +295,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         },
@@ -324,7 +324,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         },
@@ -353,7 +353,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         }
@@ -385,7 +385,7 @@
             "path": "../gene-js/"
           }
         ],
-        "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+        "basePath": "/home/nicosommi/workspace/my-repos/gddify",
         "cleanPath": ".gdd-clean"
       },
       "sourceCodeFiles": [
@@ -414,7 +414,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         }
@@ -446,7 +446,7 @@
             "path": "../gene-js/"
           }
         ],
-        "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+        "basePath": "/home/nicosommi/workspace/my-repos/gddify",
         "cleanPath": ".gdd-clean"
       },
       "sourceCodeFiles": [
@@ -475,7 +475,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         },
@@ -504,7 +504,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         }
@@ -536,7 +536,7 @@
             "path": "../gene-js/"
           }
         ],
-        "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+        "basePath": "/home/nicosommi/workspace/my-repos/gddify",
         "cleanPath": ".gdd-clean"
       },
       "sourceCodeFiles": [
@@ -565,7 +565,7 @@
                 "path": "../gene-js/"
               }
             ],
-            "basePath": "/home/nicosommi/workspace/nicosommi/gddify",
+            "basePath": "/home/nicosommi/workspace/my-repos/gddify",
             "cleanPath": ".gdd-clean"
           }
         }

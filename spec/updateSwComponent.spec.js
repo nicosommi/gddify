@@ -94,10 +94,14 @@ describe('UpdateSwComponent', () => {
     })
   })
 
-  describe('.synchronize(path[, name, type])', () => {
+  describe('.synchronize(path[, name, type, options])', () => {
+    let options;
+    let source;
+
     beforeEach(() => {
       name = 'anewname'
       type = 'anewtype'
+      source = './root'
       addSwBlocksSpy = sinon.spy(
         function addSwBlocksSpyMethod () {
           this.swBlocks = [
@@ -125,11 +129,20 @@ describe('UpdateSwComponent', () => {
 
       updateSwComponent.synchronizeWith = sinon.spy(() => Promise.resolve())
 
-      return updateSwComponent.synchronize('./root')
+      options = {}
+
+      return updateSwComponent.synchronize(source, name, type, options)
     })
 
     it('should call synchronizeWith', () => {
-      sinon.assert.callCount(updateSwComponent.synchronizeWith, 1)
+      sinon.assert.calledWith(
+        updateSwComponent.synchronizeWith,
+        source,
+        require(`${__dirname}/../fixtures/${source}/swComponent.json`),
+        name,
+        type,
+        options
+      )
     })
   })
 
@@ -145,7 +158,10 @@ describe('UpdateSwComponent', () => {
         type,
         options: {
           basePath: `${__dirname}/../fixtures/testSource`,
-          sources: [{path: '1', name: blockName, type: blockType}, {path: '2', name: 'name2', type: 'type2'}]
+          sources: [
+            {path: '1', name: blockName, type: blockType},
+            {path: '2', name: 'name2', type: 'type2'}
+          ]
         }
       }
       updateSwComponent = new UpdateSwComponent(swComponentJson)
@@ -153,12 +169,12 @@ describe('UpdateSwComponent', () => {
       return updateSwComponent.update(blockName, blockType)
     })
 
-    it('should call synchronizeWith for each source plus one because of the refresh', () => {
+    it('should call synchronize for each source plus one because of the refresh', () => {
       sinon.assert.callCount(updateSwComponent.synchronize, 3)
     })
 
-    it('should call synchronizeWith for each source plus one because of the refresh', () => {
-      sinon.assert.calledWith(updateSwComponent.synchronize, '1', 'blockName', 'blockType')
+    it('should call synchronize with the appropiate parameters', () => {
+      sinon.assert.calledWith(updateSwComponent.synchronize, '1', 'blockName', 'blockType', { generate: false })
     })
   })
 
@@ -476,8 +492,8 @@ describe('UpdateSwComponent', () => {
     })
   })
 
-  describe('.synchronizeWith(path, root)', () => {
-    describe('(given a source sw component structure and a target sw component structure)', () => {
+  describe('.synchronizeWith(path, root, name, type, options)', () => {
+    describe('(with default options)', () => {
       let rootSwComponentJson,
         metaObject,
         blocks
@@ -540,6 +556,53 @@ describe('UpdateSwComponent', () => {
 
       it('should build the root sw component before calling synchronize', () => {
         sinon.assert.callOrder(constructorSpy, constructorSpy, addSwBlocksSpy, synchronizeWithSpy)
+      })
+    })
+
+    describe('(with generation false)', () => {
+      let rootSwComponentJson,
+        metaObject,
+        blocks,
+        options
+
+      beforeEach(() => {
+        blocks = [
+          { name: 'blockname', type: 'type4', version: '0.0.2' },
+          { name: 'blockname', type: 'type1', version: '0.0.1' },
+          { name: 'blockname', type: 'type3', version: '0.2.1' },
+          { name: 'blockname', type: 'type3', version: '0.2.1' }
+        ]
+        name = 'anewname'
+        type = 'anewtype'
+        addSwBlocksSpy = sinon.spy(
+          function addSwBlocksSpyMethod () {
+            this.swBlocks = blocks
+          }
+        )
+        rootSwComponentJson = {
+          name,
+          type,
+          swBlocks: [
+            { name: 'blockname', type: 'type3', version: '0.2.1' }
+          ]
+        }
+
+        metaObject = { name: 'example' }
+
+        getMetaSpy = sinon.spy(() => Promise.resolve(metaObject))
+        setMetaSpy = sinon.spy(() => Promise.resolve())
+
+        updateSwComponent.targetSwComponent.swBlocks = []
+
+        options = {
+          generate: false
+        }
+
+        return updateSwComponent.synchronizeWith('fromhere', rootSwComponentJson, undefined, undefined, options)
+      })
+
+      it('should not add blocks on the target', () => {
+        sinon.assert.callCount(addSwBlockSpy, 0)
       })
     })
   })

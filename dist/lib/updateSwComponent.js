@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.__Rewire__ = exports.__GetDependency__ = exports.__get__ = undefined;
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -67,14 +67,14 @@ var UpdateSwComponent = function () {
   }
 
   _createClass(UpdateSwComponent, [{
-    key: buildSwComponent,
+    key: _get__('buildSwComponent'),
     value: function value(jsonObject) {
       var result = new (_get__('SwComponent'))(jsonObject.name, jsonObject.type, jsonObject.options);
       result.addSwBlocks(jsonObject.swBlocks);
       return result;
     }
   }, {
-    key: filterBlocks,
+    key: _get__('filterBlocks'),
     value: function value(blocks, name, type) {
       var result = blocks;
       if (name) {
@@ -91,7 +91,7 @@ var UpdateSwComponent = function () {
       return result;
     }
   }, {
-    key: getNewerBlocks,
+    key: _get__('getNewerBlocks'),
     value: function value(component, name, type) {
       var result = [];
       var newerBlocks = this[filterBlocks](component.swBlocks, name, type);
@@ -112,7 +112,7 @@ var UpdateSwComponent = function () {
       return result;
     }
   }, {
-    key: addSourceCodeFile,
+    key: _get__('addSourceCodeFile'),
     value: function value(sourceCodeFilePath, name, type) {
       var blockFound = this.targetSwComponent.swBlocks.find(function (block) {
         return block.name === name && block.type === type;
@@ -147,7 +147,7 @@ var UpdateSwComponent = function () {
   }, {
     key: 'jsonification',
     value: function jsonification(source, destination) {
-      var merge = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+      var merge = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
       var content = require(source);
       if (merge) {
@@ -204,40 +204,22 @@ var UpdateSwComponent = function () {
       });
     }
   }, {
-    key: updateFrom,
+    key: _get__('updateFrom'),
     value: function value(sources) {
       var _this2 = this;
 
       return _get__('Promise').mapSeries(sources, function (source) {
         console.log(_get__('chalk').magenta('Reading from ' + source + '...'));
-        return _this2.synchronize(source.path, source.name, source.type);
+        return _this2.synchronize(source.path, source.name, source.type, { generate: false });
       }).then(function () {
         console.log(_get__('chalk').green('Everything updated from all sources.'));
       });
     }
   }, {
-    key: saveConfiguration,
+    key: _get__('saveConfiguration'),
     value: function value(newConfiguration) {
       console.log(_get__('chalk').magenta('Writing configuration...'));
       return _get__('writeJson')(_get__('path').normalize(this.targetSwComponent.options.basePath + '/swComponent.json'), newConfiguration, { spaces: 2 });
-    }
-  }, {
-    key: 'synchronize',
-    value: function synchronize(sourcePath, name, type) {
-      console.log(_get__('chalk').green('Generation begins...'));
-      var rootBasePath = this.targetSwComponent.options.basePath + '/' + sourcePath;
-      var rootSwComponentJson = require(_get__('path').normalize(rootBasePath + '/swComponent.json'));
-      rootSwComponentJson.options.basePath = rootBasePath;
-
-      console.log(_get__('chalk').magenta('Synchronization begins...'));
-      return this.synchronizeWith(sourcePath, rootSwComponentJson, name, type).then(function () {
-        console.log(_get__('chalk').green('All done.'));
-        return _get__('Promise').resolve();
-      }, function (error) {
-        var message = error.message || error;
-        console.log(_get__('chalk').red('ERROR: ' + message));
-        return _get__('Promise').resolve();
-      });
     }
   }, {
     key: 'addSource',
@@ -264,7 +246,7 @@ var UpdateSwComponent = function () {
       // initialize files with meta
     }
   }, {
-    key: process,
+    key: _get__('process'),
     value: function value(block, property, callTo) {
       var _this3 = this;
 
@@ -320,7 +302,7 @@ var UpdateSwComponent = function () {
       return _get__('Promise').resolve(block);
     }
   }, {
-    key: ensureBlocks,
+    key: _get__('ensureBlocks'),
     value: function value(rootSwComponent, name, type) {
       var _this4 = this;
 
@@ -337,13 +319,35 @@ var UpdateSwComponent = function () {
       });
     }
   }, {
+    key: 'synchronize',
+    value: function synchronize(sourcePath, name, type, options) {
+      console.log(_get__('chalk').green('Generation begins...'));
+      var rootBasePath = this.targetSwComponent.options.basePath + '/' + sourcePath;
+      var rootSwComponentJson = require(_get__('path').normalize(rootBasePath + '/swComponent.json'));
+      rootSwComponentJson.options.basePath = rootBasePath;
+
+      console.log(_get__('chalk').magenta('Synchronization begins...'));
+      return this.synchronizeWith(sourcePath, rootSwComponentJson, name, type, options).then(function () {
+        console.log(_get__('chalk').green('All done.'));
+        return _get__('Promise').resolve();
+      }, function (error) {
+        var message = error.message || error;
+        console.log(_get__('chalk').red('ERROR: ' + message));
+        return _get__('Promise').resolve();
+      });
+    }
+  }, {
     key: 'synchronizeWith',
     value: function synchronizeWith(fromPath, rootSwComponentJson, name, type) {
       var _this5 = this;
 
+      var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : { generate: true };
+
       console.log(_get__('chalk').green('building objects and picking newer blocks'));
       var rootSwComponent = this[buildSwComponent](rootSwComponentJson);
-      this[ensureBlocks](rootSwComponent, name, type);
+      if (options.generate) {
+        this[ensureBlocks](rootSwComponent, name, type);
+      }
       var newerBlocks = this[getNewerBlocks](rootSwComponent, name, type);
 
       console.log(_get__('chalk').magenta('synchronizing old blocks'));
@@ -401,7 +405,10 @@ var UpdateSwComponent = function () {
 }();
 
 exports.default = UpdateSwComponent;
-var _RewiredData__ = {};
+
+var _RewiredData__ = Object.create(null);
+
+var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 var _RewireAPI__ = {};
 
 (function () {
@@ -423,7 +430,17 @@ var _RewireAPI__ = {};
 })();
 
 function _get__(variableName) {
-  return _RewiredData__ === undefined || _RewiredData__[variableName] === undefined ? _get_original__(variableName) : _RewiredData__[variableName];
+  if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+    return _get_original__(variableName);
+  } else {
+    var value = _RewiredData__[variableName];
+
+    if (value === INTENTIONAL_UNDEFINED) {
+      return undefined;
+    } else {
+      return value;
+    }
+  }
 }
 
 function _get_original__(variableName) {
@@ -460,6 +477,30 @@ function _get_original__(variableName) {
 
     case 'move':
       return move;
+
+    case 'buildSwComponent':
+      return buildSwComponent;
+
+    case 'filterBlocks':
+      return filterBlocks;
+
+    case 'getNewerBlocks':
+      return getNewerBlocks;
+
+    case 'addSourceCodeFile':
+      return addSourceCodeFile;
+
+    case 'updateFrom':
+      return updateFrom;
+
+    case 'saveConfiguration':
+      return saveConfiguration;
+
+    case 'process':
+      return process;
+
+    case 'ensureBlocks':
+      return ensureBlocks;
   }
 
   return undefined;
@@ -495,7 +536,15 @@ function _set__(variableName, value) {
       _RewiredData__[name] = variableName[name];
     });
   } else {
-    return _RewiredData__[variableName] = value;
+    if (value === undefined) {
+      _RewiredData__[variableName] = INTENTIONAL_UNDEFINED;
+    } else {
+      _RewiredData__[variableName] = value;
+    }
+
+    return function () {
+      _reset__(variableName);
+    };
   }
 }
 
