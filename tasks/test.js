@@ -17,7 +17,7 @@ function defineTestTask (taskName, reporters, sourceCode, spec) {
         gulp.src(spec)
           .pipe(mocha())
           .pipe(istanbul.writeReports({dir: `${__dirname}/../.coverage`, reporters})) // Creating the reports after tests ran
-          .pipe(istanbul.enforceThresholds({ thresholds: { global: 70 } })) // Enforce a coverage of at least 90%
+          .pipe(istanbul.enforceThresholds({ thresholds: { global: 55 } })) // Enforce a coverage of at least 90%
           .on('end', cb)
       })
   })
