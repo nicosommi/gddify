@@ -23,7 +23,7 @@ var File = function () {
 
     _get__('_')(this).path = path;
     _get__('_')(this).replacements = {};
-    _get__('_')(this).ignoredStamps = [];
+    _get__('_')(this).stamps = '';
     _get__('_')(this).cleanFilePath = cleanFilePath;
   }
 
@@ -33,9 +33,9 @@ var File = function () {
       _get__('_')(this).replacements = replacements;
     }
   }, {
-    key: 'ignoringStamps',
-    value: function ignoringStamps(ignoredStamps) {
-      _get__('_')(this).ignoredStamps = ignoredStamps;
+    key: 'setStamps',
+    value: function setStamps(stamps) {
+      _get__('_')(this).stamps = stamps;
     }
   }, {
     key: 'cleanFilePath',
@@ -53,9 +53,9 @@ var File = function () {
       return _get__('_')(this).replacements;
     }
   }, {
-    key: 'ignoredStamps',
+    key: 'stamps',
     get: function get() {
-      return _get__('_')(this).ignoredStamps;
+      return _get__('_')(this).stamps;
     }
   }]);
 

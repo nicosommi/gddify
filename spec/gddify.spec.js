@@ -2,7 +2,7 @@ import Gddify from '../source/lib/gddify.js'
 import fs from 'fs-extra'
 import del from 'del'
 
-describe('Gddify', () => {
+xdescribe('Gddify', () => {
   let gddify
 
   beforeEach(() => {
@@ -61,14 +61,16 @@ describe('Gddify', () => {
         thirdGrowthExpectation,
         thirdGrowth,
         firstGrowth,
-        secondGrowth
+        secondGrowth,
+        mockRegexp
 
       beforeEach(done => {
+        mockRegexp = { test: () => true }
         options = {
           replacements: {
             'Mango': 'Apple'
           },
-          ignoringStamps: ['astamp']
+          stamps: mockRegexp
         }
 
         gddify.add(
@@ -79,7 +81,7 @@ describe('Gddify', () => {
         )
 
         options.replacements.Mango = 'Orange'
-        delete options.ignoringStamps
+        options.stamps = mockRegexp
         options.delimiters = {
           start: '/*',
           end: '*/'
@@ -94,7 +96,7 @@ describe('Gddify', () => {
 
         delete options.replacements
         delete options.delimiters
-        options.ignoringStamps = ['mangostamp']
+        options.stamps = mockRegexp
 
         gddify.add(
           `${__dirname}/../fixtures/thirdGene.md`,
@@ -162,7 +164,7 @@ describe('Gddify', () => {
           replacements: {
             'Mango': 'Apple'
           },
-          ignoringStamps: ['astamp']
+          stamps: '/^(?!astamp{1}).*$/'
         }
 
         gddify.add(
@@ -173,7 +175,7 @@ describe('Gddify', () => {
         )
 
         options.replacements.Mango = 'Orange'
-        delete options.ignoringStamps
+        delete options.stamps
         options.delimiters = {
           start: '/*',
           end: '*/'
@@ -188,7 +190,7 @@ describe('Gddify', () => {
 
         delete options.replacements
         delete options.delimiters
-        options.ignoringStamps = ['mangostamp']
+        options.stamps = '/^(?!mangostamp{1}).*$/'
 
         gddify.add(
           `${__dirname}/../fixtures/thirdGene.md`,

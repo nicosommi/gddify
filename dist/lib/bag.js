@@ -65,8 +65,8 @@ var Bag = function () {
           options.replacements = {};
         }
 
-        if (!options.ignoringStamps) {
-          options.ignoringStamps = [];
+        if (!options.stamps) {
+          options.stamps = [];
         }
 
         var ph = _get__('Ph').refresh(target);
@@ -75,7 +75,7 @@ var Bag = function () {
           ph.withThisDelimiters(options.delimiters.start, options.delimiters.end);
         }
 
-        ph.replacing(options.replacements).ignoringStamps(options.ignoringStamps).with(root, function (errors) {
+        ph.replacing(options.replacements).stamps(options.stamps).with(root, function (errors) {
           if (errors) {
             reject(errors);
           } else {
@@ -96,8 +96,8 @@ var Bag = function () {
           options.replacements = {};
         }
 
-        if (!options.ignoringStamps) {
-          options.ignoringStamps = [];
+        if (!options.stamps) {
+          options.stamps = [];
         }
 
         var ph = _get__('Ph').using(root);
@@ -123,7 +123,7 @@ var Bag = function () {
       _get__('flowsync').eachSeries(Array.from(this.files), function (fileEntry, nextFile) {
         var filePath = fileEntry[0];
         var fileObject = fileEntry[1];
-        _get__('Ph').refresh(filePath).replacing(fileObject.replacements).ignoringStamps(fileObject.ignoredStamps).with(_this.root, function () {
+        _get__('Ph').refresh(filePath).replacing(fileObject.replacements).stamps(fileObject.ignoredStamps).with(_this.root, function () {
           nextFile();
         });
       }, function () {

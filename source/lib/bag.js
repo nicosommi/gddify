@@ -30,8 +30,8 @@ export default class Bag {
         options.replacements = {}
       }
 
-      if (!options.ignoringStamps) {
-        options.ignoringStamps = []
+      if (!options.stamps) {
+        options.stamps = []
       }
 
       let ph = Ph.refresh(target)
@@ -41,7 +41,7 @@ export default class Bag {
       }
 
       ph.replacing(options.replacements)
-        .ignoringStamps(options.ignoringStamps)
+        .stamps(options.stamps)
         .with(root,
           (errors) => {
             if (errors) {
@@ -64,8 +64,8 @@ export default class Bag {
         options.replacements = {}
       }
 
-      if (!options.ignoringStamps) {
-        options.ignoringStamps = []
+      if (!options.stamps) {
+        options.stamps = []
       }
 
       let ph = Ph.using(root)
@@ -93,7 +93,7 @@ export default class Bag {
         const fileObject = fileEntry[1]
         Ph.refresh(filePath)
           .replacing(fileObject.replacements)
-          .ignoringStamps(fileObject.ignoredStamps)
+          .stamps(fileObject.ignoredStamps)
           .with(this.root, () => {
             nextFile()
           })

@@ -68,8 +68,8 @@ var Gddify = function () {
             options.replacements = {};
           }
 
-          if (!options.ignoringStamps) {
-            options.ignoringStamps = [];
+          if (!options.stamps) {
+            options.stamps = [];
           }
 
           var ph = _get__('Ph').refresh(gene.growth);
@@ -78,7 +78,7 @@ var Gddify = function () {
             ph.withThisDelimiters(options.delimiters.start, options.delimiters.end);
           }
 
-          ph.replacing(options.replacements).ignoringStamps(options.ignoringStamps).with(gene.source, function (errors) {
+          ph.replacing(options.replacements).stamps(options.stamps).with(gene.source, function (errors) {
             if (errors) {
               reject(errors);
             } else {
