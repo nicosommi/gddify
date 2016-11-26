@@ -4,7 +4,7 @@ export default class File {
   constructor (path, cleanFilePath) {
     _(this).path = path
     _(this).replacements = {}
-    _(this).ignoredStamps = []
+    _(this).stamps = ''
     _(this).cleanFilePath = cleanFilePath
   }
 
@@ -20,15 +20,15 @@ export default class File {
     return _(this).replacements
   }
 
-  get ignoredStamps () {
-    return _(this).ignoredStamps
+  get stamps () {
+    return _(this).stamps
   }
 
   replacing (replacements) {
     _(this).replacements = replacements
   }
 
-  ignoringStamps (ignoredStamps) {
-    _(this).ignoredStamps = ignoredStamps
+  setStamps (stamps) {
+    _(this).stamps = stamps
   }
 }

@@ -10,8 +10,8 @@ describe('File', () => {
       file.path.should.equal('afilePath.js')
     })
 
-    it('should have a ignoredStamps array property', () => {
-      file.ignoredStamps.should.eql([])
+    it('should have a stamps property', () => {
+      file.stamps.should.eql('')
     })
 
     it('should have a replacements object property', () => {
@@ -24,13 +24,13 @@ describe('File', () => {
   })
 
   describe('(methods)', () => {
-    it('should provide a ignoringStamps method that sets the property', () => {
-      const stampsToIgnore = [ 'stamp1' ]
-      file.ignoringStamps(stampsToIgnore)
-      file.ignoredStamps.should.eql(stampsToIgnore)
+    it('should provide a stamps method that sets the property', () => {
+      const stamps = 'aregexp'
+      file.setStamps(stamps)
+      file.stamps.should.eql(stamps)
     })
 
-    it('should provide a ignoringStamps method that sets the property', () => {
+    it('should provide a stamps method that sets the property', () => {
       const replacements = { 'key': 'value' }
       file.replacing(replacements)
       file.replacements.should.eql(replacements)

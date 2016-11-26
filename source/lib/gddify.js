@@ -44,8 +44,8 @@ export default class Gddify {
                 options.replacements = {}
               }
 
-              if (!options.ignoringStamps) {
-                options.ignoringStamps = []
+              if (!options.stamps) {
+                options.stamps = []
               }
 
               const ph = Ph.refresh(gene.growth)
@@ -55,7 +55,7 @@ export default class Gddify {
               }
 
               ph.replacing(options.replacements)
-                .ignoringStamps(options.ignoringStamps)
+                .stamps(options.stamps)
                 .with(gene.source,
                   (errors) => {
                     if (errors) {
