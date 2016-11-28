@@ -149,7 +149,7 @@ var UpdateSwComponent = function () {
     value: function jsonification(source, destination) {
       var merge = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-      // TODO: modularize and use babel cli to transform
+      require('babel-register');
       var content = require(source);
       if (merge) {
         var newContent = require(destination);

@@ -100,7 +100,7 @@ export default class UpdateSwComponent {
   }
 
   jsonification (source, destination, merge = false) {
-    // TODO: modularize and use babel cli to transform
+    require('babel-register')
     let content = require(source)
     if (merge) {
       let newContent = require(destination)
