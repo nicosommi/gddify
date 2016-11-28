@@ -5,10 +5,8 @@
 /* main, /'main': '[a-zA-Z\.\/]+'/ig, 'main': 'index.js' */
 /* license, /MIT/g, MIT */
 /* endph */
-/* ph ignoringStamps */
-/* webapp_scripts, service_scripts */
-/* webapp_dependencies, service_dependencies */
-/* webapp_devDependencies, service_devDependencies */
+/* ph stamps */
+/* /^(?!webapp_scripts{1})(?!service_scripts{1})(?!webapp_dependencies{1})(?!service_dependencies{1})(?!webapp_devDependencies{1})(?!service_devDependencies{1}).*$/ */
 /* endph */
 
 module.exports =
@@ -63,6 +61,8 @@ module.exports =
     'flowsync': '^0.1.12',
     'liftoff': '^2.2.1',
     'yargs': '^4.7.1',
+    'babel-register': '^6.18.0',
+    'babel-preset-stage-2': '^6.18.0',
     /* endph */
     /* stamp webapp_dependencies */
     /* endstamp */

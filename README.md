@@ -2,7 +2,8 @@
 <!-- name, /gddify/g, gddify -->
 <!-- namePascal, /Gddify/g, Gddify -->
 <!-- endph -->
-<!-- ph ignoringStamps -->
+<!-- ph stamps -->
+<!-- /^.*$/ -->
 <!-- endph -->
 <!-- ph title -->
 # Gddify [![npm version](https://img.shields.io/npm/v/gddify.svg)](https://www.npmjs.com/package/gddify) [![license type](https://img.shields.io/npm/l/gddify.svg)](https://github.com/nicosommi/gddify.git/blob/master/LICENSE) [![npm downloads](https://img.shields.io/npm/dm/gddify.svg)](https://www.npmjs.com/package/gddify) ![ECMAScript 6 & 5](https://img.shields.io/badge/ECMAScript-6%20/%205-red.svg) [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
