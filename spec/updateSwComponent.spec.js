@@ -206,6 +206,7 @@ describe('UpdateSwComponent', () => {
   describe('jsonification', () => {
     describe('(use case: js to json)', () => {
       let writeJsonSpy,
+        readFileSpy,
         jsObject,
         destination,
         source
@@ -214,7 +215,7 @@ describe('UpdateSwComponent', () => {
         destination = `${__dirname}/../fixtures/adestination.json`
         source = `${__dirname}/../fixtures/jsonLikeJs.js`
         jsObject = require(source)
-        writeJsonSpy = sinon.spy()
+        writeJsonSpy = sinon.spy(() => Promise.resolve())
         UpdateSwComponent.__Rewire__('writeJson', writeJsonSpy)
 
         updateSwComponent = new UpdateSwComponent(swComponentJson)
@@ -222,7 +223,7 @@ describe('UpdateSwComponent', () => {
       })
 
       it('should take a js object form a file and put a json into the destination', () => {
-        sinon.assert.calledWith(writeJsonSpy, destination, jsObject, { spaces: 2 })
+        sinon.assert.calledWithExactly(writeJsonSpy, destination, jsObject, { spaces: 2 })
       })
     })
 

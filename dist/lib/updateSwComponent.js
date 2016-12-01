@@ -44,6 +44,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var writeJson = _get__('Promise').promisify(_get__('fs').writeJson);
 var move = _get__('Promise').promisify(_get__('fs').move);
 var copy = _get__('Promise').promisify(_get__('fs').copy);
+var readFile = _get__('Promise').promisify(_get__('fs').readFile);
 var glob = _get__('Promise').promisify(_get__('Glob'));
 
 var buildSwComponent = Symbol('buildSwComponent');
@@ -149,13 +150,18 @@ var UpdateSwComponent = function () {
     value: function jsonification(source, destination) {
       var merge = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-      require('babel-register');
-      var content = require(source);
-      if (merge) {
-        var newContent = require(destination);
-        Object.assign(content, newContent);
-      }
-      return _get__('writeJson')(destination, content, { spaces: 2 });
+      return _get__('readFile')(source, "utf8").then(function (code) {
+        var content = eval(require("babel-core").transform(code, {
+          presets: ["stage-2"]
+        }).code);
+
+        if (merge) {
+          var newContent = require(destination);
+          Object.assign(content, newContent);
+        }
+
+        return _get__('writeJson')(destination, content, { spaces: 2 });
+      });
     }
   }, {
     key: 'addFile',
@@ -463,6 +469,9 @@ function _get_original__(variableName) {
 
     case 'chalk':
       return _chalk2.default;
+
+    case 'readFile':
+      return readFile;
 
     case 'writeJson':
       return writeJson;

@@ -10,6 +10,7 @@ import Glob from 'glob'
 const writeJson = Promise.promisify(fs.writeJson)
 const move = Promise.promisify(fs.move)
 const copy = Promise.promisify(fs.copy)
+const readFile = Promise.promisify(fs.readFile)
 const glob = Promise.promisify(Glob)
 
 const buildSwComponent = Symbol('buildSwComponent')
@@ -100,13 +101,21 @@ export default class UpdateSwComponent {
   }
 
   jsonification (source, destination, merge = false) {
-    require('babel-register')
-    let content = require(source)
-    if (merge) {
-      let newContent = require(destination)
-      Object.assign(content, newContent)
-    }
-    return writeJson(destination, content, { spaces: 2 })
+    return readFile(source, "utf8")
+      .then(
+        code => {
+          let content = eval(require("babel-core").transform(code, {
+            presets: ["stage-2"]
+          }).code)
+
+          if (merge) {
+            let newContent = require(destination)
+            Object.assign(content, newContent)
+          }
+
+          return writeJson(destination, content, { spaces: 2 })
+        }
+      )
   }
 
   addFile (filePath, name, type) {
