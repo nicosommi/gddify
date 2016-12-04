@@ -5,9 +5,12 @@
     "sources": [
       {
         "path": "../sourceComponent"
+      },
+      {
+        "path": "./"
       }
     ],
-    "basePath": "/home/nicosommi/workspace/my-repos/gddify/integration/targetComponent",
+    "basePath": "/home/nicosommi/workspace/my-repos/gddify/integration/targetComponent/./",
     "cleanPath": ".gdd-clean"
   },
   "swBlocks": [
@@ -25,6 +28,9 @@
         "sources": [
           {
             "path": "../sourceComponent"
+          },
+          {
+            "path": "./"
           }
         ],
         "basePath": "/home/nicosommi/workspace/my-repos/gddify/integration/targetComponent",
@@ -38,6 +44,9 @@
             "sources": [
               {
                 "path": "../sourceComponent"
+              },
+              {
+                "path": "./"
               }
             ],
             "basePath": "/home/nicosommi/workspace/my-repos/gddify/integration/targetComponent",

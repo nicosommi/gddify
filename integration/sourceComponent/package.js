@@ -19,6 +19,7 @@ let packageObject = {
     'babel-require': '^1.0.1'
   },
   'scripts': {
+    'gddify': 'gddify'
   },
   'author': 'nicosommi',
   'license': 'MIT'

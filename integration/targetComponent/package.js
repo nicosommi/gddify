@@ -1,5 +1,5 @@
 /* ph stamps */
-/* /^.*$/ */
+/* /^(?!mochaTesting).*$/ */
 /* endph */
 
 let packageObject = {
@@ -19,6 +19,7 @@ let packageObject = {
     'babel-require': '^1.0.1'
   },
   'scripts': {
+    'gddify': 'gddify'
   },
   'author': 'nicosommi',
   'license': 'MIT'
@@ -38,23 +39,6 @@ packageObject = {
 /* endph */
 
 /* stamp mochaTesting */
-packageObject = {
-  ...packageObject,
-  'devDependencies': {
-    ...packageObject.devDependencies,
-    'mocha': '^2.5.3',
-    'nyc': '^10.0.0',
-    'proxyquire': '^1.7.10',
-    'watch': '^0.19.1',
-    'cross-env': '^3.1.3'
-  },
-  'scripts': {
-    ...packageObject.scripts,
-    'test': 'cross-env NODE_ENV=test nyc --reporter=text-summary mocha \'test/**/*.test.js\'',
-    'watch': 'cross-env NODE_ENV=test watch \'nyc --reporter=text-summary mocha "test/**/*.test.js"\' src test --ignoreDotFiles',
-    'coverage': 'cross-env NODE_ENV=test nyc mocha \'test/**/*.test.js\''
-  }
-}
 /* endstamp */
 
 module.exports = packageObject;
