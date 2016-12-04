@@ -1,0 +1,65 @@
+{
+  "name": "default",
+  "type": "default",
+  "options": {
+    "sources": [
+      {
+        "path": "../boilerplates/standalone-node"
+      },
+      {
+        "path": "./"
+      }
+    ],
+    "basePath": "/home/nicosommi/workspace/my-repos/daydo/./",
+    "cleanPath": ".gdd-clean"
+  },
+  "swBlocks": [
+    {
+      "name": "package-core",
+      "type": "standalone-nodejs",
+      "version": "0.0.5",
+      "options": {
+        "jsonification": [
+          {
+            "target": "package.json",
+            "to": "package.json"
+          }
+        ],
+        "sources": [
+          {
+            "path": "../boilerplates/standalone-node"
+          },
+          {
+            "path": "./"
+          }
+        ],
+        "basePath": "/home/nicosommi/workspace/my-repos/daydo",
+        "cleanPath": ".gdd-clean"
+      },
+      "sourceCodeFiles": [
+        {
+          "name": "package.json",
+          "path": "package.js",
+          "options": {
+            "sources": [
+              {
+                "path": "../boilerplates/standalone-node"
+              },
+              {
+                "path": "./"
+              }
+            ],
+            "basePath": "/home/nicosommi/workspace/my-repos/daydo",
+            "cleanPath": ".gdd-clean",
+            "jsonification": [
+              {
+                "target": "package.json",
+                "to": "package.json"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

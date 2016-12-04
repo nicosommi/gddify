@@ -1,6 +1,6 @@
 /* ph replacements */
 /* name, /'name': 'gddify'/g, 'name': 'gddify' */
-/* version, /'version': '\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b'/ig, 'version': '0.1.2' */
+/* version, /'version': '\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b'/ig, 'version': '0.1.3' */
 /* description, /'description': 'a\ gdd\ utility'/g, 'description': 'a gdd utility' */
 /* main, /'main': '[a-zA-Z\.\/]+'/ig, 'main': 'index.js' */
 /* license, /MIT/g, MIT */
@@ -12,7 +12,7 @@
 module.exports =
 {
   'name': 'gddify',
-  'version': '0.1.2',
+  'version': '0.1.3',
   'description': 'a gdd utility',
   'main': 'index.js',
   'standard': {
@@ -61,8 +61,8 @@ module.exports =
     'flowsync': '^0.1.12',
     'liftoff': '^2.2.1',
     'yargs': '^4.7.1',
-    'babel-preset-stage-2': '^6.18.0',
     'babel-core': '^6.6.4',
+    'babel-preset-stage-2': '^6.18.0',
     /* endph */
     /* stamp webapp_dependencies */
     /* endstamp */
