@@ -39,8 +39,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// import inquirer from "inquirer"
-
 var writeJson = _get__('Promise').promisify(_get__('fs').writeJson);
 var move = _get__('Promise').promisify(_get__('fs').move);
 var copy = _get__('Promise').promisify(_get__('fs').copy);
@@ -150,9 +148,11 @@ var UpdateSwComponent = function () {
     value: function jsonification(source, destination) {
       var merge = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
+      require("babel-preset-stage-2");
       return _get__('readFile')(source, "utf8").then(function (code) {
         var content = eval(require("babel-core").transform(code, {
-          presets: ["stage-2"]
+          presets: ["babel-preset-stage-2"],
+          sourceRoot: __dirname + '/../..'
         }).code);
 
         if (merge) {
@@ -313,7 +313,7 @@ var UpdateSwComponent = function () {
     value: function value(rootSwComponent, name, type) {
       var _this4 = this;
 
-      console.log(_get__('chalk').yellow('ensureBlocks'));
+      // console.log(chalk.yellow('ensureBlocks'))
       var rootBlocks = this[filterBlocks](rootSwComponent.swBlocks, name, type);
       rootBlocks.forEach(function (rootBlock) {
         var block = _this4.targetSwComponent.swBlocks.find(function (swBlock) {

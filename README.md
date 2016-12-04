@@ -10,11 +10,13 @@
 <!-- endph -->
 
 <!-- ph description -->
-It makes it easy to work with the GDD approach... which is still in development.
+It makes it easy to work with the GDD approach... which active development.
 
 The idea is to create self describing software components that hold software blocks that are similar patterns among files.
 
-With that self describing meta data in place on the source code you get code generation and synchronization for free. No more generator development.
+With that self describing meta data in place on the source code you get code generation and synchronization for free.
+No more generator development.
+No more conflict resolution.
 
 <!-- endph -->
 
@@ -138,7 +140,7 @@ With gdd you will be able to create and compose projects from your other project
 
 ## F.A.Q.
 *Use cases? A lot.*  
-Microservices, project bootstrapping, scaffolding (and with updates), among others.
+Starter kits, microservices, project bootstrapping, scaffolding (and with updates), among others.
 
 *Is it hard to learn? No.*  
 It aims to be intuitive. It will require a mindset change and some time thinking about how are you going to build your components and blocks. But once that's done is common sense.  

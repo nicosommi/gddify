@@ -5,7 +5,6 @@ import Promise from './promise.js'
 import path from 'path'
 import fs from 'fs-extra'
 import Glob from 'glob'
-// import inquirer from "inquirer"
 
 const writeJson = Promise.promisify(fs.writeJson)
 const move = Promise.promisify(fs.move)
@@ -101,11 +100,13 @@ export default class UpdateSwComponent {
   }
 
   jsonification (source, destination, merge = false) {
+    require("babel-preset-stage-2")
     return readFile(source, "utf8")
       .then(
         code => {
           let content = eval(require("babel-core").transform(code, {
-            presets: ["stage-2"]
+            presets: ["babel-preset-stage-2"],
+            sourceRoot: `${__dirname}/../..`
           }).code)
 
           if (merge) {
@@ -253,7 +254,7 @@ export default class UpdateSwComponent {
   }
 
   [ensureBlocks] (rootSwComponent, name, type) {
-    console.log(chalk.yellow('ensureBlocks'))
+    // console.log(chalk.yellow('ensureBlocks'))
     const rootBlocks = this[filterBlocks](rootSwComponent.swBlocks, name, type)
     rootBlocks.forEach(
       rootBlock => {
