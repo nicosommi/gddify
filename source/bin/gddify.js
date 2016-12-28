@@ -63,7 +63,7 @@ export default function invoke (env) {
         case 'jsonification':
           return updateSwComponent.jsonification(path.normalize(`${env.cwd}/${argv.from}`), path.normalize(`${env.cwd}/${argv.to}`))
         default:
-          console.log(chalk.yellow('Invalid command. Use gddify [generate|update|compile|refresh|add|addfile].'))
+          console.log(chalk.yellow('Invalid command. Use gddify [replicate|generate|update|compile|refresh|add|addfile].'))
       }
     })
 }

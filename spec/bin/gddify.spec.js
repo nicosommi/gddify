@@ -206,7 +206,7 @@ describe('gddify', () => {
       })
 
       it('should output correctly as default', () => {
-        sinon.assert.calledWith(chalk.yellow, 'Invalid command. Use gddify [generate|update|compile|refresh|add|addfile].')
+        sinon.assert.calledWith(chalk.yellow, 'Invalid command. Use gddify [replicate|generate|update|compile|refresh|add|addfile].')
       })
     })
 
