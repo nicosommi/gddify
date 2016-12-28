@@ -44,6 +44,8 @@ export default function invoke (env) {
       const updateSwComponent = new UpdateSwComponent(targetSwComponentJson)
 
       switch (command) {
+        case 'replicate':
+          return updateSwComponent.replicate(argv.name, argv.type, argv['target-name'], argv['path-pattern'], argv['path-value'])
         case 'generate':
           return updateSwComponent.synchronize(argv.from, argv.name, argv.type)
         case 'update':

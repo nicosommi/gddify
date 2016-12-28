@@ -11,7 +11,8 @@ describe('gddify', () => {
     addSpy,
     cleanSpy,
     jsonificationSpy,
-    incrementSpy
+    incrementSpy,
+    replicateSpy
 
   class UpdateSwComponent {
     synchronize () {
@@ -45,6 +46,10 @@ describe('gddify', () => {
     increment () {
       return incrementSpy.apply(this, arguments)
     }
+
+    replicate () {
+      return replicateSpy.apply(this, arguments)
+    }
   }
 
   beforeEach(() => {
@@ -56,6 +61,7 @@ describe('gddify', () => {
     cleanSpy = sinon.spy()
     jsonificationSpy = sinon.spy()
     incrementSpy = sinon.spy()
+    replicateSpy = sinon.spy()
 
     argv = {}
     env = {
@@ -66,6 +72,25 @@ describe('gddify', () => {
   })
 
   describe('(commands)', () => {
+    describe('replicate', () => {
+      beforeEach(() => {
+        argv = {
+          _: ['replicate'],
+          'name': 'blockName',
+          'type': 'blockType',
+          'target-name': 'newBlockName',
+          'path-pattern': '/afilepath/',
+          'path-value': 'anewfilepath'
+        }
+        invoke.__Rewire__('argv', argv)
+        return invoke(env)
+      })
+
+      it('should call replicate block with the right parameters', () => {
+        replicateSpy.getCall(0).args.should.deepEqual([argv.name, argv.type, argv['target-name'], argv['path-pattern'], argv['path-value']]);
+      })
+    })
+
     describe('generate', () => {
       beforeEach(() => {
         argv = {
