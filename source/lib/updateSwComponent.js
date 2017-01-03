@@ -1,4 +1,4 @@
-import { SwComponent } from 'gene-js'
+import { SwComponent } from './swComponent.js'
 import semver from 'semver'
 import chalk from 'chalk'
 import Promise from './promise.js'

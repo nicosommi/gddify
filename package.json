@@ -1,6 +1,6 @@
 {
   "name": "gddify",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "a gdd utility",
   "main": "index.js",
   "standard": {
@@ -36,7 +36,7 @@
     "debug": "^2.2.0",
     "flowsync": "^0.1.12",
     "fs-extra": "^0.26.7",
-    "gene-js": "0.0.14",
+    "gene-js": "file:../gene-js",
     "glob": "^7.0.3",
     "incognito": "^0.1.4",
     "inquirer": "^1.0.2",
