@@ -7,49 +7,120 @@ exports.__RewireAPI__ = exports.__ResetDependency__ = exports.__set__ = exports.
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint-disable no-console */
+
+
+var _chalk = require('chalk');
+
+var _chalk2 = _interopRequireDefault(_chalk);
 
 var _swBlock = require('./swBlock.js');
 
 var _swBlock2 = _interopRequireDefault(_swBlock);
 
+var _promise = require('./promise.js');
+
+var _promise2 = _interopRequireDefault(_promise);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var buildSwBlock = Symbol('buildSwBlock');
+var SwComponent = function () {
+  function SwComponent(name, type, options) {
+    _classCallCheck(this, SwComponent);
 
-var UpdateSwBlock = function () {
-  function UpdateSwBlock(targetSwBlockJson) {
-    _classCallCheck(this, UpdateSwBlock);
-
-    this.targetSwBlock = this[buildSwBlock](targetSwBlockJson);
+    this.name = name;
+    this.type = type;
+    this.options = options;
+    this.swBlocks = [];
   }
 
-  _createClass(UpdateSwBlock, [{
-    key: _get__('buildSwBlock'),
-    value: function value(jsonObject) {
-      var result = new (_get__('SwBlock'))(jsonObject.name, jsonObject.type, jsonObject.version, jsonObject.options);
-      result.addSourceCodeFiles(jsonObject.sourceCodeFiles);
-      return result;
+  _createClass(SwComponent, [{
+    key: 'addSwBlock',
+    value: function addSwBlock(swBlock) {
+      var newOptions = Object.assign({}, swBlock.options, this.options); // passing options down through
+      var newSwBlock = new (_get__('SwBlock'))(swBlock.name, swBlock.type, swBlock.version, newOptions);
+      newSwBlock.addSourceCodeFiles(swBlock.sourceCodeFiles);
+      this.swBlocks.push(newSwBlock);
+      return newSwBlock;
+    }
+  }, {
+    key: 'addSwBlocks',
+    value: function addSwBlocks(swBlocks) {
+      var _this = this;
+
+      swBlocks.forEach(function (swBlock) {
+        return _this.addSwBlock(swBlock);
+      });
+    }
+  }, {
+    key: 'getMeta',
+    value: function getMeta() {
+      var _this2 = this;
+
+      return _get__('Promise').all(this.swBlocks.map(function (swBlock) {
+        return swBlock.getMeta();
+      })).then(function (results) {
+        return _get__('Promise').resolve({
+          name: _this2.name,
+          type: _this2.type,
+          swBlocks: results
+        });
+      });
+    }
+  }, {
+    key: 'setMeta',
+    value: function setMeta(metaObject) {
+      return _get__('Promise').all(metaObject.swBlocks.map(function (swBlock) {
+        var block = new (_get__('SwBlock'))(swBlock.name, swBlock.type);
+        return block.setMeta(swBlock);
+      }));
     }
   }, {
     key: 'synchronizeWith',
-    value: function synchronizeWith(rootSwBlockJson) {
-      this.rootSwBlock = this[buildSwBlock](rootSwBlockJson);
-      return this.targetSwBlock.synchronizeWith(this.rootSwBlock);
+    value: function synchronizeWith(rootBlock) {
+      console.log(_get__('chalk').magenta('synchronize component started'));
+      var promise = void 0;
+
+      // find this.swBlock
+      var matchingSwBlocks = this.swBlocks.filter(function (swBlock) {
+        return swBlock.type === rootBlock.type;
+      });
+      if (matchingSwBlocks && matchingSwBlocks.length > 0) {
+        console.log(_get__('chalk').magenta('going through existing blocks'));
+        promise = _get__('Promise').all(matchingSwBlocks.map(function (matchingSwBlock) {
+          return matchingSwBlock.synchronizeWith(rootBlock);
+        }));
+      } else {
+        console.log(_get__('chalk').magenta('creating a new block named ' + rootBlock.name + ' of type ' + rootBlock.type));
+        var newOptions = Object.assign({}, this.options, rootBlock.options);
+        var newSwBlock = this.addSwBlock({
+          name: rootBlock.name,
+          type: rootBlock.type,
+          version: '0.0.0',
+          options: newOptions,
+          sourceCodeFiles: []
+        });
+        promise = newSwBlock.synchronizeWith(rootBlock);
+      }
+
+      return promise;
     }
   }, {
     key: 'clean',
     value: function clean(dirtyPhs) {
-      return this.targetSwBlock.clean(dirtyPhs);
+      var promises = this.swBlocks.map(function (swBlock) {
+        return swBlock.clean(dirtyPhs);
+      });
+      return _get__('Promise').all(promises);
     }
   }]);
 
-  return UpdateSwBlock;
+  return SwComponent;
 }();
 
-exports.default = UpdateSwBlock;
+exports.default = SwComponent;
 
 var _RewiredData__ = Object.create(null);
 
@@ -93,8 +164,11 @@ function _get_original__(variableName) {
     case 'SwBlock':
       return _swBlock2.default;
 
-    case 'buildSwBlock':
-      return buildSwBlock;
+    case 'Promise':
+      return _promise2.default;
+
+    case 'chalk':
+      return _chalk2.default;
   }
 
   return undefined;
@@ -173,17 +247,17 @@ function _with__(object) {
   };
 }
 
-var _typeOfOriginalExport = typeof UpdateSwBlock === 'undefined' ? 'undefined' : _typeof(UpdateSwBlock);
+var _typeOfOriginalExport = typeof SwComponent === 'undefined' ? 'undefined' : _typeof(SwComponent);
 
 function addNonEnumerableProperty(name, value) {
-  Object.defineProperty(UpdateSwBlock, name, {
+  Object.defineProperty(SwComponent, name, {
     value: value,
     enumerable: false,
     configurable: true
   });
 }
 
-if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(UpdateSwBlock)) {
+if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(SwComponent)) {
   addNonEnumerableProperty('__get__', _get__);
   addNonEnumerableProperty('__GetDependency__', _get__);
   addNonEnumerableProperty('__Rewire__', _set__);

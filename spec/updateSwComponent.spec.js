@@ -150,33 +150,64 @@ describe('UpdateSwComponent', () => {
   describe('.replicate', () => {
     let blockName,
       blockType,
-      targetName,
-      pathPattern,
-      pathValue
+      targetName
 
-    beforeEach(() => {
+    beforeEach(function beforeEachBody() {
       blockName = 'blockName'
       blockType = 'blockType'
       targetName = 'targetName'
-      pathPattern = 'pathPattern'
-      pathValue = 'pathValue'
-      swComponentJson = {
+      addSwBlockSpy = sinon.spy(() => Promise.resolve())
+      addSwBlocksSpy = sinon.spy(
+        function addSwBlocksSpyMethod () {
+          this.swBlocks = [
+            {
+              name: blockName, type: blockType, version: '0.0.1',
+              sourceCodeFiles: [
+                {
+                  name: 'afilepath.js',
+                  path: `${blockName}/afilepath.js`
+                }
+              ]
+            },
+            {
+              name: 'anotherblock', type: 'anothertype', version: '0.0.2',
+              sourceCodeFiles: [
+                {
+                  name: 'anotherblock/file.js',
+                  path: 'anotherblock/file.js'
+                }
+              ]
+            }
+          ]
+        }
+      )
+
+      this.swComponentJson = {
         name,
         type,
         options: {
-          basePath: `${__dirname}/../fixtures/testSource`,
-          sources: [
-            {path: '1', name: blockName, type: blockType},
-            {path: '2', name: 'name2', type: 'type2'}
-          ]
+          basePath: `${__dirname}/../fixtures/testSource`
         }
       }
-      updateSwComponent = new UpdateSwComponent(swComponentJson)
-      // updateSwComponent.synchronize = sinon.spy(() => Promise.resolve())
-      return updateSwComponent.replicate(blockName, blockType, targetName, pathPattern, pathValue)
+
+      this.updateSwComponent = new UpdateSwComponent(this.swComponentJson)
+      // this.updateSwComponent.synchronize = sinon.spy(() => Promise.resolve())
+      return this.updateSwComponent.replicate(blockName, blockType, targetName)
     })
 
-    it.skip('should create a new block with the appropiate values')
+    it('should create a new block with the appropiate values', function testBody() {
+      const expected = {
+        name: targetName, type: blockType, version: '0.0.1',
+        sourceCodeFiles: [
+          {
+            name: 'afilepath.js',
+            path: `${targetName}/afilepath.js`
+          }
+        ]
+      }
+      const actual = this.updateSwComponent.targetSwComponent
+      sinon.assert.calledWith(addSwBlockSpy, expected)
+    })
 
     it.skip('should generate the proper files for that new block')
   })

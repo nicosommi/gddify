@@ -1,4 +1,4 @@
-import { SwComponent } from './swComponent.js'
+import SwComponent from './swComponent.js'
 import semver from 'semver'
 import chalk from 'chalk'
 import Promise from './promise.js'
@@ -89,11 +89,19 @@ export default class UpdateSwComponent {
 
   replicate (name, type, targetName) {
     console.log(chalk.green('Replicating a new block...'))
-    // synchronizewith same path, just block type no name, generate = true
-    // ensureblock tiene que reemplazar con name del block origen en los ultimos tokens de los filepath con el name del block destination
-    // (si hay path pattern y/o path value usa eso en lugar del name)
-    // TODO: just call synchronize in this path with a different targetName
-    // return this.synchronize('.', name, type, targetName)
+    const rootBasePath = `${this.targetSwComponent.options.basePath}/`
+    const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
+    rootSwComponentJson.options.basePath = rootBasePath
+    return this.synchronizeWith('./', rootSwComponentJson, targetName, name, type, { generate: true })
+      .then(() => {
+        console.log(chalk.green('All done.'))
+        return Promise.resolve()
+      },
+      error => {
+        const message = error.message || error
+        console.log(chalk.red(`ERROR: ${message}`))
+        return Promise.resolve()
+      })
   }
 
   increment (release, name, type) {
@@ -274,12 +282,18 @@ export default class UpdateSwComponent {
           // TODO: replace targetName con name en el filepath
           let sourceCodeFiles = []
           if (rootBlock.sourceCodeFiles) {
+            console.log('replacing ', { name, targetName });
             sourceCodeFiles = rootBlock.sourceCodeFiles.map(
-              ({name, path}) => ({ name, path: path.replace(new RegExp(`\w*/${name}[/.]\w*`, 'g'), targetName)})
+              ({name: sourceCodeFileName, path}) => ({ name: sourceCodeFileName, path: path.replace(name, targetName)})
             )
           }
 
-          block = { name: targetName, type: rootBlock.type, options: rootBlock.options, version: '0.0.0', sourceCodeFiles: rootBlock.sourceCodeFiles }
+          block = {
+            name: targetName,
+            type: rootBlock.type,
+            version: rootBlock.version,
+            sourceCodeFiles: sourceCodeFiles
+          }
           this.targetSwComponent.addSwBlock(block)
         }
       }

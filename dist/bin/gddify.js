@@ -76,6 +76,8 @@ function invoke(env) {
     var updateSwComponent = new (_get__('UpdateSwComponent'))(targetSwComponentJson);
 
     switch (command) {
+      case 'replicate':
+        return updateSwComponent.replicate(_get__('argv').name, _get__('argv').type, _get__('argv')['target-name'], _get__('argv')['path-pattern'], _get__('argv')['path-value']);
       case 'generate':
         return updateSwComponent.synchronize(_get__('argv').from, _get__('argv').name, _get__('argv').type);
       case 'update':
@@ -93,7 +95,7 @@ function invoke(env) {
       case 'jsonification':
         return updateSwComponent.jsonification(_get__('path').normalize(env.cwd + '/' + _get__('argv').from), _get__('path').normalize(env.cwd + '/' + _get__('argv').to));
       default:
-        console.log(_get__('chalk').yellow('Invalid command. Use gddify [generate|update|compile|refresh|add|addfile].'));
+        console.log(_get__('chalk').yellow('Invalid command. Use gddify [replicate|generate|update|compile|refresh|add|addfile].'));
     }
   });
 }
