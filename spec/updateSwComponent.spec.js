@@ -140,10 +140,76 @@ describe('UpdateSwComponent', () => {
         source,
         require(`${__dirname}/../fixtures/${source}/swComponent.json`),
         name,
+        name,
         type,
         options
       )
     })
+  })
+
+  describe('.replicate', () => {
+    let blockName,
+      blockType,
+      targetName
+
+    beforeEach(function beforeEachBody() {
+      blockName = 'blockName'
+      blockType = 'blockType'
+      targetName = 'targetName'
+      addSwBlockSpy = sinon.spy(() => Promise.resolve())
+      addSwBlocksSpy = sinon.spy(
+        function addSwBlocksSpyMethod () {
+          this.swBlocks = [
+            {
+              name: blockName, type: blockType, version: '0.0.1',
+              sourceCodeFiles: [
+                {
+                  name: 'afilepath.js',
+                  path: `${blockName}/afilepath.js`
+                }
+              ]
+            },
+            {
+              name: 'anotherblock', type: 'anothertype', version: '0.0.2',
+              sourceCodeFiles: [
+                {
+                  name: 'anotherblock/file.js',
+                  path: 'anotherblock/file.js'
+                }
+              ]
+            }
+          ]
+        }
+      )
+
+      this.swComponentJson = {
+        name,
+        type,
+        options: {
+          basePath: `${__dirname}/../fixtures/testSource`
+        }
+      }
+
+      this.updateSwComponent = new UpdateSwComponent(this.swComponentJson)
+      // this.updateSwComponent.synchronize = sinon.spy(() => Promise.resolve())
+      return this.updateSwComponent.replicate(blockName, blockType, targetName)
+    })
+
+    it('should create a new block with the appropiate values', function testBody() {
+      const expected = {
+        name: targetName, type: blockType, version: '0.0.1',
+        sourceCodeFiles: [
+          {
+            name: 'afilepath.js',
+            path: `${targetName}/afilepath.js`
+          }
+        ]
+      }
+      const actual = this.updateSwComponent.targetSwComponent
+      sinon.assert.calledWith(addSwBlockSpy, expected)
+    })
+
+    it.skip('should generate the proper files for that new block')
   })
 
   describe('.update', () => {
@@ -198,7 +264,7 @@ describe('UpdateSwComponent', () => {
       return updateSwComponent.refresh(blockName, blockType)
     })
 
-    it('should call synchronizeWith just once', () => {
+    it('should call synchronize just once', () => {
       sinon.assert.callCount(updateSwComponent.synchronize, 1)
     })
   })
@@ -493,7 +559,7 @@ describe('UpdateSwComponent', () => {
     })
   })
 
-  describe('.synchronizeWith(path, root, name, type, options)', () => {
+  describe('.synchronizeWith(path, root, targetName, name, type, options)', () => {
     describe('(with default options)', () => {
       let rootSwComponentJson,
         metaObject,

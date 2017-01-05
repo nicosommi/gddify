@@ -1,4 +1,4 @@
-import { SwBlock } from 'gene-js'
+import SwBlock from './swBlock.js'
 
 const buildSwBlock = Symbol('buildSwBlock')
 
