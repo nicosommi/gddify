@@ -194,7 +194,7 @@ export default class UpdateSwComponent {
 
   [ saveConfiguration ] (newConfiguration) {
     console.log(chalk.magenta('Writing configuration...'))
-    const basePath = this.targetSwComponent.options.basePath
+    const basePath = this[getCwd]()
     return writeJson(path.normalize(`${basePath}/swComponent.json`), newConfiguration.toJSON(), { spaces: 2 })
   }
 
@@ -230,8 +230,9 @@ export default class UpdateSwComponent {
         file => {
           const sourceCodeFile = block.sourceCodeFiles.find(scf => file.target === scf.name)
           if (sourceCodeFile) {
-            console.log(chalk.magenta(`${property} on file ${this.targetSwComponent.options.basePath}/${sourceCodeFile.path} to ${this.targetSwComponent.options.basePath}/${file.to}...`))
-            return callTo.call(this, `${this.targetSwComponent.options.basePath}/${sourceCodeFile.path}`, `${this.targetSwComponent.options.basePath}/${file.to}`)
+            const cwd = this[getCwd]()
+            console.log(chalk.magenta(`${property} on file ${cwd}/${sourceCodeFile.path} to ${cwd}/${file.to}...`))
+            return callTo.call(this, `${cwd}/${sourceCodeFile.path}`, `${cwd}/${file.to}`)
           } else {
             console.log(chalk.yellow(`WARNING: ${property} file not found on block ${block.name}-${block.type} with target ${file.target}`))
             return Promise.resolve()

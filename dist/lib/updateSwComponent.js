@@ -244,7 +244,7 @@ var UpdateSwComponent = function () {
     key: _get__('saveConfiguration'),
     value: function value(newConfiguration) {
       console.log(_get__('chalk').magenta('Writing configuration...'));
-      var basePath = this.targetSwComponent.options.basePath;
+      var basePath = this[getCwd]();
       return _get__('writeJson')(_get__('path').normalize(basePath + '/swComponent.json'), newConfiguration.toJSON(), { spaces: 2 });
     }
   }, {
@@ -283,8 +283,9 @@ var UpdateSwComponent = function () {
             return file.target === scf.name;
           });
           if (sourceCodeFile) {
-            console.log(_get__('chalk').magenta(property + ' on file ' + _this3.targetSwComponent.options.basePath + '/' + sourceCodeFile.path + ' to ' + _this3.targetSwComponent.options.basePath + '/' + file.to + '...'));
-            return callTo.call(_this3, _this3.targetSwComponent.options.basePath + '/' + sourceCodeFile.path, _this3.targetSwComponent.options.basePath + '/' + file.to);
+            var cwd = _this3[getCwd]();
+            console.log(_get__('chalk').magenta(property + ' on file ' + cwd + '/' + sourceCodeFile.path + ' to ' + cwd + '/' + file.to + '...'));
+            return callTo.call(_this3, cwd + '/' + sourceCodeFile.path, cwd + '/' + file.to);
           } else {
             console.log(_get__('chalk').yellow('WARNING: ' + property + ' file not found on block ' + block.name + '-' + block.type + ' with target ' + file.target));
             return _get__('Promise').resolve();
