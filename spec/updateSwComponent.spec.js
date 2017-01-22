@@ -168,7 +168,7 @@ describe('UpdateSwComponent', () => {
         function addSwBlocksSpyMethod () {
           this.swBlocks = [
             {
-              name: blockName, type: blockType, version: '0.0.1',
+              name: blockName, type: blockType, version: '0.0.1', options: {},
               sourceCodeFiles: [
                 {
                   name: 'afilepath.js',
@@ -177,7 +177,7 @@ describe('UpdateSwComponent', () => {
               ]
             },
             {
-              name: 'anotherblock', type: 'anothertype', version: '0.0.2',
+              name: 'anotherblock', type: 'anothertype', version: '0.0.2', options: {},
               sourceCodeFiles: [
                 {
                   name: 'anotherblock/file.js',
@@ -202,7 +202,7 @@ describe('UpdateSwComponent', () => {
 
     it('should create a new block with the appropiate values', function testBody() {
       const expected = {
-        name: targetName, type: blockType, version: '0.0.1',
+        name: targetName, type: blockType, version: '0.0.1', options: {},
         sourceCodeFiles: [
           {
             name: 'afilepath.js',

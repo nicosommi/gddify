@@ -355,6 +355,7 @@ var UpdateSwComponent = function () {
             name: targetName,
             type: rootBlock.type,
             version: rootBlock.version,
+            options: rootBlock.options,
             sourceCodeFiles: sourceCodeFiles
           };
           _this4.targetSwComponent.addSwBlock(block);

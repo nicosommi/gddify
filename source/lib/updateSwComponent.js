@@ -294,6 +294,7 @@ export default class UpdateSwComponent {
             name: targetName,
             type: rootBlock.type,
             version: rootBlock.version,
+            options: rootBlock.options,
             sourceCodeFiles: sourceCodeFiles
           }
           this.targetSwComponent.addSwBlock(block)
