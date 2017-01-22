@@ -15,7 +15,8 @@ describe('UpdateSwComponent', () => {
     name,
     type,
     swComponentJson,
-    options
+    options,
+    writeJsonSpy
 
   class SwComponent {
     constructor () {
@@ -87,6 +88,9 @@ describe('UpdateSwComponent', () => {
       }
       UpdateSwComponent.__Rewire__('SwComponent', SwComponent)
       updateSwComponent = new UpdateSwComponent(swComponentJson)
+      
+      writeJsonSpy = sinon.spy(() => Promise.resolve())
+      UpdateSwComponent.__Rewire__('writeJson', writeJsonSpy)
     }
   )
 
@@ -105,7 +109,7 @@ describe('UpdateSwComponent', () => {
     beforeEach(() => {
       name = 'anewname'
       type = 'anewtype'
-      source = './root'
+      source = `./fixtures/root`
       addSwBlocksSpy = sinon.spy(
         function addSwBlocksSpyMethod () {
           this.swBlocks = [
@@ -123,7 +127,6 @@ describe('UpdateSwComponent', () => {
         name,
         type,
         options: {
-          basePath: `${__dirname}/../fixtures`,
           cleanPath: 'clean-path'
         },
         swBlocks: []
@@ -142,7 +145,7 @@ describe('UpdateSwComponent', () => {
       sinon.assert.calledWith(
         updateSwComponent.synchronizeWith,
         source,
-        require(`${__dirname}/../fixtures/${source}/swComponent.json`),
+        require(`${__dirname}/../fixtures/root/swComponent.json`),
         name,
         name,
         type,
@@ -189,9 +192,7 @@ describe('UpdateSwComponent', () => {
       this.swComponentJson = {
         name,
         type,
-        options: {
-          basePath: `${__dirname}/../fixtures/testSource`
-        }
+        options: {}
       }
 
       this.updateSwComponent = new UpdateSwComponent(this.swComponentJson)
@@ -275,8 +276,7 @@ describe('UpdateSwComponent', () => {
 
   describe('jsonification', () => {
     describe('(use case: js to json)', () => {
-      let writeJsonSpy,
-        readFileSpy,
+      let readFileSpy,
         jsObject,
         destination,
         source
@@ -285,8 +285,6 @@ describe('UpdateSwComponent', () => {
         destination = `${__dirname}/../fixtures/adestination.json`
         source = `${__dirname}/../fixtures/jsonLikeJs.js`
         jsObject = require(source)
-        writeJsonSpy = sinon.spy(() => Promise.resolve())
-        UpdateSwComponent.__Rewire__('writeJson', writeJsonSpy)
 
         updateSwComponent = new UpdateSwComponent(swComponentJson)
         return updateSwComponent.jsonification(source, destination)
@@ -298,8 +296,7 @@ describe('UpdateSwComponent', () => {
     })
 
     describe('(use case: merge)', () => {
-      let writeJsonSpy,
-        jsObject,
+      let jsObject,
         destination,
         source,
         expectation
@@ -308,8 +305,6 @@ describe('UpdateSwComponent', () => {
         destination = `${__dirname}/../fixtures/adestinationWithData.json`
         source = `${__dirname}/../fixtures/jsonLikeJs.js`
         jsObject = require(source)
-        writeJsonSpy = sinon.spy()
-        UpdateSwComponent.__Rewire__('writeJson', writeJsonSpy)
 
         expectation = require(destination)
 
@@ -358,7 +353,8 @@ describe('UpdateSwComponent', () => {
     })
 
     it('should take a file and move it into the destination', () => {
-      sinon.assert.calledWith(moveSpy, `${swComponentJson.options.basePath}/${source}`, `${swComponentJson.options.basePath}/${destination}`, { clobber: true })
+      const cwd = process.cwd()
+      sinon.assert.calledWith(moveSpy, `${cwd}/${source}`, `${cwd}/${destination}`, { clobber: true })
     })
   })
 
@@ -395,18 +391,15 @@ describe('UpdateSwComponent', () => {
     })
 
     it('should take a file and move it into the destination', () => {
-      sinon.assert.calledWith(copySpy, `${swComponentJson.options.basePath}/${source}`, `${swComponentJson.options.basePath}/${destination}`, { clobber: true })
+      const cwd = process.cwd()
+      sinon.assert.calledWith(copySpy, `${cwd}/${source}`, `${cwd}/${destination}`, { clobber: true })
     })
   })
 
   describe('increment', () => {
-    let writeJsonSpy,
-      expectedJson
+    let expectedJson
 
     beforeEach(() => {
-      writeJsonSpy = sinon.spy(() => Promise.resolve())
-      UpdateSwComponent.__Rewire__('writeJson', writeJsonSpy)
-
       addSwBlocksSpy = sinon.spy(
         function addSwBlocksSpyMethod () {
           this.swBlocks = [
@@ -416,9 +409,7 @@ describe('UpdateSwComponent', () => {
       )
 
       swComponentJson = {
-        options: {
-          basePath: `${__dirname}/../fixtures/testSource`
-        },
+        options: {},
         swBlocks: [
           {
             name: 'blockname',
@@ -437,9 +428,7 @@ describe('UpdateSwComponent', () => {
     describe('patch', () => {
       beforeEach(() => {
         expectedJson = {
-          options: {
-            basePath: `${__dirname}/../fixtures/testSource`
-          },
+          options: {},
           swBlocks: [
             {
               name: 'blockname',
@@ -452,7 +441,7 @@ describe('UpdateSwComponent', () => {
         return updateSwComponent.increment('patch', 'blockname', 'type4')
       })
       it('should increase the patch version number', () => {
-        sinon.assert.calledWith(writeJsonSpy, path.normalize(`${__dirname}/../fixtures/testSource/swComponent.json`), expectedJson, { spaces: 2 })
+        sinon.assert.calledWith(writeJsonSpy, path.normalize(`${process.cwd()}/swComponent.json`), expectedJson, { spaces: 2 })
       })
     })
   })
