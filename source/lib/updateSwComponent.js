@@ -20,6 +20,7 @@ const addSourceCodeFile = Symbol('addSourceCodeFile')
 const filterBlocks = Symbol('filterBlocks')
 const ensureBlocks = Symbol('ensureBlocks')
 const process = Symbol('process')
+const getCwd = Symbol('getCwd')
 
 export default class UpdateSwComponent {
   constructor (targetSwComponentJson) {
@@ -89,7 +90,7 @@ export default class UpdateSwComponent {
 
   replicate (name, type, targetName) {
     console.log(chalk.green('Replicating a new block...'))
-    const rootBasePath = `${this.targetSwComponent.options.basePath}/`
+    const rootBasePath = `${this[getCwd]()}/`
     const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
     rootSwComponentJson.options.basePath = rootBasePath
     return this.synchronizeWith('./', rootSwComponentJson, targetName, name, type, { generate: true })
@@ -117,7 +118,6 @@ export default class UpdateSwComponent {
   }
 
   jsonification (source, destination, merge = false) {
-    require("babel-preset-stage-2")
     return readFile(source, "utf8")
       .then(
         code => {
@@ -194,7 +194,8 @@ export default class UpdateSwComponent {
 
   [ saveConfiguration ] (newConfiguration) {
     console.log(chalk.magenta('Writing configuration...'))
-    return writeJson(path.normalize(`${this.targetSwComponent.options.basePath}/swComponent.json`), newConfiguration, { spaces: 2 })
+    const basePath = this.targetSwComponent.options.basePath
+    return writeJson(path.normalize(`${basePath}/swComponent.json`), newConfiguration.toJSON(), { spaces: 2 })
   }
 
   addSource (path, name, type) {
@@ -300,9 +301,13 @@ export default class UpdateSwComponent {
     )
   }
 
+  [ getCwd ] () {
+    return require('process').cwd()
+  }
+
   synchronize (sourcePath, name, type, options) {
-    console.log(chalk.green('Generation begins...'))
-    const rootBasePath = `${this.targetSwComponent.options.basePath}/${sourcePath}`
+    console.log(chalk.green('Generation begins...'), { sourcePath })
+    const rootBasePath = `${this[getCwd]()}/${sourcePath}`
     const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
     rootSwComponentJson.options.basePath = rootBasePath
 
@@ -329,7 +334,7 @@ export default class UpdateSwComponent {
     const newerBlocks = this[getNewerBlocks](rootSwComponent, name, type)
 
     console.log(chalk.magenta('synchronizing old blocks'))
-    return rootSwComponent.getMeta()
+    return rootSwComponent.getMeta(name, type)
       .then(metaObject => this.targetSwComponent.setMeta(metaObject))
       .then(() => {
         return Promise.mapSeries(

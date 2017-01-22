@@ -23,6 +23,10 @@ describe('UpdateSwComponent', () => {
       constructorSpy.apply(this, arguments)
     }
 
+    toJSON() {
+      return this
+    }
+
     synchronizeWith () {
       return synchronizeWithSpy.apply(this, arguments)
     }

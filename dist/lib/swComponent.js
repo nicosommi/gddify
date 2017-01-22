@@ -37,6 +37,54 @@ var SwComponent = function () {
   }
 
   _createClass(SwComponent, [{
+    key: 'toJSON',
+    value: function toJSON() {
+      var newOptions = this.options;
+      delete newOptions.basePath;
+      var newBlocks = [];
+      if (this.swBlocks) {
+        newBlocks = this.swBlocks.map(function (_ref) {
+          var name = _ref.name;
+          var type = _ref.type;
+          var version = _ref.version;
+          var options = _ref.options;
+          var sourceCodeFiles = _ref.sourceCodeFiles;
+
+          var newSourceCodeFiles = [];
+          if (sourceCodeFiles) {
+            newSourceCodeFiles = sourceCodeFiles.map(function (_ref2) {
+              var name = _ref2.name;
+              var path = _ref2.path;
+              var options = _ref2.options;
+
+              var newOptions = options;
+              delete newOptions.basePath;
+              return {
+                name: name, path: path, options: newOptions
+              };
+            });
+          }
+
+          var newOptions = options;
+          delete newOptions.basePath;
+          return {
+            name: name,
+            type: type,
+            version: version,
+            options: newOptions,
+            sourceCodeFiles: newSourceCodeFiles
+          };
+        });
+      }
+
+      return {
+        name: this.name,
+        type: this.type,
+        options: newOptions,
+        swBlocks: newBlocks
+      };
+    }
+  }, {
     key: 'addSwBlock',
     value: function addSwBlock(swBlock) {
       var newOptions = Object.assign({}, swBlock.options, this.options); // passing options down through
@@ -56,10 +104,12 @@ var SwComponent = function () {
     }
   }, {
     key: 'getMeta',
-    value: function getMeta() {
+    value: function getMeta(name, type) {
       var _this2 = this;
 
-      return _get__('Promise').all(this.swBlocks.map(function (swBlock) {
+      return _get__('Promise').all(this.swBlocks.filter(function (swBlock) {
+        return (!name || name === swBlock.name) && (!type || type === swBlock.type);
+      }).map(function (swBlock) {
         return swBlock.getMeta();
       })).then(function (results) {
         return _get__('Promise').resolve({

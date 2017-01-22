@@ -61,7 +61,9 @@ function invoke(env) {
     command = 'help';
   }
 
-  var targetSwComponentPath = _get__('path').normalize(env.cwd + '/swComponent.json');
+  var cwd = require('process').cwd();
+
+  var targetSwComponentPath = _get__('path').normalize(cwd + '/swComponent.json');
   var initialData = { name: 'default', type: 'default', options: { sources: [], basePath: env.cwd, cleanPath: '.gdd-clean' }, swBlocks: [] };
 
   console.log(_get__('chalk').magenta('Command execution begins...'));
@@ -72,7 +74,10 @@ function invoke(env) {
     console.log(_get__('chalk').magenta('Target file ensured...'));
     var targetSwComponentJson = require(targetSwComponentPath);
     // machine switch or folder change is possible
-    targetSwComponentJson.options.basePath = env.cwd;
+    if (!targetSwComponentJson.options) {
+      targetSwComponentJson.options = {};
+    }
+    targetSwComponentJson.options.basePath = cwd;
     var updateSwComponent = new (_get__('UpdateSwComponent'))(targetSwComponentJson);
 
     switch (command) {

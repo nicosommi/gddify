@@ -11,6 +11,47 @@ export default class SwComponent {
     this.swBlocks = []
   }
 
+  toJSON() {
+    const newOptions = this.options
+    delete newOptions.basePath
+    let newBlocks = []
+    if(this.swBlocks) {
+      newBlocks = this.swBlocks.map(
+        ({ name, type, version, options, sourceCodeFiles }) => {
+          let newSourceCodeFiles = []
+          if(sourceCodeFiles) {
+            newSourceCodeFiles = sourceCodeFiles.map(
+              ({ name, path, options }) => {
+                const newOptions = options
+                delete newOptions.basePath
+                return {
+                  name, path, options: newOptions
+                }
+              }
+            )
+          }
+          
+          const newOptions = options
+          delete newOptions.basePath
+          return ({
+            name,
+            type,
+            version,
+            options: newOptions,
+            sourceCodeFiles: newSourceCodeFiles
+          })
+        }
+      )
+    }
+    
+    return {
+      name: this.name,
+      type: this.type,
+      options: newOptions,
+      swBlocks: newBlocks
+    }
+  }
+
   addSwBlock (swBlock) {
     const newOptions = Object.assign({}, swBlock.options, this.options) // passing options down through
     const newSwBlock = new SwBlock(swBlock.name, swBlock.type, swBlock.version, newOptions)
@@ -23,10 +64,17 @@ export default class SwComponent {
     swBlocks.forEach(swBlock => this.addSwBlock(swBlock))
   }
 
-  getMeta () {
-    return Promise.all(this.swBlocks.map(swBlock => {
-      return swBlock.getMeta()
-    }))
+  getMeta (name, type) {
+    return Promise.all(
+      this.swBlocks
+      .filter(swBlock => {
+        return (!name || name === swBlock.name)
+          && (!type || type === swBlock.type)
+      })
+      .map(swBlock => {
+        return swBlock.getMeta()
+      })
+    )
       .then(results => {
         return Promise.resolve({
           name: this.name,

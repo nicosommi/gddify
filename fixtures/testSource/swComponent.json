@@ -1,6 +1,6 @@
 {
   "options": {
-    "basePath": "/home/nicolas/workspace/community/nicosommi/my-repos/gddify/spec/../fixtures/testSource",
+    "basePath": "/Users/nicosommi/workspace/my-repos/gddify/spec/../fixtures/testSource",
     "sources": [
       {
         "path": "./",

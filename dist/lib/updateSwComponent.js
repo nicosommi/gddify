@@ -55,6 +55,7 @@ var addSourceCodeFile = Symbol('addSourceCodeFile');
 var filterBlocks = Symbol('filterBlocks');
 var ensureBlocks = Symbol('ensureBlocks');
 var process = Symbol('process');
+var getCwd = Symbol('getCwd');
 
 var UpdateSwComponent = function () {
   function UpdateSwComponent(targetSwComponentJson) {
@@ -137,7 +138,7 @@ var UpdateSwComponent = function () {
     key: 'replicate',
     value: function replicate(name, type, targetName) {
       console.log(_get__('chalk').green('Replicating a new block...'));
-      var rootBasePath = this.targetSwComponent.options.basePath + '/';
+      var rootBasePath = this[getCwd]() + '/';
       var rootSwComponentJson = require(_get__('path').normalize(rootBasePath + '/swComponent.json'));
       rootSwComponentJson.options.basePath = rootBasePath;
       return this.synchronizeWith('./', rootSwComponentJson, targetName, name, type, { generate: true }).then(function () {
@@ -166,7 +167,6 @@ var UpdateSwComponent = function () {
     value: function jsonification(source, destination) {
       var merge = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-      require("babel-preset-stage-2");
       return _get__('readFile')(source, "utf8").then(function (code) {
         var content = eval(require("babel-core").transform(code, {
           presets: ["babel-preset-stage-2"],
@@ -244,7 +244,8 @@ var UpdateSwComponent = function () {
     key: _get__('saveConfiguration'),
     value: function value(newConfiguration) {
       console.log(_get__('chalk').magenta('Writing configuration...'));
-      return _get__('writeJson')(_get__('path').normalize(this.targetSwComponent.options.basePath + '/swComponent.json'), newConfiguration, { spaces: 2 });
+      var basePath = this.targetSwComponent.options.basePath;
+      return _get__('writeJson')(_get__('path').normalize(basePath + '/swComponent.json'), newConfiguration.toJSON(), { spaces: 2 });
     }
   }, {
     key: 'addSource',
@@ -343,8 +344,8 @@ var UpdateSwComponent = function () {
           if (rootBlock.sourceCodeFiles) {
             console.log('replacing ', { name: name, targetName: targetName });
             sourceCodeFiles = rootBlock.sourceCodeFiles.map(function (_ref) {
-              var sourceCodeFileName = _ref.name,
-                  path = _ref.path;
+              var sourceCodeFileName = _ref.name;
+              var path = _ref.path;
               return { name: sourceCodeFileName, path: path.replace(name, targetName) };
             });
           }
@@ -360,10 +361,15 @@ var UpdateSwComponent = function () {
       });
     }
   }, {
+    key: _get__('getCwd'),
+    value: function value() {
+      return require('process').cwd();
+    }
+  }, {
     key: 'synchronize',
     value: function synchronize(sourcePath, name, type, options) {
-      console.log(_get__('chalk').green('Generation begins...'));
-      var rootBasePath = this.targetSwComponent.options.basePath + '/' + sourcePath;
+      console.log(_get__('chalk').green('Generation begins...'), { sourcePath: sourcePath });
+      var rootBasePath = this[getCwd]() + '/' + sourcePath;
       var rootSwComponentJson = require(_get__('path').normalize(rootBasePath + '/swComponent.json'));
       rootSwComponentJson.options.basePath = rootBasePath;
 
@@ -393,7 +399,7 @@ var UpdateSwComponent = function () {
       var newerBlocks = this[getNewerBlocks](rootSwComponent, name, type);
 
       console.log(_get__('chalk').magenta('synchronizing old blocks'));
-      return rootSwComponent.getMeta().then(function (metaObject) {
+      return rootSwComponent.getMeta(name, type).then(function (metaObject) {
         return _this5.targetSwComponent.setMeta(metaObject);
       }).then(function () {
         return _get__('Promise').mapSeries(newerBlocks, function (swBlock) {
@@ -546,6 +552,9 @@ function _get_original__(variableName) {
 
     case 'ensureBlocks':
       return ensureBlocks;
+
+    case 'getCwd':
+      return getCwd;
   }
 
   return undefined;

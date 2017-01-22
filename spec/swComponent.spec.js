@@ -80,6 +80,52 @@ describe('SwComponent', () => {
     })
   })
 
+  describe('(toJSON)', () => {
+    let swBlockName,
+        swBlockType,
+        swBlockVersion,
+        swBlockObj,
+        sourceCodeFile,
+        trashOptions,
+        expectedOptions
+
+    beforeEach(() => {
+      swBlockName = 'ablockname'
+      swBlockType = 'ablocktype'
+      swBlockVersion = '0.0.1'
+
+      trashOptions = { a: 1, sources: [], basePath: 'trash' }
+      expectedOptions = { a: 1, sources: [] }
+      sourceCodeFile = { options: trashOptions, name: 'aname', path: 'apath' }
+      swBlockObj = { options: trashOptions, name: swBlockName, type: swBlockType, version: swBlockVersion, sourceCodeFiles: [sourceCodeFile]}
+      swComponent.options = trashOptions
+      swComponent.swBlocks = [swBlockObj]
+    })
+    
+    it('should return the appropiate output', () => {
+      const actual = swComponent.toJSON()
+      const expected = {
+        name,
+        type,
+        options: expectedOptions,
+        swBlocks: [
+          {
+            name: swBlockName,
+            type: swBlockType,
+            version: swBlockVersion,
+            options: expectedOptions,
+            sourceCodeFiles: [
+              {
+                name: 'aname', path: 'apath', options: expectedOptions
+              }
+            ]
+          }
+        ]
+      }
+      actual.should.eql(expected)
+    })
+  })
+
   describe('(adding blocks files)', () => {
     describe('.addSwBlock(source, clean, options)', () => {
       let swBlockName,
