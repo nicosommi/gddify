@@ -1,4 +1,4 @@
-import { SwComponent } from 'gene-js'
+import SwComponent from './swComponent.js'
 import semver from 'semver'
 import chalk from 'chalk'
 import Promise from './promise.js'
@@ -20,6 +20,7 @@ const addSourceCodeFile = Symbol('addSourceCodeFile')
 const filterBlocks = Symbol('filterBlocks')
 const ensureBlocks = Symbol('ensureBlocks')
 const process = Symbol('process')
+const getCwd = Symbol('getCwd')
 
 export default class UpdateSwComponent {
   constructor (targetSwComponentJson) {
@@ -87,6 +88,23 @@ export default class UpdateSwComponent {
     }
   }
 
+  replicate (name, type, targetName) {
+    console.log(chalk.green('Replicating a new block...'))
+    const rootBasePath = `${this[getCwd]()}/`
+    const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
+    rootSwComponentJson.options.basePath = rootBasePath
+    return this.synchronizeWith('./', rootSwComponentJson, targetName, name, type, { generate: true })
+      .then(() => {
+        console.log(chalk.green('All done.'))
+        return Promise.resolve()
+      },
+      error => {
+        const message = error.message || error
+        console.log(chalk.red(`ERROR: ${message}`))
+        return Promise.resolve()
+      })
+  }
+
   increment (release, name, type) {
     console.log(chalk.green('Incrementing the release...'))
     const blocks = this[filterBlocks](this.targetSwComponent.swBlocks, name, type)
@@ -100,7 +118,6 @@ export default class UpdateSwComponent {
   }
 
   jsonification (source, destination, merge = false) {
-    require("babel-preset-stage-2")
     return readFile(source, "utf8")
       .then(
         code => {
@@ -177,7 +194,8 @@ export default class UpdateSwComponent {
 
   [ saveConfiguration ] (newConfiguration) {
     console.log(chalk.magenta('Writing configuration...'))
-    return writeJson(path.normalize(`${this.targetSwComponent.options.basePath}/swComponent.json`), newConfiguration, { spaces: 2 })
+    const basePath = this[getCwd]()
+    return writeJson(path.normalize(`${basePath}/swComponent.json`), newConfiguration.toJSON(), { spaces: 2 })
   }
 
   addSource (path, name, type) {
@@ -212,8 +230,9 @@ export default class UpdateSwComponent {
         file => {
           const sourceCodeFile = block.sourceCodeFiles.find(scf => file.target === scf.name)
           if (sourceCodeFile) {
-            console.log(chalk.magenta(`${property} on file ${this.targetSwComponent.options.basePath}/${sourceCodeFile.path} to ${this.targetSwComponent.options.basePath}/${file.to}...`))
-            return callTo.call(this, `${this.targetSwComponent.options.basePath}/${sourceCodeFile.path}`, `${this.targetSwComponent.options.basePath}/${file.to}`)
+            const cwd = this[getCwd]()
+            console.log(chalk.magenta(`${property} on file ${cwd}/${sourceCodeFile.path} to ${cwd}/${file.to}...`))
+            return callTo.call(this, `${cwd}/${sourceCodeFile.path}`, `${cwd}/${file.to}`)
           } else {
             console.log(chalk.yellow(`WARNING: ${property} file not found on block ${block.name}-${block.type} with target ${file.target}`))
             return Promise.resolve()
@@ -253,30 +272,50 @@ export default class UpdateSwComponent {
     return Promise.resolve(block)
   }
 
-  [ensureBlocks] (rootSwComponent, name, type) {
+  [ensureBlocks] (rootSwComponent, targetName, name, type) {
     // console.log(chalk.yellow('ensureBlocks'))
     const rootBlocks = this[filterBlocks](rootSwComponent.swBlocks, name, type)
     rootBlocks.forEach(
       rootBlock => {
         let block = this.targetSwComponent.swBlocks.find(
-          swBlock => ((swBlock.name === rootBlock.name || !rootBlock.name) && (swBlock.type === rootBlock.type || !rootBlock.type))
+          swBlock => ((swBlock.name === targetName || !targetName) && (swBlock.type === rootBlock.type || !rootBlock.type))
         )
         if (!block) {
-          block = { name: rootBlock.name, type: rootBlock.type, options: rootBlock.options, version: '0.0.0', sourceCodeFiles: rootBlock.sourceCodeFiles }
+          // TODO: replace targetName con name en el filepath
+          let sourceCodeFiles = []
+          if (rootBlock.sourceCodeFiles) {
+            console.log('replacing ', { name, targetName });
+            sourceCodeFiles = rootBlock.sourceCodeFiles.map(
+              ({name: sourceCodeFileName, path}) => ({ name: sourceCodeFileName, path: path.replace(name, targetName)})
+            )
+          }
+
+          block = {
+            name: targetName,
+            type: rootBlock.type,
+            version: rootBlock.version,
+            options: rootBlock.options,
+            sourceCodeFiles: sourceCodeFiles
+          }
           this.targetSwComponent.addSwBlock(block)
         }
       }
     )
   }
 
+  [ getCwd ] () {
+    return require('process').cwd()
+  }
+
   synchronize (sourcePath, name, type, options) {
-    console.log(chalk.green('Generation begins...'))
-    const rootBasePath = `${this.targetSwComponent.options.basePath}/${sourcePath}`
+    console.log(chalk.green('Generation begins...'), { sourcePath })
+    const rootBasePath = `${this[getCwd]()}/${sourcePath}`
     const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
     rootSwComponentJson.options.basePath = rootBasePath
 
     console.log(chalk.magenta('Synchronization begins...'))
-    return this.synchronizeWith(sourcePath, rootSwComponentJson, name, type, options)
+    // FIXME: name === targetName for now, add support to cli
+    return this.synchronizeWith(sourcePath, rootSwComponentJson, name, name, type, options)
       .then(() => {
         console.log(chalk.green('All done.'))
         return Promise.resolve()
@@ -288,16 +327,16 @@ export default class UpdateSwComponent {
       })
   }
 
-  synchronizeWith (fromPath, rootSwComponentJson, name, type, options = { generate: true }) {
+  synchronizeWith (fromPath, rootSwComponentJson, targetName, name, type, options = { generate: true }) {
     console.log(chalk.green('building objects and picking newer blocks'))
     const rootSwComponent = this[buildSwComponent](rootSwComponentJson)
     if(options.generate) {
-      this[ensureBlocks](rootSwComponent, name, type)
+      this[ensureBlocks](rootSwComponent, targetName, name, type)
     }
     const newerBlocks = this[getNewerBlocks](rootSwComponent, name, type)
 
     console.log(chalk.magenta('synchronizing old blocks'))
-    return rootSwComponent.getMeta()
+    return rootSwComponent.getMeta(name, type)
       .then(metaObject => this.targetSwComponent.setMeta(metaObject))
       .then(() => {
         return Promise.mapSeries(

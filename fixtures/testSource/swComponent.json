@@ -1,8 +1,36 @@
 {
-  "name": "default",
-  "type": "default",
   "options": {
-    "basePath": "",
-    "sources": []
-  }
+    "basePath": "/Users/nicosommi/workspace/my-repos/gddify/spec/../fixtures/testSource",
+    "sources": [
+      {
+        "path": "./",
+        "name": "blockName",
+        "type": "blockType"
+      }
+    ]
+  },
+  "swBlocks": [
+    {
+      "name": "blockName",
+      "type": "blockType",
+      "version": "0.0.1",
+      "sourceCodeFiles": [
+        {
+          "name": "afilepath.js",
+          "path": "blockName/afilepath.js"
+        }
+      ]
+    },
+    {
+      "name": "anotherblock",
+      "type": "anothertype",
+      "version": "0.0.2",
+      "sourceCodeFiles": [
+        {
+          "name": "anotherblock/file.js",
+          "path": "anotherblock/file.js"
+        }
+      ]
+    }
+  ]
 }

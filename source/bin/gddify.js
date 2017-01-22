@@ -29,7 +29,9 @@ export default function invoke (env) {
     command = 'help'
   }
 
-  const targetSwComponentPath = path.normalize(`${env.cwd}/swComponent.json`)
+  const cwd = require('process').cwd()
+
+  const targetSwComponentPath = path.normalize(`${cwd}/swComponent.json`)
   const initialData = { name: 'default', type: 'default', options: { sources: [], basePath: env.cwd, cleanPath: `.gdd-clean` }, swBlocks: [] }
 
   console.log(chalk.magenta('Command execution begins...'))
@@ -40,10 +42,15 @@ export default function invoke (env) {
       console.log(chalk.magenta('Target file ensured...'))
       const targetSwComponentJson = require(targetSwComponentPath)
       // machine switch or folder change is possible
-      targetSwComponentJson.options.basePath = env.cwd
+      if (!targetSwComponentJson.options) {
+        targetSwComponentJson.options = {}
+      }
+      targetSwComponentJson.options.basePath = cwd
       const updateSwComponent = new UpdateSwComponent(targetSwComponentJson)
 
       switch (command) {
+        case 'replicate':
+          return updateSwComponent.replicate(argv.name, argv.type, argv['target-name'], argv['path-pattern'], argv['path-value'])
         case 'generate':
           return updateSwComponent.synchronize(argv.from, argv.name, argv.type)
         case 'update':
@@ -61,7 +68,7 @@ export default function invoke (env) {
         case 'jsonification':
           return updateSwComponent.jsonification(path.normalize(`${env.cwd}/${argv.from}`), path.normalize(`${env.cwd}/${argv.to}`))
         default:
-          console.log(chalk.yellow('Invalid command. Use gddify [generate|update|compile|refresh|add|addfile].'))
+          console.log(chalk.yellow('Invalid command. Use gddify [replicate|generate|update|compile|refresh|add|addfile].'))
       }
     })
 }
