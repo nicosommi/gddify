@@ -1,6 +1,6 @@
 /* ph replacements */
 /* name, /'name': 'gddify'/g, 'name': 'gddify' */
-/* version, /'version': '\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b'/ig, 'version': '0.1.8' */
+/* version, /'version': '\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b'/ig, 'version': '0.1.9' */
 /* description, /'description': 'a\ gdd\ utility'/g, 'description': 'a gdd utility' */
 /* main, /'main': '[a-zA-Z\.\/]+'/ig, 'main': 'index.js' */
 /* license, /MIT/g, MIT */
@@ -12,7 +12,7 @@
 module.exports =
 {
   'name': 'gddify',
-  'version': '0.1.8',
+  'version': '0.1.9',
   'description': 'a gdd utility',
   'main': 'index.js',
   'standard': {
@@ -54,7 +54,7 @@ module.exports =
   'dependencies': {
     /* ph componentDependencies */
     'fs-extra': '^0.26.7',
-    'gene-js': '0.1.2',
+    'gene-js': '0.1.3',
     'inquirer': '^1.0.2',
     'semver': '^5.1.0',
     'glob': '^7.0.3',
