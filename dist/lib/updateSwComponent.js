@@ -135,7 +135,7 @@ var UpdateSwComponent = function () {
   }, {
     key: 'replicate',
     value: function replicate(name, type, targetName) {
-      _get__('debug')('Replicating a new block...');
+      _get__('debug')('Replicating a new block...', { name: name, type: type, targetName: targetName });
       var rootBasePath = this[getCwd]() + '/';
       var rootSwComponentJson = require(_get__('path').normalize(rootBasePath + '/swComponent.json'));
       rootSwComponentJson.options.basePath = rootBasePath;
@@ -331,17 +331,19 @@ var UpdateSwComponent = function () {
     value: function value(rootSwComponent, targetName, name, type) {
       var _this4 = this;
 
-      // debug('ensureBlocks')
+      _get__('debug')('ensureBlocks', { targetName: targetName, name: name, type: type });
       var rootBlocks = this[filterBlocks](rootSwComponent.swBlocks, name, type);
+      _get__('debug')('rootBlocks', { rootBlocks: rootBlocks });
       rootBlocks.forEach(function (rootBlock) {
+        _get__('debug')('finding blocks', { rootBlock: rootBlock, targetName: targetName, name: name, type: type });
         var block = _this4.targetSwComponent.swBlocks.find(function (swBlock) {
           return (swBlock.name === targetName || !targetName) && (swBlock.type === rootBlock.type || !rootBlock.type);
         });
         if (!block) {
-          // TODO: replace targetName con name en el filepath
+          _get__('debug')('not found block', { targetName: targetName, type: type });
           var sourceCodeFiles = [];
           if (rootBlock.sourceCodeFiles) {
-            console.log('replacing ', { name: name, targetName: targetName });
+            _get__('debug')('replacing ', { name: name, targetName: targetName });
             sourceCodeFiles = rootBlock.sourceCodeFiles.map(function (_ref) {
               var sourceCodeFileName = _ref.name;
               var path = _ref.path;
@@ -357,6 +359,8 @@ var UpdateSwComponent = function () {
             sourceCodeFiles: sourceCodeFiles
           };
           _this4.targetSwComponent.addSwBlock(block);
+        } else {
+          _get__('debug')('found block', { targetName: targetName, type: type, block: block });
         }
       });
     }

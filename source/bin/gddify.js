@@ -8,6 +8,7 @@ import chalk from 'chalk'
 import fs from 'fs-extra'
 import Promise from '../lib/promise.js'
 
+const debug = require('debug')('nicosommi.gddify.cli')
 const stat = Promise.promisify(fs.stat)
 const outputJson = Promise.promisify(fs.outputJson)
 
@@ -39,7 +40,7 @@ export default function invoke (env) {
   return stat(targetSwComponentPath)
     .catch(() => outputJson(targetSwComponentPath, initialData))
     .then(() => {
-      console.log(chalk.magenta('Target file ensured...'))
+      debug('Target file ensured...')
       const targetSwComponentJson = require(targetSwComponentPath)
       // machine switch or folder change is possible
       if (!targetSwComponentJson.options) {
@@ -48,27 +49,44 @@ export default function invoke (env) {
       targetSwComponentJson.options.basePath = cwd
       const updateSwComponent = new UpdateSwComponent(targetSwComponentJson)
 
+      let commandPromise = Promise.resolve();
+
       switch (command) {
         case 'replicate':
-          return updateSwComponent.replicate(argv.name, argv.type, argv['target-name'], argv['path-pattern'], argv['path-value'])
+          commandPromise = updateSwComponent.replicate(argv.name, argv.type, argv['target-name'], argv['path-pattern'], argv['path-value'])
+          break
         case 'generate':
-          return updateSwComponent.synchronize(argv.from, argv.name, argv.type, argv['target-name'])
+          commandPromise = updateSwComponent.synchronize(argv.from, argv.name, argv.type, argv['target-name'])
+          break
         case 'update':
-          return updateSwComponent.update(argv.name, argv.type)
+          commandPromise = updateSwComponent.update(argv.name, argv.type)
+          break
         case 'refresh':
-          return updateSwComponent.refresh(argv.name, argv.type)
+          commandPromise = updateSwComponent.refresh(argv.name, argv.type)
+          break
         case 'compile':
-          return updateSwComponent.clean([ 'gddifyph' ])
+          commandPromise = updateSwComponent.clean([ 'gddifyph' ])
+          break
         case 'add':
-          return updateSwComponent.add(argv.glob, argv.name, argv.type)
+          commandPromise = updateSwComponent.add(argv.glob, argv.name, argv.type)
+          break
         case 'addfile':
-          return updateSwComponent.addFile(argv.path, argv.name, argv.type)
+          commandPromise = updateSwComponent.addFile(argv.path, argv.name, argv.type)
+          break
         case 'increment':
-          return updateSwComponent.increment(argv.release, argv.name, argv.type)
+          commandPromise = updateSwComponent.increment(argv.release, argv.name, argv.type)
+          break
         case 'jsonification':
-          return updateSwComponent.jsonification(path.normalize(`${env.cwd}/${argv.from}`), path.normalize(`${env.cwd}/${argv.to}`))
+          commandPromise = updateSwComponent.jsonification(path.normalize(`${env.cwd}/${argv.from}`), path.normalize(`${env.cwd}/${argv.to}`))
+          break
         default:
-          console.log(chalk.yellow('Invalid command. Use gddify [replicate|generate|update|compile|refresh|add|addfile].'))
+          console.log(chalk.yellow('Invalid command.\nUse gddify [replicate|generate|update|compile|refresh|add|addfile].'))
       }
+
+      return commandPromise.then(
+        () => {
+          console.log(chalk.magenta('Done.'))
+        }
+      );
     })
 }

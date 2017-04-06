@@ -90,7 +90,7 @@ export default class UpdateSwComponent {
   }
 
   replicate (name, type, targetName) {
-    debug('Replicating a new block...')
+    debug('Replicating a new block...', { name, type, targetName })
     const rootBasePath = `${this[getCwd]()}/`
     const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
     rootSwComponentJson.options.basePath = rootBasePath
@@ -274,18 +274,20 @@ export default class UpdateSwComponent {
   }
 
   [ensureBlocks] (rootSwComponent, targetName, name, type) {
-    // debug('ensureBlocks')
+    debug('ensureBlocks', { targetName, name, type })
     const rootBlocks = this[filterBlocks](rootSwComponent.swBlocks, name, type)
+    debug('rootBlocks', { rootBlocks })
     rootBlocks.forEach(
       rootBlock => {
+        debug('finding blocks', { rootBlock, targetName, name, type })
         let block = this.targetSwComponent.swBlocks.find(
           swBlock => ((swBlock.name === targetName || !targetName) && (swBlock.type === rootBlock.type || !rootBlock.type))
         )
         if (!block) {
-          // TODO: replace targetName con name en el filepath
+          debug('not found block', {targetName, type})
           let sourceCodeFiles = []
           if (rootBlock.sourceCodeFiles) {
-            console.log('replacing ', { name, targetName });
+            debug('replacing ', { name, targetName })
             sourceCodeFiles = rootBlock.sourceCodeFiles.map(
               ({name: sourceCodeFileName, path}) => ({ name: sourceCodeFileName, path: path.replace(name, targetName)})
             )
@@ -296,9 +298,11 @@ export default class UpdateSwComponent {
             type: rootBlock.type,
             version: rootBlock.version,
             options: rootBlock.options,
-            sourceCodeFiles: sourceCodeFiles
+            sourceCodeFiles
           }
           this.targetSwComponent.addSwBlock(block)
+        } else {
+          debug('found block', {targetName, type, block})
         }
       }
     )

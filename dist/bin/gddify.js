@@ -40,6 +40,7 @@ var _promise2 = _interopRequireDefault(_promise);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var debug = require('debug')('nicosommi.gddify.cli');
 var stat = _get__('Promise').promisify(_get__('fs').stat);
 var outputJson = _get__('Promise').promisify(_get__('fs').outputJson);
 
@@ -71,7 +72,7 @@ function invoke(env) {
   return _get__('stat')(targetSwComponentPath).catch(function () {
     return _get__('outputJson')(targetSwComponentPath, initialData);
   }).then(function () {
-    console.log(_get__('chalk').magenta('Target file ensured...'));
+    _get__('debug')('Target file ensured...');
     var targetSwComponentJson = require(targetSwComponentPath);
     // machine switch or folder change is possible
     if (!targetSwComponentJson.options) {
@@ -80,28 +81,43 @@ function invoke(env) {
     targetSwComponentJson.options.basePath = cwd;
     var updateSwComponent = new (_get__('UpdateSwComponent'))(targetSwComponentJson);
 
+    var commandPromise = _get__('Promise').resolve();
+
     switch (command) {
       case 'replicate':
-        return updateSwComponent.replicate(_get__('argv').name, _get__('argv').type, _get__('argv')['target-name'], _get__('argv')['path-pattern'], _get__('argv')['path-value']);
+        commandPromise = updateSwComponent.replicate(_get__('argv').name, _get__('argv').type, _get__('argv')['target-name'], _get__('argv')['path-pattern'], _get__('argv')['path-value']);
+        break;
       case 'generate':
-        return updateSwComponent.synchronize(_get__('argv').from, _get__('argv').name, _get__('argv').type, _get__('argv')['target-name']);
+        commandPromise = updateSwComponent.synchronize(_get__('argv').from, _get__('argv').name, _get__('argv').type, _get__('argv')['target-name']);
+        break;
       case 'update':
-        return updateSwComponent.update(_get__('argv').name, _get__('argv').type);
+        commandPromise = updateSwComponent.update(_get__('argv').name, _get__('argv').type);
+        break;
       case 'refresh':
-        return updateSwComponent.refresh(_get__('argv').name, _get__('argv').type);
+        commandPromise = updateSwComponent.refresh(_get__('argv').name, _get__('argv').type);
+        break;
       case 'compile':
-        return updateSwComponent.clean(['gddifyph']);
+        commandPromise = updateSwComponent.clean(['gddifyph']);
+        break;
       case 'add':
-        return updateSwComponent.add(_get__('argv').glob, _get__('argv').name, _get__('argv').type);
+        commandPromise = updateSwComponent.add(_get__('argv').glob, _get__('argv').name, _get__('argv').type);
+        break;
       case 'addfile':
-        return updateSwComponent.addFile(_get__('argv').path, _get__('argv').name, _get__('argv').type);
+        commandPromise = updateSwComponent.addFile(_get__('argv').path, _get__('argv').name, _get__('argv').type);
+        break;
       case 'increment':
-        return updateSwComponent.increment(_get__('argv').release, _get__('argv').name, _get__('argv').type);
+        commandPromise = updateSwComponent.increment(_get__('argv').release, _get__('argv').name, _get__('argv').type);
+        break;
       case 'jsonification':
-        return updateSwComponent.jsonification(_get__('path').normalize(env.cwd + '/' + _get__('argv').from), _get__('path').normalize(env.cwd + '/' + _get__('argv').to));
+        commandPromise = updateSwComponent.jsonification(_get__('path').normalize(env.cwd + '/' + _get__('argv').from), _get__('path').normalize(env.cwd + '/' + _get__('argv').to));
+        break;
       default:
-        console.log(_get__('chalk').yellow('Invalid command. Use gddify [replicate|generate|update|compile|refresh|add|addfile].'));
+        console.log(_get__('chalk').yellow('Invalid command.\nUse gddify [replicate|generate|update|compile|refresh|add|addfile].'));
     }
+
+    return commandPromise.then(function () {
+      console.log(_get__('chalk').magenta('Done.'));
+    });
   });
 }
 
@@ -173,6 +189,9 @@ function _get_original__(variableName) {
 
     case 'outputJson':
       return outputJson;
+
+    case 'debug':
+      return debug;
 
     case 'UpdateSwComponent':
       return _updateSwComponent2.default;

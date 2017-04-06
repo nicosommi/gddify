@@ -68,7 +68,14 @@ npm i -g gddify
 ```
 
 ### Generation / Creation / Source addition
-#### Create
+#### Replicate
+```shell
+gddify replicate --type action --name add --target-name cancel
+```
+That will replicate your block replacing the name with the target name in both the block name and all along the file path.
+Useful to synchronize blocks within your project.
+
+#### Generate
 ```shell
 npm install git://github.com/nicosommi/gddify.git
 gddify generate --from ./node_modules/gddify
