@@ -367,15 +367,14 @@ var UpdateSwComponent = function () {
     }
   }, {
     key: 'synchronize',
-    value: function synchronize(sourcePath, name, type, options) {
+    value: function synchronize(sourcePath, name, type, targetName, options) {
       _get__('debug')('Generation begins...'), { sourcePath: sourcePath };
       var rootBasePath = this[getCwd]() + '/' + sourcePath;
       var rootSwComponentJson = require(_get__('path').normalize(rootBasePath + '/swComponent.json'));
       rootSwComponentJson.options.basePath = rootBasePath;
 
       _get__('debug')('Synchronization begins...');
-      // FIXME: name === targetName for now, add support to cli
-      return this.synchronizeWith(sourcePath, rootSwComponentJson, name, name, type, options).then(function () {
+      return this.synchronizeWith(sourcePath, rootSwComponentJson, targetName, name, type, options).then(function () {
         _get__('debug')('All done.');
         return _get__('Promise').resolve();
       }, function (error) {

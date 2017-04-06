@@ -308,15 +308,14 @@ export default class UpdateSwComponent {
     return require('process').cwd()
   }
 
-  synchronize (sourcePath, name, type, options) {
+  synchronize (sourcePath, name, type, targetName, options) {
     debug('Generation begins...'), { sourcePath }
     const rootBasePath = `${this[getCwd]()}/${sourcePath}`
     const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
     rootSwComponentJson.options.basePath = rootBasePath
 
     debug('Synchronization begins...')
-    // FIXME: name === targetName for now, add support to cli
-    return this.synchronizeWith(sourcePath, rootSwComponentJson, name, name, type, options)
+    return this.synchronizeWith(sourcePath, rootSwComponentJson, targetName, name, type, options)
       .then(() => {
         debug('All done.')
         return Promise.resolve()

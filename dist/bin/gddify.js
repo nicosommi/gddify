@@ -84,7 +84,7 @@ function invoke(env) {
       case 'replicate':
         return updateSwComponent.replicate(_get__('argv').name, _get__('argv').type, _get__('argv')['target-name'], _get__('argv')['path-pattern'], _get__('argv')['path-value']);
       case 'generate':
-        return updateSwComponent.synchronize(_get__('argv').from, _get__('argv').name, _get__('argv').type);
+        return updateSwComponent.synchronize(_get__('argv').from, _get__('argv').name, _get__('argv').type, _get__('argv')['target-name']);
       case 'update':
         return updateSwComponent.update(_get__('argv').name, _get__('argv').type);
       case 'refresh':
