@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import chalk from 'chalk'
 import SwBlock from './swBlock.js'
 import Promise from './promise.js'
+const debug = require('debug')('nicosommi.gddify.swComponent')
 
 export default class SwComponent {
   constructor (name, type, options) {
@@ -92,18 +92,18 @@ export default class SwComponent {
   }
 
   synchronizeWith (rootBlock) {
-    console.log(chalk.magenta(`synchronize component started`))
+    debug(`synchronize component started`)
     let promise
 
     // find this.swBlock
     const matchingSwBlocks = this.swBlocks.filter(swBlock => (swBlock.type === rootBlock.type))
     if (matchingSwBlocks && matchingSwBlocks.length > 0) {
-      console.log(chalk.magenta(`going through existing blocks`))
+      debug(`going through existing blocks`)
       promise = Promise.all(
         matchingSwBlocks.map(matchingSwBlock => matchingSwBlock.synchronizeWith(rootBlock))
       )
     } else {
-      console.log(chalk.magenta(`creating a new block named ${rootBlock.name} of type ${rootBlock.type}`))
+      debug(`creating a new block named ${rootBlock.name} of type ${rootBlock.type}`)
       const newOptions = Object.assign({}, this.options, rootBlock.options)
       const newSwBlock = this.addSwBlock({
         name: rootBlock.name,

@@ -17,10 +17,6 @@ var _semver = require('semver');
 
 var _semver2 = _interopRequireDefault(_semver);
 
-var _chalk = require('chalk');
-
-var _chalk2 = _interopRequireDefault(_chalk);
-
 var _promise = require('./promise.js');
 
 var _promise2 = _interopRequireDefault(_promise);
@@ -56,6 +52,8 @@ var filterBlocks = Symbol('filterBlocks');
 var ensureBlocks = Symbol('ensureBlocks');
 var process = Symbol('process');
 var getCwd = Symbol('getCwd');
+
+var debug = require('debug')('nicosommi.gddify.updateSwComponent');
 
 var UpdateSwComponent = function () {
   function UpdateSwComponent(targetSwComponentJson) {
@@ -130,36 +128,36 @@ var UpdateSwComponent = function () {
         if (!sourceCodeFileFound) {
           blockFound.addSourceCodeFile(sourceCodeFileJson);
         } else {
-          console.log(_get__('chalk').magenta('File ' + sourceCodeFilePath + ' already exists, omitted'));
+          _get__('debug')('File ' + sourceCodeFilePath + ' already exists, omitted');
         }
       }
     }
   }, {
     key: 'replicate',
     value: function replicate(name, type, targetName) {
-      console.log(_get__('chalk').green('Replicating a new block...'));
+      _get__('debug')('Replicating a new block...');
       var rootBasePath = this[getCwd]() + '/';
       var rootSwComponentJson = require(_get__('path').normalize(rootBasePath + '/swComponent.json'));
       rootSwComponentJson.options.basePath = rootBasePath;
       return this.synchronizeWith('./', rootSwComponentJson, targetName, name, type, { generate: true }).then(function () {
-        console.log(_get__('chalk').green('All done.'));
+        _get__('debug')('All done.');
         return _get__('Promise').resolve();
       }, function (error) {
         var message = error.message || error;
-        console.log(_get__('chalk').red('ERROR: ' + message));
+        _get__('debug')('ERROR: ' + message);
         return _get__('Promise').resolve();
       });
     }
   }, {
     key: 'increment',
     value: function increment(release, name, type) {
-      console.log(_get__('chalk').green('Incrementing the release...'));
+      _get__('debug')('Incrementing the release...');
       var blocks = this[filterBlocks](this.targetSwComponent.swBlocks, name, type);
       blocks.forEach(function (block) {
         block.version = _get__('semver').inc(block.version, release);
       });
       return this[saveConfiguration](this.targetSwComponent).then(function () {
-        return console.log(_get__('chalk').green('Increment finished.'));
+        return _get__('debug')('Increment finished.');
       });
     }
   }, {
@@ -184,10 +182,10 @@ var UpdateSwComponent = function () {
   }, {
     key: 'addFile',
     value: function addFile(filePath, name, type) {
-      console.log(_get__('chalk').green('Beginning addition of a single file...'));
+      _get__('debug')('Beginning addition of a single file...');
       this[addSourceCodeFile](filePath, name, type);
       return this[saveConfiguration](this.targetSwComponent).then(function () {
-        return console.log(_get__('chalk').green('Addfile finished.'));
+        return _get__('debug')('Addfile finished.');
       });
     }
   }, {
@@ -195,7 +193,7 @@ var UpdateSwComponent = function () {
     value: function add(pattern, name, type) {
       var _this = this;
 
-      console.log(_get__('chalk').green('Beginning addition...'));
+      _get__('debug')('Beginning addition...');
       return _get__('glob')(pattern).then(function (files) {
         files.forEach(function (filePath) {
           _this[addSourceCodeFile](filePath, name, type);
@@ -204,27 +202,27 @@ var UpdateSwComponent = function () {
       }).then(function () {
         return _this[saveConfiguration](_this.targetSwComponent);
       }).then(function () {
-        return console.log(_get__('chalk').green('Add finished.'));
+        return _get__('debug')('Add finished.');
       });
     }
   }, {
     key: 'update',
     value: function update(name, type) {
-      console.log(_get__('chalk').green('Beginning update...'));
+      _get__('debug')('Beginning update...');
       this.addSource('./');
       var sources = this.targetSwComponent.options.sources;
 
       return this[updateFrom](sources).then(function () {
-        console.log(_get__('chalk').green('Update finished.'));
+        _get__('debug')('Update finished.');
         return _get__('Promise').resolve();
       });
     }
   }, {
     key: 'refresh',
     value: function refresh(name, type) {
-      console.log(_get__('chalk').green('Beginning refresh...'));
+      _get__('debug')('Beginning refresh...');
       return this[updateFrom]([{ path: './', name: name, type: type }]).then(function () {
-        console.log(_get__('chalk').green('Refresh finished.'));
+        _get__('debug')('Refresh finished.');
         return _get__('Promise').resolve();
       });
     }
@@ -234,16 +232,16 @@ var UpdateSwComponent = function () {
       var _this2 = this;
 
       return _get__('Promise').mapSeries(sources, function (source) {
-        console.log(_get__('chalk').magenta('Reading from ' + source + '...'));
+        _get__('debug')('Reading from ' + source + '...');
         return _this2.synchronize(source.path, source.name, source.type, { generate: false });
       }).then(function () {
-        console.log(_get__('chalk').green('Everything updated from all sources.'));
+        _get__('debug')('Everything updated from all sources.');
       });
     }
   }, {
     key: _get__('saveConfiguration'),
     value: function value(newConfiguration) {
-      console.log(_get__('chalk').magenta('Writing configuration...'));
+      _get__('debug')('Writing configuration...');
       var basePath = this[getCwd]();
       return _get__('writeJson')(_get__('path').normalize(basePath + '/swComponent.json'), newConfiguration.toJSON(), { spaces: 2 });
     }
@@ -276,7 +274,7 @@ var UpdateSwComponent = function () {
     value: function value(block, property, callTo) {
       var _this3 = this;
 
-      console.log(_get__('chalk').magenta(property + ' block begun...'));
+      _get__('debug')(property + ' block begun...');
       if (block.options && block.options[property] && Array.isArray(block.options[property])) {
         return _get__('Promise').mapSeries(block.options[property], function (file) {
           var sourceCodeFile = block.sourceCodeFiles.find(function (scf) {
@@ -284,14 +282,14 @@ var UpdateSwComponent = function () {
           });
           if (sourceCodeFile) {
             var cwd = _this3[getCwd]();
-            console.log(_get__('chalk').magenta(property + ' on file ' + cwd + '/' + sourceCodeFile.path + ' to ' + cwd + '/' + file.to + '...'));
+            _get__('debug')(property + ' on file ' + cwd + '/' + sourceCodeFile.path + ' to ' + cwd + '/' + file.to + '...');
             return callTo.call(_this3, cwd + '/' + sourceCodeFile.path, cwd + '/' + file.to);
           } else {
-            console.log(_get__('chalk').yellow('WARNING: ' + property + ' file not found on block ' + block.name + '-' + block.type + ' with target ' + file.target));
+            _get__('debug')('WARNING: ' + property + ' file not found on block ' + block.name + '-' + block.type + ' with target ' + file.target);
             return _get__('Promise').resolve();
           }
         }).then(function () {
-          console.log(_get__('chalk').magenta(property + ' block ended.'));
+          _get__('debug')(property + ' block ended.');
           return _get__('Promise').resolve();
         });
       } else {
@@ -333,7 +331,7 @@ var UpdateSwComponent = function () {
     value: function value(rootSwComponent, targetName, name, type) {
       var _this4 = this;
 
-      // console.log(chalk.yellow('ensureBlocks'))
+      // debug('ensureBlocks')
       var rootBlocks = this[filterBlocks](rootSwComponent.swBlocks, name, type);
       rootBlocks.forEach(function (rootBlock) {
         var block = _this4.targetSwComponent.swBlocks.find(function (swBlock) {
@@ -370,19 +368,19 @@ var UpdateSwComponent = function () {
   }, {
     key: 'synchronize',
     value: function synchronize(sourcePath, name, type, options) {
-      console.log(_get__('chalk').green('Generation begins...'), { sourcePath: sourcePath });
+      _get__('debug')('Generation begins...'), { sourcePath: sourcePath };
       var rootBasePath = this[getCwd]() + '/' + sourcePath;
       var rootSwComponentJson = require(_get__('path').normalize(rootBasePath + '/swComponent.json'));
       rootSwComponentJson.options.basePath = rootBasePath;
 
-      console.log(_get__('chalk').magenta('Synchronization begins...'));
+      _get__('debug')('Synchronization begins...');
       // FIXME: name === targetName for now, add support to cli
       return this.synchronizeWith(sourcePath, rootSwComponentJson, name, name, type, options).then(function () {
-        console.log(_get__('chalk').green('All done.'));
+        _get__('debug')('All done.');
         return _get__('Promise').resolve();
       }, function (error) {
         var message = error.message || error;
-        console.log(_get__('chalk').red('ERROR: ' + message));
+        _get__('debug')('ERROR: ' + message);
         return _get__('Promise').resolve();
       });
     }
@@ -393,19 +391,19 @@ var UpdateSwComponent = function () {
 
       var options = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : { generate: true };
 
-      console.log(_get__('chalk').green('building objects and picking newer blocks'));
+      _get__('debug')('building objects and picking newer blocks');
       var rootSwComponent = this[buildSwComponent](rootSwComponentJson);
       if (options.generate) {
         this[ensureBlocks](rootSwComponent, targetName, name, type);
       }
       var newerBlocks = this[getNewerBlocks](rootSwComponent, name, type);
 
-      console.log(_get__('chalk').magenta('synchronizing old blocks'));
+      _get__('debug')('synchronizing old blocks');
       return rootSwComponent.getMeta(name, type).then(function (metaObject) {
         return _this5.targetSwComponent.setMeta(metaObject);
       }).then(function () {
         return _get__('Promise').mapSeries(newerBlocks, function (swBlock) {
-          console.log(_get__('chalk').green('About to update block ' + swBlock.type + ' to version ' + swBlock.version + '... '));
+          _get__('debug')('About to update block ' + swBlock.type + ' to version ' + swBlock.version + '... ');
           var syncPromise = _this5.inquireBlock(swBlock).then(function () {
             return _this5.targetSwComponent.synchronizeWith(swBlock);
           }).then(function () {
@@ -415,11 +413,11 @@ var UpdateSwComponent = function () {
           }).then(function () {
             return _this5.copy(swBlock);
           }).then(function () {
-            console.log(_get__('chalk').magenta('About to write configuration... '));
-            console.log(_get__('chalk').magenta('Adding the new source...'));
+            _get__('debug')('About to write configuration... ');
+            _get__('debug')('Adding the new source...');
             _this5.addSource(fromPath, name, type);
             return _this5[saveConfiguration](_this5.targetSwComponent).then(function () {
-              console.log(_get__('chalk').magenta('Configuration written  for type ' + swBlock.type + ' to version ' + swBlock.version + '... '));
+              _get__('debug')('Configuration written  for type ' + swBlock.type + ' to version ' + swBlock.version + '... ');
             });
           });
           return _get__('Promise').resolve(syncPromise).reflect();
@@ -428,13 +426,13 @@ var UpdateSwComponent = function () {
           inspections.forEach(function (inspection) {
             if (!inspection.isFulfilled()) {
               errorCount++;
-              console.log(_get__('chalk').yellow(inspection.reason()));
+              _get__('debug')(inspection.reason());
             }
           });
           if (errorCount) {
             return _get__('Promise').reject(new Error('Error/Warnings occurred during synchronization.'));
           } else {
-            console.log(_get__('chalk').green('Component ' + _this5.targetSwComponent.name + ' updated.'));
+            _get__('debug')('Component ' + _this5.targetSwComponent.name + ' updated.');
             return _get__('Promise').resolve(_this5.targetSwComponent);
           }
         });
@@ -443,9 +441,9 @@ var UpdateSwComponent = function () {
   }, {
     key: 'clean',
     value: function clean(dirtyPhs) {
-      console.log(_get__('chalk').green('Beginning compile...'));
+      _get__('debug')('Beginning compile...');
       return this.targetSwComponent.clean(dirtyPhs).then(function () {
-        console.log(_get__('chalk').green('Compile finished.'));
+        _get__('debug')('Compile finished.');
         return _get__('Promise').resolve();
       });
     }
@@ -510,8 +508,8 @@ function _get_original__(variableName) {
     case 'semver':
       return _semver2.default;
 
-    case 'chalk':
-      return _chalk2.default;
+    case 'debug':
+      return debug;
 
     case 'path':
       return _path2.default;

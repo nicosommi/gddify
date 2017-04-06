@@ -1,6 +1,5 @@
 import SwComponent from './swComponent.js'
 import semver from 'semver'
-import chalk from 'chalk'
 import Promise from './promise.js'
 import path from 'path'
 import fs from 'fs-extra'
@@ -21,6 +20,8 @@ const filterBlocks = Symbol('filterBlocks')
 const ensureBlocks = Symbol('ensureBlocks')
 const process = Symbol('process')
 const getCwd = Symbol('getCwd')
+
+const debug = require('debug')('nicosommi.gddify.updateSwComponent')
 
 export default class UpdateSwComponent {
   constructor (targetSwComponentJson) {
@@ -83,30 +84,30 @@ export default class UpdateSwComponent {
       if (!sourceCodeFileFound) {
         blockFound.addSourceCodeFile(sourceCodeFileJson)
       } else {
-        console.log(chalk.magenta(`File ${sourceCodeFilePath} already exists, omitted`))
+        debug(`File ${sourceCodeFilePath} already exists, omitted`)
       }
     }
   }
 
   replicate (name, type, targetName) {
-    console.log(chalk.green('Replicating a new block...'))
+    debug('Replicating a new block...')
     const rootBasePath = `${this[getCwd]()}/`
     const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
     rootSwComponentJson.options.basePath = rootBasePath
     return this.synchronizeWith('./', rootSwComponentJson, targetName, name, type, { generate: true })
       .then(() => {
-        console.log(chalk.green('All done.'))
+        debug('All done.')
         return Promise.resolve()
       },
       error => {
         const message = error.message || error
-        console.log(chalk.red(`ERROR: ${message}`))
+        debug(`ERROR: ${message}`)
         return Promise.resolve()
       })
   }
 
   increment (release, name, type) {
-    console.log(chalk.green('Incrementing the release...'))
+    debug('Incrementing the release...')
     const blocks = this[filterBlocks](this.targetSwComponent.swBlocks, name, type)
     blocks.forEach(
       block => {
@@ -114,7 +115,7 @@ export default class UpdateSwComponent {
       }
     )
     return this[saveConfiguration](this.targetSwComponent)
-      .then(() => console.log(chalk.green('Increment finished.')))
+      .then(() => debug('Increment finished.'))
   }
 
   jsonification (source, destination, merge = false) {
@@ -137,14 +138,14 @@ export default class UpdateSwComponent {
   }
 
   addFile (filePath, name, type) {
-    console.log(chalk.green('Beginning addition of a single file...'))
+    debug('Beginning addition of a single file...')
     this[addSourceCodeFile](filePath, name, type)
     return this[saveConfiguration](this.targetSwComponent)
-      .then(() => console.log(chalk.green('Addfile finished.')))
+      .then(() => debug('Addfile finished.'))
   }
 
   add (pattern, name, type) {
-    console.log(chalk.green('Beginning addition...'))
+    debug('Beginning addition...')
     return glob(pattern)
       .then((files) => {
         files.forEach(
@@ -155,26 +156,26 @@ export default class UpdateSwComponent {
         return Promise.resolve()
       })
       .then(() => this[saveConfiguration](this.targetSwComponent))
-      .then(() => console.log(chalk.green('Add finished.')))
+      .then(() => debug('Add finished.'))
   }
 
   update (name, type) {
-    console.log(chalk.green('Beginning update...'))
+    debug('Beginning update...')
     this.addSource('./')
     const sources = this.targetSwComponent.options.sources
 
     return this[updateFrom](sources)
       .then(() => {
-        console.log(chalk.green('Update finished.'))
+        debug('Update finished.')
         return Promise.resolve()
       })
   }
 
   refresh (name, type) {
-    console.log(chalk.green('Beginning refresh...'))
+    debug('Beginning refresh...')
     return this[updateFrom]([{path: './', name, type}])
       .then(() => {
-        console.log(chalk.green('Refresh finished.'))
+        debug('Refresh finished.')
         return Promise.resolve()
       })
   }
@@ -183,17 +184,17 @@ export default class UpdateSwComponent {
     return Promise.mapSeries(
       sources,
       source => {
-        console.log(chalk.magenta(`Reading from ${source}...`))
+        debug(`Reading from ${source}...`)
         return this.synchronize(source.path, source.name, source.type, { generate: false })
       }
     )
       .then(() => {
-        console.log(chalk.green('Everything updated from all sources.'))
+        debug('Everything updated from all sources.')
       })
   }
 
   [ saveConfiguration ] (newConfiguration) {
-    console.log(chalk.magenta('Writing configuration...'))
+    debug('Writing configuration...')
     const basePath = this[getCwd]()
     return writeJson(path.normalize(`${basePath}/swComponent.json`), newConfiguration.toJSON(), { spaces: 2 })
   }
@@ -223,7 +224,7 @@ export default class UpdateSwComponent {
   }
 
   [process] (block, property, callTo) {
-    console.log(chalk.magenta(`${property} block begun...`))
+    debug(`${property} block begun...`)
     if (block.options && block.options[property] && Array.isArray(block.options[property])) {
       return Promise.mapSeries(
         block.options[property],
@@ -231,16 +232,16 @@ export default class UpdateSwComponent {
           const sourceCodeFile = block.sourceCodeFiles.find(scf => file.target === scf.name)
           if (sourceCodeFile) {
             const cwd = this[getCwd]()
-            console.log(chalk.magenta(`${property} on file ${cwd}/${sourceCodeFile.path} to ${cwd}/${file.to}...`))
+            debug(`${property} on file ${cwd}/${sourceCodeFile.path} to ${cwd}/${file.to}...`)
             return callTo.call(this, `${cwd}/${sourceCodeFile.path}`, `${cwd}/${file.to}`)
           } else {
-            console.log(chalk.yellow(`WARNING: ${property} file not found on block ${block.name}-${block.type} with target ${file.target}`))
+            debug(`WARNING: ${property} file not found on block ${block.name}-${block.type} with target ${file.target}`)
             return Promise.resolve()
           }
         }
       )
       .then(() => {
-        console.log(chalk.magenta(`${property} block ended.`))
+        debug(`${property} block ended.`)
         return Promise.resolve()
       })
     } else {
@@ -273,7 +274,7 @@ export default class UpdateSwComponent {
   }
 
   [ensureBlocks] (rootSwComponent, targetName, name, type) {
-    // console.log(chalk.yellow('ensureBlocks'))
+    // debug('ensureBlocks')
     const rootBlocks = this[filterBlocks](rootSwComponent.swBlocks, name, type)
     rootBlocks.forEach(
       rootBlock => {
@@ -308,41 +309,41 @@ export default class UpdateSwComponent {
   }
 
   synchronize (sourcePath, name, type, options) {
-    console.log(chalk.green('Generation begins...'), { sourcePath })
+    debug('Generation begins...'), { sourcePath }
     const rootBasePath = `${this[getCwd]()}/${sourcePath}`
     const rootSwComponentJson = require(path.normalize(`${rootBasePath}/swComponent.json`))
     rootSwComponentJson.options.basePath = rootBasePath
 
-    console.log(chalk.magenta('Synchronization begins...'))
+    debug('Synchronization begins...')
     // FIXME: name === targetName for now, add support to cli
     return this.synchronizeWith(sourcePath, rootSwComponentJson, name, name, type, options)
       .then(() => {
-        console.log(chalk.green('All done.'))
+        debug('All done.')
         return Promise.resolve()
       },
       error => {
         const message = error.message || error
-        console.log(chalk.red(`ERROR: ${message}`))
+        debug(`ERROR: ${message}`)
         return Promise.resolve()
       })
   }
 
   synchronizeWith (fromPath, rootSwComponentJson, targetName, name, type, options = { generate: true }) {
-    console.log(chalk.green('building objects and picking newer blocks'))
+    debug('building objects and picking newer blocks')
     const rootSwComponent = this[buildSwComponent](rootSwComponentJson)
     if(options.generate) {
       this[ensureBlocks](rootSwComponent, targetName, name, type)
     }
     const newerBlocks = this[getNewerBlocks](rootSwComponent, name, type)
 
-    console.log(chalk.magenta('synchronizing old blocks'))
+    debug('synchronizing old blocks')
     return rootSwComponent.getMeta(name, type)
       .then(metaObject => this.targetSwComponent.setMeta(metaObject))
       .then(() => {
         return Promise.mapSeries(
           newerBlocks,
           swBlock => {
-            console.log(chalk.green(`About to update block ${swBlock.type} to version ${swBlock.version}... `))
+            debug(`About to update block ${swBlock.type} to version ${swBlock.version}... `)
             const syncPromise = this.inquireBlock(swBlock)
               .then(() => this.targetSwComponent.synchronizeWith(swBlock))
               .then(() => this.jsonificate(swBlock))
@@ -350,12 +351,12 @@ export default class UpdateSwComponent {
               .then(() => this.copy(swBlock))
               .then(
                 () => {
-                  console.log(chalk.magenta(`About to write configuration... `))
-                  console.log(chalk.magenta('Adding the new source...'))
+                  debug(`About to write configuration... `)
+                  debug('Adding the new source...')
                   this.addSource(fromPath, name, type)
                   return this[saveConfiguration](this.targetSwComponent)
                     .then(() => {
-                      console.log(chalk.magenta(`Configuration written  for type ${swBlock.type} to version ${swBlock.version}... `))
+                      debug(`Configuration written  for type ${swBlock.type} to version ${swBlock.version}... `)
                     })
                 }
               )
@@ -368,14 +369,14 @@ export default class UpdateSwComponent {
             inspection => {
               if (!inspection.isFulfilled()) {
                 errorCount++
-                console.log(chalk.yellow(inspection.reason()))
+                debug(inspection.reason())
               }
             }
           )
           if (errorCount) {
             return Promise.reject(new Error('Error/Warnings occurred during synchronization.'))
           } else {
-            console.log(chalk.green(`Component ${this.targetSwComponent.name} updated.`))
+            debug(`Component ${this.targetSwComponent.name} updated.`)
             return Promise.resolve(this.targetSwComponent)
           }
         })
@@ -383,10 +384,10 @@ export default class UpdateSwComponent {
   }
 
   clean (dirtyPhs) {
-    console.log(chalk.green('Beginning compile...'))
+    debug('Beginning compile...')
     return this.targetSwComponent.clean(dirtyPhs)
       .then(() => {
-        console.log(chalk.green('Compile finished.'))
+        debug('Compile finished.')
         return Promise.resolve()
       })
   }

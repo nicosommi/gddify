@@ -10,10 +10,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /* eslint-disable no-console */
 
 
-var _chalk = require('chalk');
-
-var _chalk2 = _interopRequireDefault(_chalk);
-
 var _swBlock = require('./swBlock.js');
 
 var _swBlock2 = _interopRequireDefault(_swBlock);
@@ -25,6 +21,8 @@ var _promise2 = _interopRequireDefault(_promise);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var debug = require('debug')('nicosommi.gddify.swComponent');
 
 var SwComponent = function () {
   function SwComponent(name, type, options) {
@@ -130,7 +128,7 @@ var SwComponent = function () {
   }, {
     key: 'synchronizeWith',
     value: function synchronizeWith(rootBlock) {
-      console.log(_get__('chalk').magenta('synchronize component started'));
+      _get__('debug')('synchronize component started');
       var promise = void 0;
 
       // find this.swBlock
@@ -138,12 +136,12 @@ var SwComponent = function () {
         return swBlock.type === rootBlock.type;
       });
       if (matchingSwBlocks && matchingSwBlocks.length > 0) {
-        console.log(_get__('chalk').magenta('going through existing blocks'));
+        _get__('debug')('going through existing blocks');
         promise = _get__('Promise').all(matchingSwBlocks.map(function (matchingSwBlock) {
           return matchingSwBlock.synchronizeWith(rootBlock);
         }));
       } else {
-        console.log(_get__('chalk').magenta('creating a new block named ' + rootBlock.name + ' of type ' + rootBlock.type));
+        _get__('debug')('creating a new block named ' + rootBlock.name + ' of type ' + rootBlock.type);
         var newOptions = Object.assign({}, this.options, rootBlock.options);
         var newSwBlock = this.addSwBlock({
           name: rootBlock.name,
@@ -217,8 +215,8 @@ function _get_original__(variableName) {
     case 'Promise':
       return _promise2.default;
 
-    case 'chalk':
-      return _chalk2.default;
+    case 'debug':
+      return debug;
   }
 
   return undefined;
