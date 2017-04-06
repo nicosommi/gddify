@@ -105,10 +105,12 @@ describe('UpdateSwComponent', () => {
   describe('.synchronize(path[, name, type, options])', () => {
     let options;
     let source;
+    let targetName;
 
     beforeEach(() => {
       name = 'anewname'
       type = 'anewtype'
+      targetName = 'targetNAme'
       source = `./fixtures/root`
       addSwBlocksSpy = sinon.spy(
         function addSwBlocksSpyMethod () {
@@ -138,7 +140,7 @@ describe('UpdateSwComponent', () => {
 
       options = {}
 
-      return updateSwComponent.synchronize(source, name, type, options)
+      return updateSwComponent.synchronize(source, name, type, targetName, options)
     })
 
     it('should call synchronizeWith', () => {
@@ -146,7 +148,7 @@ describe('UpdateSwComponent', () => {
         updateSwComponent.synchronizeWith,
         source,
         require(`${__dirname}/../fixtures/root/swComponent.json`),
-        name,
+        targetName,
         name,
         type,
         options

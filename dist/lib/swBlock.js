@@ -24,13 +24,11 @@ var _semver = require('semver');
 
 var _semver2 = _interopRequireDefault(_semver);
 
-var _chalk = require('chalk');
-
-var _chalk2 = _interopRequireDefault(_chalk);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var debug = require('debug')('nicosommi.gddify.swBlock');
 
 var SwBlock = function () {
   function SwBlock(name, type, version, options) {
@@ -90,14 +88,14 @@ var SwBlock = function () {
       var _this3 = this;
 
       return new (_get__('Promise'))(function (resolve, reject) {
-        console.log(_get__('chalk').magenta('checking block versions'));
+        _get__('debug')('checking block versions');
         if (_get__('semver').gte(rootBlock.version, _this3.version)) {
           (function () {
-            console.log(_get__('chalk').magenta('syncing block to version ' + rootBlock.version));
+            _get__('debug')('syncing block to version ' + rootBlock.version);
             var errors = [];
 
             var promises = rootBlock.sourceCodeFiles.map(function (rootSourceCodeFile) {
-              console.log(_get__('chalk').magenta('syncing file ' + rootSourceCodeFile.path));
+              _get__('debug')('syncing file ' + rootSourceCodeFile.path);
               // find this.sourceCodeFile
               var matchingSourceCodeFile = _this3.sourceCodeFiles.find(function (sourceCodeFile) {
                 return sourceCodeFile.name === rootSourceCodeFile.name;
@@ -127,17 +125,17 @@ var SwBlock = function () {
 
             // check processed list against sourceCodeFiles
             if (errors.length === 0) {
-              console.log(_get__('chalk').magenta('executing sync tasks...'));
+              _get__('debug')('executing sync tasks...');
               _get__('Promise').all(promises).then(function () {
                 _this3.version = rootBlock.version;
-                console.log(_get__('chalk').green('finished with no errors, now version ' + _this3.version + '.'));
+                _get__('debug')('finished with no errors, now version ' + _this3.version + '.');
                 resolve();
               }).catch(function (error) {
-                console.log(_get__('chalk').red('error ' + error.message + '.'));
+                _get__('debug')('error ' + error.message + '.');
                 reject(error);
               });
             } else {
-              console.log(_get__('chalk').red('errors on files ' + errors));
+              _get__('debug')('errors on files ' + errors);
               var errorMessage = errors.reduce(function (message, currentError) {
                 if (message) {
                   return message + '\n' + currentError.message;
@@ -215,8 +213,8 @@ function _get_original__(variableName) {
     case 'Promise':
       return _promise2.default;
 
-    case 'chalk':
-      return _chalk2.default;
+    case 'debug':
+      return debug;
 
     case 'semver':
       return _semver2.default;

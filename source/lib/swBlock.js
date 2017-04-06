@@ -3,7 +3,7 @@ import { SourceCodeFile } from 'gene-js'
 import Promise from './promise.js'
 import path from 'path'
 import semver from 'semver'
-import chalk from 'chalk'
+const debug = require('debug')('nicosommi.gddify.swBlock')
 
 export default class SwBlock {
   constructor (name, type, version, options) {
@@ -47,14 +47,14 @@ export default class SwBlock {
   synchronizeWith (rootBlock) {
     return new Promise(
       (resolve, reject) => {
-        console.log(chalk.magenta(`checking block versions`))
+        debug(`checking block versions`)
         if (semver.gte(rootBlock.version, this.version)) {
-          console.log(chalk.magenta(`syncing block to version ${rootBlock.version}`))
+          debug(`syncing block to version ${rootBlock.version}`)
           const errors = []
 
           const promises = rootBlock.sourceCodeFiles.map(
             rootSourceCodeFile => {
-              console.log(chalk.magenta(`syncing file ${rootSourceCodeFile.path}`))
+              debug(`syncing file ${rootSourceCodeFile.path}`)
               // find this.sourceCodeFile
               const matchingSourceCodeFile = this.sourceCodeFiles.find(sourceCodeFile => (sourceCodeFile.name === rootSourceCodeFile.name))
               if (matchingSourceCodeFile) {
@@ -83,20 +83,20 @@ export default class SwBlock {
 
           // check processed list against sourceCodeFiles
           if (errors.length === 0) {
-            console.log(chalk.magenta(`executing sync tasks...`))
+            debug(`executing sync tasks...`)
             Promise.all(promises).then(() => {
               this.version = rootBlock.version
-              console.log(chalk.green(`finished with no errors, now version ${this.version}.`))
+              debug(`finished with no errors, now version ${this.version}.`)
               resolve()
             })
             .catch(
               error => {
-                console.log(chalk.red(`error ${error.message}.`))
+                debug(`error ${error.message}.`)
                 reject(error)
               }
             )
           } else {
-            console.log(chalk.red(`errors on files ${errors}`))
+            debug(`errors on files ${errors}`)
             const errorMessage = errors.reduce((message, currentError) => {
               if (message) {
                 return `${message}\n${currentError.message}`
