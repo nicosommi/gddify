@@ -53,15 +53,16 @@ describe('gddify', () => {
   }
 
   beforeEach(() => {
-    synchronizeSpy = sinon.spy()
-    updateSpy = sinon.spy()
-    refreshSpy = sinon.spy()
-    addFileSpy = sinon.spy()
-    addSpy = sinon.spy()
-    cleanSpy = sinon.spy()
-    jsonificationSpy = sinon.spy()
-    incrementSpy = sinon.spy()
-    replicateSpy = sinon.spy()
+    const returnPromise = () => Promise.resolve()
+    synchronizeSpy = sinon.spy(returnPromise)
+    updateSpy = sinon.spy(returnPromise)
+    refreshSpy = sinon.spy(returnPromise)
+    addFileSpy = sinon.spy(returnPromise)
+    addSpy = sinon.spy(returnPromise)
+    cleanSpy = sinon.spy(returnPromise)
+    jsonificationSpy = sinon.spy(returnPromise)
+    incrementSpy = sinon.spy(returnPromise)
+    replicateSpy = sinon.spy(returnPromise)
 
     argv = {}
     env = {
@@ -206,7 +207,7 @@ describe('gddify', () => {
       })
 
       it('should output correctly as default', () => {
-        sinon.assert.calledWith(chalk.yellow, 'Invalid command. Use gddify [replicate|generate|update|compile|refresh|add|addfile].')
+        chalk.yellow.firstCall.args[0].should.eql('Invalid command.\nUse gddify [replicate|generate|update|compile|refresh|add|addfile].')
       })
     })
 
