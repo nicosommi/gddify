@@ -1,6 +1,6 @@
 {
   "name": "gddify",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "a gdd utility",
   "main": "index.js",
   "standard": {

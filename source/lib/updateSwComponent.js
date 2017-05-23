@@ -76,13 +76,16 @@ export default class UpdateSwComponent {
   [ addSourceCodeFile ] (sourceCodeFilePath, name, type) {
     let blockFound = this.targetSwComponent.swBlocks.find(block => (block.name === name && block.type === type))
     const sourceCodeFileJson = { name: sourceCodeFilePath, path: sourceCodeFilePath }
+    debug(`About to add file ${sourceCodeFilePath}...`)
     if (!blockFound) {
       const version = '0.0.0'
       blockFound = this.targetSwComponent.addSwBlock({name, type, version, sourceCodeFiles: [sourceCodeFileJson]})
+      debug(`added by creating a new block ${name} / ${type} (name / type)`)
     } else {
       const sourceCodeFileFound = blockFound.sourceCodeFiles.find(file => (file.path === sourceCodeFileJson.path))
       if (!sourceCodeFileFound) {
         blockFound.addSourceCodeFile(sourceCodeFileJson)
+        debug(`added on the existing block ${name} / ${type} (name / type)`)
       } else {
         debug(`File ${sourceCodeFilePath} already exists, omitted`)
       }
@@ -148,8 +151,10 @@ export default class UpdateSwComponent {
     debug('Beginning addition...')
     return glob(pattern)
       .then((files) => {
+        debug('Pattern matched files', { files })
         files.forEach(
           filePath => {
+            debug('Iterate on', { filePath })
             this[addSourceCodeFile](filePath, name, type)
           }
         )

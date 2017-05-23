@@ -118,15 +118,18 @@ var UpdateSwComponent = function () {
         return block.name === name && block.type === type;
       });
       var sourceCodeFileJson = { name: sourceCodeFilePath, path: sourceCodeFilePath };
+      _get__('debug')('About to add file ' + sourceCodeFilePath + '...');
       if (!blockFound) {
         var version = '0.0.0';
         blockFound = this.targetSwComponent.addSwBlock({ name: name, type: type, version: version, sourceCodeFiles: [sourceCodeFileJson] });
+        _get__('debug')('added by creating a new block ' + name + ' / ' + type + ' (name / type)');
       } else {
         var sourceCodeFileFound = blockFound.sourceCodeFiles.find(function (file) {
           return file.path === sourceCodeFileJson.path;
         });
         if (!sourceCodeFileFound) {
           blockFound.addSourceCodeFile(sourceCodeFileJson);
+          _get__('debug')('added on the existing block ' + name + ' / ' + type + ' (name / type)');
         } else {
           _get__('debug')('File ' + sourceCodeFilePath + ' already exists, omitted');
         }
@@ -195,7 +198,9 @@ var UpdateSwComponent = function () {
 
       _get__('debug')('Beginning addition...');
       return _get__('glob')(pattern).then(function (files) {
+        _get__('debug')('Pattern matched files', { files: files });
         files.forEach(function (filePath) {
+          _get__('debug')('Iterate on', { filePath: filePath });
           _this[addSourceCodeFile](filePath, name, type);
         });
         return _get__('Promise').resolve();
