@@ -12,7 +12,7 @@ let packageObject = {
   'dependencies': {
   },
   'devDependencies': {
-    'gddify': '^0.1.2',
+    'gddify': '../../',
     'babel-polyfill': '^6.9.1',
     'babel-preset-es2015': '^6.9.0',
     'babel-register': '^6.9.0',
