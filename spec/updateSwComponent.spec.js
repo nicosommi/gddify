@@ -247,7 +247,7 @@ describe('UpdateSwComponent', () => {
     })
 
     it('should call synchronize with the appropiate parameters', () => {
-      sinon.assert.calledWith(updateSwComponent.synchronize, '1', '1', 'blockName', 'blockType', { generate: false })
+      sinon.assert.calledWith(updateSwComponent.synchronize, '1', 'blockName', 'blockType', undefined, { generate: false })
     })
   })
 

@@ -190,7 +190,7 @@ export default class UpdateSwComponent {
       sources,
       source => {
         debug(`Reading from ${source}...`)
-        return this.synchronize(source.path, source.path, source.name, source.type, { generate: false })
+        return this.synchronize(source.path, source.name, source.type, undefined, { generate: false })
       }
     )
       .then(() => {
