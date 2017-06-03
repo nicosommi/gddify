@@ -1,6 +1,6 @@
 /* ph replacements */
 /* name, /'name': 'gddify'/g, 'name': 'gddify' */
-/* version, /'version': '\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b'/ig, 'version': '0.1.12' */
+/* version, /'version': '\bv?(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)(?:-[\da-z\-]+(?:\.[\da-z\-]+)*)?(?:\+[\da-z\-]+(?:\.[\da-z\-]+)*)?\b'/ig, 'version': '0.1.13' */
 /* description, /'description': 'a\ gdd\ utility'/g, 'description': 'a gdd utility' */
 /* main, /'main': '[a-zA-Z\.\/]+'/ig, 'main': 'index.js' */
 /* license, /MIT/g, MIT */
@@ -12,7 +12,7 @@
 module.exports =
 {
   'name': 'gddify',
-  'version': '0.1.12',
+  'version': '0.1.13',
   'description': 'a gdd utility',
   'main': 'index.js',
   'standard': {
@@ -42,6 +42,7 @@ module.exports =
     /* endstamp */
     /* stamp service_scripts */
     /* endstamp */
+    'checkDependencies': 'nsp check',
     'gddify': 'gddify',
     'test': 'gulp test',
     'build': 'gulp build',
@@ -57,10 +58,10 @@ module.exports =
     'gene-js': '0.1.3',
     'inquirer': '^1.0.2',
     'semver': '^5.1.0',
-    'glob': '^7.0.3',
+    'glob': '^7.1.2',
     'flowsync': '^0.1.12',
     'liftoff': '^2.2.1',
-    'yargs': '^4.7.1',
+    'yargs': '^8.0.1',
     'babel-core': '^6.6.4',
     'babel-preset-stage-2': '^6.18.0',
     /* endph */
@@ -86,6 +87,7 @@ module.exports =
     /* endstamp */
     /* stamp service_devDependencies */
     /* endstamp */
+    'nsp': '^2.6.3',
     'babel': '^6.5.2',
     'babel-core': '^6.6.4',
     'babel-eslint': '^3.1.30',
