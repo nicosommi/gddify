@@ -238,7 +238,7 @@ var UpdateSwComponent = function () {
 
       return _get__('Promise').mapSeries(sources, function (source) {
         _get__('debug')('Reading from ' + source + '...');
-        return _this2.synchronize(source.path, source.path, source.name, source.type, { generate: false });
+        return _this2.synchronize(source.path, source.name, source.type, undefined, { generate: false });
       }).then(function () {
         _get__('debug')('Everything updated from all sources.');
       });
