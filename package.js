@@ -12,7 +12,7 @@
 module.exports =
 {
   'name': 'gddify',
-  'version': '0.1.15',
+  'version': '0.1.16',
   'description': 'a gdd utility',
   'main': 'index.js',
   'standard': {
