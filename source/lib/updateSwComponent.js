@@ -149,7 +149,7 @@ export default class UpdateSwComponent {
 
   add (pattern, name, type) {
     debug('Beginning addition...')
-    return glob(pattern)
+    return glob(pattern, { nodir: true })
       .then((files) => {
         debug('Pattern matched files', { files })
         files.forEach(

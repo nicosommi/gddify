@@ -503,10 +503,10 @@ describe('UpdateSwComponent', () => {
         describe('.add', () => {
           beforeEach(() => {
             updateSwComponent.targetSwComponent.swBlocks[0].sourceCodeFiles = []
-            return updateSwComponent.add(`${__dirname}/../fixtures/testSource/*.js`, blockName, blockType)
+            return updateSwComponent.add(`${__dirname}/../fixtures/testSource/example/*`, blockName, blockType)
           })
 
-          it('should call addSourceCodeFile', () => {
+          it('should call addSourceCodeFile just with the file but not with the folder', () => {
             sinon.assert.callCount(addSourceCodeFileSpy, 1)
           })
 
