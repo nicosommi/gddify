@@ -90,62 +90,60 @@ var SwBlock = function () {
       return new (_get__('Promise'))(function (resolve, reject) {
         _get__('debug')('checking block versions');
         if (_get__('semver').gte(rootBlock.version, _this3.version)) {
-          (function () {
-            _get__('debug')('syncing block to version ' + rootBlock.version);
-            var errors = [];
+          _get__('debug')('syncing block to version ' + rootBlock.version);
+          var errors = [];
 
-            var promises = rootBlock.sourceCodeFiles.map(function (rootSourceCodeFile) {
-              _get__('debug')('syncing file ' + rootSourceCodeFile.path);
-              // find this.sourceCodeFile
-              var matchingSourceCodeFile = _this3.sourceCodeFiles.find(function (sourceCodeFile) {
-                return sourceCodeFile.name === rootSourceCodeFile.name;
-              });
-              if (matchingSourceCodeFile) {
-                // add promess to process list
-                return matchingSourceCodeFile.synchronizeWith(rootSourceCodeFile);
-              } else {
-                // create a potential promess to create it
-                var newSourceCodeFile = void 0;
-                if (_this3.options && _this3.options.basePath) {
-                  if (rootSourceCodeFile.path) {
-                    newSourceCodeFile = _this3.addSourceCodeFile({
-                      name: rootSourceCodeFile.name,
-                      path: _get__('path').normalize('' + rootSourceCodeFile.path),
-                      options: _this3.options
-                    });
-                    return newSourceCodeFile.synchronizeWith(rootSourceCodeFile);
-                  } else {
-                    errors.push(new Error('ERROR: there is no path provided for the source file ' + rootSourceCodeFile.name + ' on the block of name ' + rootBlock.name + ' and type ' + rootBlock.type + '. Please ammend that and try again.'));
-                  }
+          var promises = rootBlock.sourceCodeFiles.map(function (rootSourceCodeFile) {
+            _get__('debug')('syncing file ' + rootSourceCodeFile.path);
+            // find this.sourceCodeFile
+            var matchingSourceCodeFile = _this3.sourceCodeFiles.find(function (sourceCodeFile) {
+              return sourceCodeFile.name === rootSourceCodeFile.name;
+            });
+            if (matchingSourceCodeFile) {
+              // add promess to process list
+              return matchingSourceCodeFile.synchronizeWith(rootSourceCodeFile);
+            } else {
+              // create a potential promess to create it
+              var newSourceCodeFile = void 0;
+              if (_this3.options && _this3.options.basePath) {
+                if (rootSourceCodeFile.path) {
+                  newSourceCodeFile = _this3.addSourceCodeFile({
+                    name: rootSourceCodeFile.name,
+                    path: _get__('path').normalize('' + rootSourceCodeFile.path),
+                    options: _this3.options
+                  });
+                  return newSourceCodeFile.synchronizeWith(rootSourceCodeFile);
                 } else {
-                  errors.push(new Error('ERROR: there is no base path provided for the block ' + _this3.name + ', so the new source code file ' + rootSourceCodeFile.name + ' cannot be added.'));
+                  errors.push(new Error('ERROR: there is no path provided for the source file ' + rootSourceCodeFile.name + ' on the block of name ' + rootBlock.name + ' and type ' + rootBlock.type + '. Please ammend that and try again.'));
                 }
+              } else {
+                errors.push(new Error('ERROR: there is no base path provided for the block ' + _this3.name + ', so the new source code file ' + rootSourceCodeFile.name + ' cannot be added.'));
+              }
+            }
+          });
+
+          // check processed list against sourceCodeFiles
+          if (errors.length === 0) {
+            _get__('debug')('executing sync tasks...');
+            _get__('Promise').all(promises).then(function () {
+              _this3.version = rootBlock.version;
+              _get__('debug')('finished with no errors, now version ' + _this3.version + '.');
+              resolve();
+            }).catch(function (error) {
+              _get__('debug')('error ' + error.message + '.');
+              reject(error);
+            });
+          } else {
+            _get__('debug')('errors on files ' + errors);
+            var errorMessage = errors.reduce(function (message, currentError) {
+              if (message) {
+                return message + '\n' + currentError.message;
+              } else {
+                return currentError.message;
               }
             });
-
-            // check processed list against sourceCodeFiles
-            if (errors.length === 0) {
-              _get__('debug')('executing sync tasks...');
-              _get__('Promise').all(promises).then(function () {
-                _this3.version = rootBlock.version;
-                _get__('debug')('finished with no errors, now version ' + _this3.version + '.');
-                resolve();
-              }).catch(function (error) {
-                _get__('debug')('error ' + error.message + '.');
-                reject(error);
-              });
-            } else {
-              _get__('debug')('errors on files ' + errors);
-              var errorMessage = errors.reduce(function (message, currentError) {
-                if (message) {
-                  return message + '\n' + currentError.message;
-                } else {
-                  return currentError.message;
-                }
-              });
-              reject(new Error(errorMessage));
-            }
-          })();
+            reject(new Error(errorMessage));
+          }
         } else if (_get__('semver').eq(rootBlock.version, _this3.version)) {
           reject(new Error('WARNING: The root block ' + rootBlock.name + ' - v' + rootBlock.version + ' is at the same version as the destination (' + _this3.name + ' - v' + _this3.version + '). So the block synchronization is omitted.'));
         } else {
@@ -168,7 +166,73 @@ var SwBlock = function () {
 
 exports.default = SwBlock;
 
-var _RewiredData__ = Object.create(null);
+function _getGlobalObject() {
+  try {
+    if (!!global) {
+      return global;
+    }
+  } catch (e) {
+    try {
+      if (!!window) {
+        return window;
+      }
+    } catch (e) {
+      return this;
+    }
+  }
+}
+
+;
+var _RewireModuleId__ = null;
+
+function _getRewireModuleId__() {
+  if (_RewireModuleId__ === null) {
+    var globalVariable = _getGlobalObject();
+
+    if (!globalVariable.__$$GLOBAL_REWIRE_NEXT_MODULE_ID__) {
+      globalVariable.__$$GLOBAL_REWIRE_NEXT_MODULE_ID__ = 0;
+    }
+
+    _RewireModuleId__ = __$$GLOBAL_REWIRE_NEXT_MODULE_ID__++;
+  }
+
+  return _RewireModuleId__;
+}
+
+function _getRewireRegistry__() {
+  var theGlobalVariable = _getGlobalObject();
+
+  if (!theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__) {
+    theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__ = Object.create(null);
+  }
+
+  return __$$GLOBAL_REWIRE_REGISTRY__;
+}
+
+function _getRewiredData__() {
+  var moduleId = _getRewireModuleId__();
+
+  var registry = _getRewireRegistry__();
+
+  var rewireData = registry[moduleId];
+
+  if (!rewireData) {
+    registry[moduleId] = Object.create(null);
+    rewireData = registry[moduleId];
+  }
+
+  return rewireData;
+}
+
+(function registerResetAll() {
+  var theGlobalVariable = _getGlobalObject();
+
+  if (!theGlobalVariable['__rewire_reset_all__']) {
+    theGlobalVariable['__rewire_reset_all__'] = function () {
+      theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__ = Object.create(null);
+    };
+  }
+})();
 
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 var _RewireAPI__ = {};
@@ -192,10 +256,12 @@ var _RewireAPI__ = {};
 })();
 
 function _get__(variableName) {
-  if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+  var rewireData = _getRewiredData__();
+
+  if (rewireData[variableName] === undefined) {
     return _get_original__(variableName);
   } else {
-    var value = _RewiredData__[variableName];
+    var value = rewireData[variableName];
 
     if (value === INTENTIONAL_UNDEFINED) {
       return undefined;
@@ -227,10 +293,12 @@ function _get_original__(variableName) {
 }
 
 function _assign__(variableName, value) {
-  if (_RewiredData__ === undefined || _RewiredData__[variableName] === undefined) {
+  var rewireData = _getRewiredData__();
+
+  if (rewireData[variableName] === undefined) {
     return _set_original__(variableName, value);
   } else {
-    return _RewiredData__[variableName] = value;
+    return rewireData[variableName] = value;
   }
 }
 
@@ -251,15 +319,17 @@ function _update_operation__(operation, variableName, prefix) {
 }
 
 function _set__(variableName, value) {
+  var rewireData = _getRewiredData__();
+
   if ((typeof variableName === 'undefined' ? 'undefined' : _typeof(variableName)) === 'object') {
     Object.keys(variableName).forEach(function (name) {
-      _RewiredData__[name] = variableName[name];
+      rewireData[name] = variableName[name];
     });
   } else {
     if (value === undefined) {
-      _RewiredData__[variableName] = INTENTIONAL_UNDEFINED;
+      rewireData[variableName] = INTENTIONAL_UNDEFINED;
     } else {
-      _RewiredData__[variableName] = value;
+      rewireData[variableName] = value;
     }
 
     return function () {
@@ -269,23 +339,33 @@ function _set__(variableName, value) {
 }
 
 function _reset__(variableName) {
-  delete _RewiredData__[variableName];
+  var rewireData = _getRewiredData__();
+
+  delete rewireData[variableName];
+
+  if (Object.keys(rewireData).length == 0) {
+    delete _getRewireRegistry__()[_getRewireModuleId__];
+  }
+
+  ;
 }
 
 function _with__(object) {
+  var rewireData = _getRewiredData__();
+
   var rewiredVariableNames = Object.keys(object);
   var previousValues = {};
 
   function reset() {
     rewiredVariableNames.forEach(function (variableName) {
-      _RewiredData__[variableName] = previousValues[variableName];
+      rewireData[variableName] = previousValues[variableName];
     });
   }
 
   return function (callback) {
     rewiredVariableNames.forEach(function (variableName) {
-      previousValues[variableName] = _RewiredData__[variableName];
-      _RewiredData__[variableName] = object[variableName];
+      previousValues[variableName] = rewireData[variableName];
+      rewireData[variableName] = object[variableName];
     });
     var result = callback();
 
