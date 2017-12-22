@@ -10,6 +10,8 @@
 <!-- endph -->
 
 <!-- ph description -->
+> **NOTICE**: I'm working on something slightly different. *This package is no longer mantained*
+
 It makes it easy to work with the GDD approach... which active development.
 
 The idea is to create self describing software components that hold software blocks that are similar patterns among files.
